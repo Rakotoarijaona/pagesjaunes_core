@@ -1,7 +1,7 @@
 <?php 
 if (jApp::config()->compilation['checkCacheFiletime']&&(
 
- filemtime('G:\wamp\pagesjaunes_core/modules/ads/daos/ads_zone.dao.xml') > 1487135864)){ return false;
+ filemtime('G:\wamp\pagesjaunes_core/modules/ads/daos/ads_zone.dao.xml') > 1487238647)){ return false;
 }
 else {
  require_once ( JELIX_LIB_PATH .'dao/jDaoRecordBase.class.php');
