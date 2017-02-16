@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="usr" realname="jlx_user" primarykey="usr_id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="usr_id" datatype="int" autoincrement="true"/>
+        <property name="login" fieldname="usr_login" datatype="varchar" required="true" maxlength="50"/>
+        <property name="loginalias" fieldname="usr_loginalias" datatype="varchar" required="true" maxlength="50"/>
+        <property name="password" fieldname="usr_password" datatype="varchar" required="true" maxlength="120" selectpattern="%s" updatepattern="" insertpattern="%s" />
+        <property name="password_clear" fieldname="usr_password_clear" datatype="varchar" default="" maxlength="120"/>
+        <property name="email" fieldname="usr_email" datatype="varchar" required="true" maxlength="50"/>
+        <property name="name" fieldname="usr_name" datatype="varchar" default="" maxlength="60"/>
+        <property name="firstname" fieldname="usr_firstname" datatype="varchar" default="" maxlength="60"/>
+        <property name="lastname" fieldname="usr_lastname" datatype="varchar" default="" maxlength="60"/>
+        <property name="photo" fieldname="usr_photo" datatype="varchar" default="" maxlength="150"/>
+        <property name="token" fieldname="usr_token" datatype="varchar" default="" maxlength="250"/>
+        <property name="date_token" fieldname="usr_date_token" datatype="datetime" default=""/>
+        <property name="date_creation" fieldname="usr_date_creation" datatype="datetime" default=""/>
+        <property name="date_update" fieldname="usr_date_update" datatype="datetime" default=""/>
+        <property name="date_lastlogin" fieldname="usr_date_lastlogin" datatype="datetime" default=""/>
+        <property name="publication_status" fieldname="usr_publication_status" datatype="tinyint" required="true" default="2"/>
+        <property name="activation_status" fieldname="usr_activation_status" datatype="tinyint" required="true" default="2"/>
+        <!--<property name="" fieldname="" datatype="string/int/float/date"
+        required="yes" maxlength="" minlength="" regexp="" sequence=""
+        updatepattern="" insertpattern="" selectpattern=""/>-->
+    </record>
+    <factory>
+        <method name="getByLoginPassword" type="selectfirst">
+            <parameter name="login" />
+            <parameter name="password" />
+            <conditions>
+                <eq property="login" expr="$login" />
+                <eq property="password" expr="$password" />
+            </conditions>
+        </method>
+
+        <method name="getByLogin" type="selectfirst">
+            <parameter name="login" />
+            <conditions>
+                <eq property="login" expr="$login" />
+            </conditions>
+        </method>
+
+        <method name="updatePassword" type="update">
+            <parameter name="login" />
+            <parameter name="password" />
+            <values>
+                <value property="password" expr="$password"/>
+            </values>
+            <conditions>
+                <eq property="login" expr="$login" />
+            </conditions>
+        </method>
+
+        <method name="deleteByLogin" type="delete">
+            <parameter name="login" />
+            <conditions>
+                <eq property="login" expr="$login" />
+            </conditions>
+        </method>
+
+        <method name="findByLogin" type="select">
+            <parameter name="pattern" />
+            <conditions>
+                <like property="login" expr="$pattern" />
+            </conditions>
+            <order>
+                <orderitem property="login" way="asc" />
+            </order>
+        </method>
+
+        <method name="findAll" type="select">
+            <order>
+                <orderitem property="login" way="asc" />
+            </order>
+        </method>
+   </factory>
+</dao>

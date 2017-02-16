@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="slideshow" realname="slideshow" primarykey="slideshow_id" />
+    </datasources>
+    <record>
+        <property name="slideshow_id" fieldname="slideshow_id" datatype="int" autoincrement="true"/>
+        <property name="slideshow_identifiant" fieldname="slideshow_identifiant" datatype="varchar" required="true" maxlength="25"/>
+        <property name="slideshow_namealias" fieldname="slideshow_namealias" datatype="varchar" required="true" maxlength="125"/>
+        <property name="slideshow_entrepriseId" fieldname="slideshow_entrepriseId" datatype="int" required="true"/>
+        <property name="slideshow_imageonly" fieldname="slideshow_imageonly" datatype="tinyint" required="true"/>
+        <property name="slideshow_publicationstatus" fieldname="slideshow_publicationstatus" datatype="tinyint" required="true"/>
+        <property name="slideshow_titre" fieldname="slideshow_titre" datatype="varchar" required="true" maxlength="255"/>
+        <property name="slideshow_introductiontext" fieldname="slideshow_introductiontext" datatype="text" required="true"/>
+        <property name="slideshow_visuelbackground" fieldname="slideshow_visuelbackground" datatype="varchar" required="true" maxlength="50"/>
+        <property name="slideshow_buttontitle" fieldname="slideshow_buttontitle" datatype="varchar" required="true" maxlength="50"/>
+        <property name="slideshow_contentposition" fieldname="slideshow_contentposition" datatype="varchar" required="true" maxlength="10"/>
+        <property name="slideshow_urlpage" fieldname="slideshow_urlpage" datatype="varchar" required="true" maxlength="100"/>
+        <property name="slideshow_creationdate" fieldname="slideshow_creationdate" datatype="datetime" required="true"/>
+        <property name="slideshow_updatedate" fieldname="slideshow_updatedate" datatype="datetime" required="true"/>
+        <property name="slideshow_publicationdate" fieldname="slideshow_publicationdate" datatype="datetime" required="true"/>
+        <!--<property name="" fieldname="" datatype="string/int/float/date"
+        required="yes" maxlength="" minlength="" regexp="" sequence=""
+        updatepattern="" insertpattern="" selectpattern=""/>-->
+    </record>
+    <factory>
+        <method name="getByIdentifiant" type="selectfirst">
+            <parameter name="Identifiant" />
+            <conditions>
+                <eq property="slideshow_identifiant" value="$Identifiant" />
+            </conditions>
+        </method>
+        <!--<method name="findByStage" type="select/selectfirst/delete/update/php">
+            <parameter name="" />
+            <values>
+                <value property="" value="" />
+            </values>
+            <conditions logic="and/or">
+                <eq property="" value="" />
+            </conditions>
+            <order>
+                <orderitem property="" way="asc/desc" />
+            </order>
+            <limit offset="" count=""/>
+            <body><![CDATA[
+            ]]></body>
+        </method>-->
+    </factory>
+</dao>

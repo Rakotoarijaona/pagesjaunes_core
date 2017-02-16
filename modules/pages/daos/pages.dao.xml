@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="pages" realname="pages" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="name" fieldname="name" datatype="varchar" required="true" maxlength="125"/>
+        <property name="label" fieldname="label" datatype="varchar" required="true" maxlength="50"/>
+        <property name="title" fieldname="title" datatype="varchar" required="true" maxlength="50"/>
+        <property name="content" fieldname="content" datatype="text" required="true"/>
+        <property name="is_publie" fieldname="is_publie" datatype="tinyint" required="true" default="0"/>
+        <property name="is_removed" fieldname="is_removed" datatype="tinyint" required="true" default="0"/>
+        <property name="meta_title" fieldname="meta_title" datatype="varchar" required="true" maxlength="255"/>
+        <property name="meta_description" fieldname="meta_description" datatype="varchar" required="true" maxlength="255"/>
+        <property name="has_pub" fieldname="has_pub" datatype="tinyint" required="true" default="1"/>
+        <!--<property name="" fieldname="" datatype="string/int/float/date"
+        required="yes" maxlength="" minlength="" regexp="" sequence=""
+        updatepattern="" insertpattern="" selectpattern=""/>-->
+    </record>
+    <factory>
+        <!--<method name="findByStage" type="select/selectfirst/delete/update/php">
+            <parameter name="" />
+            <values>
+                <value property="" value="" />
+            </values>
+            <conditions logic="and/or">
+                <eq property="" value="" />
+            </conditions>
+            <order>
+                <orderitem property="" way="asc/desc" />
+            </order>
+            <limit offset="" count=""/>
+            <body><![CDATA[
+            ]]></body>
+        </method>-->
+        <method name="getByName" type="selectfirst">
+           <parameter name="name" />
+           <conditions>
+              <eq property="name" expr="$name" />
+           </conditions>
+        </method>
+        <method name="getByTitle" type="selectfirst">
+           <parameter name="title" />
+           <conditions>
+              <eq property="title" expr="$title" />
+           </conditions>
+        </method>
+        <method name="getByLabel" type="selectfirst">
+           <parameter name="label" />
+           <conditions>
+              <eq property="label" expr="$label" />
+           </conditions>
+        </method>
+    </factory>
+</dao>

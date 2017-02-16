@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="ads_type" realname="ads_type" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="name" fieldname="name" datatype="varchar" required="true" maxlength="50"/>
+        <property name="namealias" fieldname="namealias" datatype="varchar" required="true" maxlength="50"/>
+        <property name="format" fieldname="format" datatype="varchar" required="true" maxlength="20"/>
+        <property name="type_fichier" fieldname="type_fichier" datatype="varchar" required="true" maxlength="100"/>
+        <property name="is_publie" fieldname="is_publie" datatype="tinyint" required="true"/>
+        <property name="date_publication" fieldname="date_publication" datatype="datetime"/>
+        <property name="date_creation" fieldname="date_creation" datatype="datetime" required="true"/>
+        <property name="date_modification" fieldname="date_modification" datatype="datetime"/>
+        <property name="creator_id" fieldname="creator_id" datatype="int" required="true"/>
+        <property name="modificator_id" fieldname="modificator_id" datatype="int" required="true"/>
+        <property name="is_removed" fieldname="is_removed" datatype="tinyint" required="true"/>
+    </record>
+    <factory>
+        <method name="getList" type="select">
+            <conditions >
+                <eq property="is_removed" value="0"/>
+            </conditions>
+        </method>
+    </factory>
+</dao>

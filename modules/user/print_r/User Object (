@@ -1,0 +1,24 @@
+User Object ( 
+	[usr_id] => 4 
+	[usr_login] => rojo 
+	[usr_password] => af6c1a0ca271f2650720abc9a1738c99d11b4269 
+	[usr_password_clear] => 
+	[usr_email] => noman@gmial.Com 
+	[usr_name] => Rojoniaina 
+	[usr_firstname] => 
+	[usr_lastname] => noman 
+	[usr_photo] => logornf.png 
+	[usr_token] => 
+	[usr_date_token] => 
+	[usr_date_creation] => 
+	[usr_date_update] => 
+	[usr_date_lastlogin] => 
+	[usr_publication_status] => 
+	[usr_activation_status] => 
+	[usr_typeLabel] => __priv_admin 
+	[usr_datecreation] => 
+	[usr_dateupdate] => 
+	[usr_publicationstatus] => 2 
+	[usr_activationstatus] => 2 
+
+)

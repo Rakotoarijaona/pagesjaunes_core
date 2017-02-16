@@ -1,0 +1,100 @@
+subject group
+        id                      label key
+--------------------------------------------------------
+        admin.right.list        right~acl2.admin.right.list
+        admin.right.update      right~acl2.admin.right.update
+        =>admin.right.restrictall right~acl2.admin.right.restrictall
+
+        categorie.create        categorie~acl2.create
+        categorie.delete        categorie~acl2.delete
+        categorie.list  categorie~acl2.list
+        categorie.menu  categorie~acl2.menu
+        categorie.restrictall   categorie~acl2.restrictall
+        categorie.update        categorie~acl2.update
+
+        dashboard.menu  dashboard~acl2.menu
+        =>dashboard.restrictall dashboard~acl2.restrictall
+
+        entreprise.create       entreprise~acl2.create
+        entreprise.delete       entreprise~acl2.delete
+        entreprise.list entreprise~acl2.list
+        entreprise.menu entreprise~acl2.menu
+        entreprise.restrictall  entreprise~acl2.restrictall
+        entreprise.update       entreprise~acl2.update
+
+        homepage.menu   homepage~acl2.menu
+        =>homepage.restrictall homepage~acl2.restrictall
+
+        keywords.create keywords~acl2.create
+        keywords.delete keywords~acl2.delete
+        keywords.list   keywords~acl2.list
+        keywords.menu   keywords~acl2.menu
+        keywords.restrictall    keywords~acl2.restrictall
+        keywords.update keywords~acl2.update
+
+        profile.create  profile~acl2.create
+        profile.delete  profile~acl2.delete
+        profile.list    profile~acl2.list
+        profile.menu    profile~acl2.menu
+        profile.update  profile~acl2.update
+        =>profile.restrictall profile~acl2.restrictall
+
+        right.create    right~acl2.create
+        right.delete    right~acl2.delete
+        right.list      right~acl2.list
+        right.menu      right~acl2.menu
+        right.update    right~acl2.update
+        =>right.restrictall right~acl2.restrictall
+
+        slideshow.create        slideshow~acl2.create
+        slideshow.delete        slideshow~acl2.delete
+        slideshow.list  slideshow~acl2.list
+        slideshow.menu  slideshow~acl2.menu
+        slideshow.restrictall   slideshow~acl2.restrictall
+        slideshow.update        slideshow~acl2.update
+
+        user.create     user~acl2.create
+        user.delete     user~acl2.delete
+        user.list       user~acl2.list
+        user.menu       user~acl2.menu
+        user.update     user~acl2.update
+        =>user.restrictall user~acl2.restrictall
+
+        ads.create      ads~acl2.create
+      ads.delete      ads~acl2.delete
+      ads.list        ads~acl2.list
+      ads.update      ads~acl2.update
+      =>ads.restrictall ads~acl2.restrictall
+
+      ads.type.create ads~acl2.type.create
+      ads.type.delete ads~acl2.type.delete
+      ads.type.list   ads~acl2.type.list
+      ads.type.update ads~acl2.type.update
+      =>ads.type.restrictall ads~acl2.type.restrictall
+
+        pages.create    pages~acl2.create
+        pages.delete    pages~acl2.delete
+        pages.list      pages~acl2.list
+        pages.update    pages~acl2.update
+        =>pages.restrictall pages~acl2.restrictall
+
+acl.grp.group.management
+        acl.group.create        jacl2db~acl2db.acl.group.create
+        acl.group.delete        jacl2db~acl2db.acl.group.delete
+        acl.group.modify        jacl2db~acl2db.acl.group.modify
+        acl.group.view  jacl2db~acl2db.acl.group.view
+acl.grp.user.management
+        acl.user.modify jacl2db~acl2db.acl.user.modify
+        acl.user.view   jacl2db~acl2db.acl.user.view
+auth.grp.user.management
+        auth.user.change.password       jelix~auth.acl.user.chang
+        auth.user.modify        jelix~auth.acl.user.modify
+        auth.user.view  jelix~auth.acl.user.view
+        auth.users.change.password      jelix~auth.acl.users.chan
+        auth.users.create       jelix~auth.acl.users.create
+        auth.users.delete       jelix~auth.acl.users.delete
+        auth.users.list jelix~auth.acl.users.list
+        auth.users.modify       jelix~auth.acl.users.modify
+        auth.users.view jelix~auth.acl.users.view
+jprefs.prefs.management
+        jprefs.prefs.list       jpref_admin~admin.acl.prefs.list

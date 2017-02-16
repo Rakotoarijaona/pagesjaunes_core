@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="ads_zone_price" realname="ads_zone_price" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="zone_id" fieldname="zone_id" datatype="int" required="true"/>
+        <property name="price" fieldname="price" datatype="int" required="true"/>
+        <property name="number" fieldname="number" datatype="int" required="true"/>
+        <property name="unity" fieldname="unity" datatype="varchar" required="true" maxlength="20"/>
+    </record>
+    <factory>
+        <method name="getList" type="select">
+        </method>
+        <method name="getListByZone" type="select">
+            <parameter name="zone" />
+            <conditions >
+                <eq property="zone_id" expr="$zone"/>
+            </conditions>
+        </method>
+    </factory>
+</dao>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="souscategorie" realname="souscategorie" primarykey="souscategorie_id" />
+    </datasources>
+    <record>
+        <property name="souscategorie_id" fieldname="souscategorie_id" datatype="int" autoincrement="true"/>
+        <property name="souscategorie_categorieid" fieldname="souscategorie_categorieid" datatype="int" required="true"/>
+        <property name="souscategorie_name" fieldname="souscategorie_name" datatype="varchar" required="true" maxlength="150"/>
+        <property name="souscategorie_namealias" fieldname="souscategorie_namealias" datatype="varchar" required="true" maxlength="255"/>
+        <property name="souscategorie_ispublie" fieldname="souscategorie_ispublie" datatype="tinyint" required="true"/>
+        <property name="souscategorie_datecreation" fieldname="souscategorie_datecreation" datatype="datetime" required="true"/>
+        <property name="souscategorie_dateupdate" fieldname="souscategorie_dateupdate" datatype="datetime" default=""/>
+        <property name="souscategorie_datepublie" fieldname="souscategorie_datepublie" datatype="datetime" default=""/>
+        <!--<property name="" fieldname="" datatype="string/int/float/date"
+        required="yes" maxlength="" minlength="" regexp="" sequence=""
+        updatepattern="" insertpattern="" selectpattern=""/>-->
+    </record>
+    <factory>
+        <!--<method name="findByStage" type="select/selectfirst/delete/update/php">
+            <parameter name="" />
+            <values>
+                <value property="" value="" />
+            </values>
+            <conditions logic="and/or">
+                <eq property="" value="" />
+            </conditions>
+            <order>
+                <orderitem property="" way="asc/desc" />
+            </order>
+            <limit offset="" count=""/>
+            <body><![CDATA[
+            ]]></body>
+        </method>-->
+    </factory>
+</dao>

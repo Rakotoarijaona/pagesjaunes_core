@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="ads" realname="ads" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="name" fieldname="name" datatype="varchar" required="true" maxlength="50"/>
+        <property name="namealias" fieldname="namealias" datatype="varchar" required="true" maxlength="50"/>
+        <property name="type" fieldname="type" datatype="int" required="true"/>
+        <property name="description" fieldname="description" datatype="text" required="true"/>
+        <property name="annonceur" fieldname="annonceur" datatype="int" required="true"/>
+        <property name="images" fieldname="images" datatype="varchar" required="true" maxlength="100"/>
+        <property name="duree" fieldname="duree" datatype="int" required="true"/>
+        <property name="is_default" fieldname="is_default" datatype="tinyint" required="true"/>
+        <property name="is_publie" fieldname="is_publie" datatype="tinyint" required="true"/>
+        <property name="date_publication" fieldname="date_publication" datatype="datetime"/>
+        <property name="date_creation" fieldname="date_creation" datatype="datetime" required="true"/>
+        <property name="date_modification" fieldname="date_modification" datatype="datetime"/>
+        <property name="is_removed" fieldname="is_removed" datatype="tinyint" required="true"/>
+        <property name="creator_id" fieldname="creator_id" datatype="int" required="true"/>
+        <property name="modificator_id" fieldname="modificator_id" datatype="int" required="true"/>
+    </record>
+    <factory>
+        <method name="getList" type="select">
+            <conditions >
+                <eq property="is_removed" value="0"/>
+            </conditions>
+            <order>
+                <orderitem property="date_creation" way="desc" />
+            </order>
+        </method>
+    </factory>
+</dao>

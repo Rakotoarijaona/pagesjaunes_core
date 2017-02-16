@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="ads_souscategorie" realname="ads_souscategorie" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="ads_id" fieldname="ads_id" datatype="int" required="true"/>
+        <property name="souscategorie_id" fieldname="souscategorie_id" datatype="int" required="true"/>
+        <property name="date_creation" fieldname="date_creation" datatype="datetime" required="true"/>
+    </record>
+    <factory>
+        <method name="getByAds" type="select">
+            <parameter name="id" />
+            <conditions >
+                <eq property="ads_id" expr="$id"/>
+            </conditions>
+        </method>
+    </factory>
+</dao>

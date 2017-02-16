@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="ads_zone" realname="ads_zone" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="name" fieldname="name" datatype="varchar" required="true" maxlength="50"/>
+        <property name="cost_model" fieldname="cost_model" datatype="varchar" required="true" maxlength="10"/>
+        <property name="width" fieldname="width" datatype="int" required="true"/>
+        <property name="height" fieldname="height" datatype="int" required="true"/>
+        <property name="slots_columns" fieldname="slots_columns" datatype="int" required="true"/>
+        <property name="slots_row" fieldname="slots_row" datatype="int" required="true"/>
+        <property name="number_rotation" fieldname="number_rotation" datatype="int" required="true"/>
+        <property name="number_client" fieldname="number_client" datatype="int" required="true"/>
+        <property name="line_height" fieldname="line_height" datatype="int" required="true"/>
+        <property name="number_ads_default" fieldname="number_ads_default" datatype="int" required="true"/>
+        <property name="ads_display_method" fieldname="ads_display_method" datatype="int" required="true"/>
+        <property name="is_publie" fieldname="is_publie" datatype="tinyint" required="true"/>
+        <property name="date_creation" fieldname="date_creation" datatype="datetime" required="true"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime" default=""/>
+        <property name="date_publication" fieldname="date_publication" datatype="datetime" default=""/>
+        <property name="creator" fieldname="creator" datatype="varchar" required="true" maxlength="50"/>
+    </record>
+    <factory>
+        <method name="getList" type="select">
+        </method>
+        <method name="getListPublie" type="select">
+            <conditions >
+                <eq property="is_publie" value="1"/>
+            </conditions>
+        </method>
+        <method name="getListNotPublie" type="select">
+            <conditions >
+                <eq property="is_publie" value="0"/>
+            </conditions>
+        </method>
+        <method name="countAll" type="count">
+        </method>
+        <method name="countPublie" type="count">
+            <conditions >
+                <eq property="is_publie" value="1"/>
+            </conditions>
+        </method>
+        <method name="countNotPublie" type="count">
+            <conditions >
+                <eq property="is_publie" value="0"/>
+            </conditions>
+        </method>
+    </factory>
+</dao>

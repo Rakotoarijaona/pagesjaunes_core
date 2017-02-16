@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="contenuhomepage" realname="contenuhomepage" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="background_parallax" fieldname="background_parallax" datatype="varchar" required="true" maxlength="255"/>
+        <property name="titre_parallax" fieldname="titre_parallax" datatype="varchar" required="true" maxlength="255"/>
+        <property name="description_parallax" fieldname="description_parallax" datatype="mediumtext" required="true"/>
+        <property name="titre_reference" fieldname="titre_reference" datatype="varchar" required="true" maxlength="255"/>
+        <property name="description_reference" fieldname="description_reference" datatype="mediumtext" required="true"/>
+        <property name="image_reference" fieldname="image_reference" datatype="varchar" required="true" maxlength="255"/>
+        <property name="position_image_reference" fieldname="position_image_reference" datatype="tinyint" required="true"/>
+        <property name="bloc_marketing" fieldname="bloc_marketing" datatype="mediumtext" required="true"/>
+        <property name="image_marketing" fieldname="image_marketing" datatype="varchar" required="true" maxlength="255"/>
+        <property name="position_image_marketing" fieldname="position_image_marketing" datatype="tinyint" required="true"/>
+        <property name="is_publie" fieldname="is_publie" datatype="tinyint" required="true"/>
+        <property name="date_creation" fieldname="date_creation" datatype="datetime" required="true"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime" default=""/>
+        <!--<property name="" fieldname="" datatype="string/int/float/date"
+        required="yes" maxlength="" minlength="" regexp="" sequence=""
+        updatepattern="" insertpattern="" selectpattern=""/>-->
+    </record>
+    <factory>
+        <!--<method name="findByStage" type="select/selectfirst/delete/update/php">
+            <parameter name="" />
+            <values>
+                <value property="" value="" />
+            </values>
+            <conditions logic="and/or">
+                <eq property="" value="" />
+            </conditions>
+            <order>
+                <orderitem property="" way="asc/desc" />
+            </order>
+            <limit offset="" count=""/>
+            <body><![CDATA[
+            ]]></body>
+        </method>-->
+    </factory>
+</dao>

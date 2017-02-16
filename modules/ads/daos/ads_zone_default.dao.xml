@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="ads_zone_default" realname="ads_zone_default" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="zone_id" fieldname="zone_id" datatype="int" required="true"/>
+        <property name="rang" fieldname="rang" datatype="int"/>
+        <property name="type" fieldname="type" datatype="tinyint" required="true"/>
+        <property name="categorie_id" fieldname="categorie_id" datatype="int"/>
+        <property name="souscategorie_id" fieldname="souscategorie_id" datatype="int"/>
+        <property name="image" fieldname="image" datatype="varchar" maxlength="50"/>
+        <property name="html" fieldname="html" datatype="text"/>
+        <property name="link" fieldname="link" datatype="varchar" maxlength="255"/>
+        <property name="is_publie" fieldname="is_publie" datatype="tinyint" required="true"/>
+        <property name="date_creation" fieldname="date_creation" datatype="datetime" required="true"/>
+        <property name="date_publication" fieldname="date_publication" datatype="datetime"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime"/>
+        <property name="creator" fieldname="creator" datatype="varchar" required="true" maxlength="50"/>
+    </record>
+    <factory>
+        <method name="getList" type="select">
+        </method>
+        <method name="getListByZone" type="select">
+            <parameter name="id" />
+            <conditions >
+                <eq property="zone_id" expr="$id"/>
+            </conditions>
+        </method>
+        <method name="getListPublie" type="select">
+            <conditions >
+                <eq property="is_publie" value="1"/>
+            </conditions>
+        </method>
+        <method name="getListNotPublie" type="select">
+            <conditions >
+                <eq property="is_publie" value="0"/>
+            </conditions>
+        </method>
+        <method name="countAll" type="count">
+        </method>
+        <method name="countPublie" type="count">
+            <conditions >
+                <eq property="is_publie" value="1"/>
+            </conditions>
+        </method>
+        <method name="countNotPublie" type="count">
+            <conditions >
+                <eq property="is_publie" value="0"/>
+            </conditions>
+        </method>
+    </factory>
+</dao>

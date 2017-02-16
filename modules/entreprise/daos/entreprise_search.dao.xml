@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="entreprise_search" realname="entreprise_search" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="entreprise_id" fieldname="entreprise_id" datatype="int" required="true"/>
+        <property name="raisonsociale" fieldname="raisonsociale" datatype="varchar" required="true" maxlength="50"/>
+        <property name="activite" fieldname="activite" datatype="varchar" required="true" maxlength="255"/>
+        <property name="adresse" fieldname="adresse" datatype="varchar" required="true" maxlength="255"/>
+        <property name="region" fieldname="region" datatype="varchar" required="true" maxlength="50"/>
+        <property name="services" fieldname="services" datatype="text" required="true"/>
+        <property name="produits" fieldname="produits" datatype="text" required="true"/>
+        <property name="marques" fieldname="marques" datatype="text" required="true"/>
+        <property name="catalogues" fieldname="catalogues" datatype="text" required="true"/>
+        <property name="souscategories" fieldname="souscategories" datatype="text" required="true"/>
+        <property name="motscles" fieldname="motscles" datatype="text" required="true"/>
+        <property name="telephones" fieldname="telephones" datatype="text" required="true"/>
+        <property name="is_publie" fieldname="is_publie" datatype="tinyint" required="true"/>
+        <!--<property name="" fieldname="" datatype="string/int/float/date"
+        required="yes" maxlength="" minlength="" regexp="" sequence=""
+        updatepattern="" insertpattern="" selectpattern=""/>-->
+    </record>
+    <factory>
+        <method name="getByEntrepriseId" type="selectfirst">
+            <parameter name="id" />
+            <conditions>
+                <eq property="entreprise_id" expr="$id" />
+            </conditions>
+        </method>
+        <!--<method name="findByStage" type="select/selectfirst/delete/update/php">
+            <parameter name="" />
+            <values>
+                <value property="" value="" />
+            </values>
+            <conditions logic="and/or">
+                <eq property="" value="" />
+            </conditions>
+            <order>
+                <orderitem property="" way="asc/desc" />
+            </order>
+            <limit offset="" count=""/>
+            <body><![CDATA[
+            ]]></body>
+        </method>-->
+    </factory>
+</dao>

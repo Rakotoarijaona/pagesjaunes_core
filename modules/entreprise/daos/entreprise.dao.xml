@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="entreprise" realname="entreprise" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="raisonsociale" fieldname="raisonsociale" datatype="varchar" required="true" maxlength="255"/>
+        <property name="activite" fieldname="activite" datatype="varchar" required="true" maxlength="255"/>
+        <property name="adresse" fieldname="adresse" datatype="mediumtext" required="true"/>
+        <property name="region" fieldname="region" datatype="varchar" required="true" maxlength="50"/>
+        <property name="logo" fieldname="logo" datatype="varchar" default="" maxlength="100"/>
+        <property name="contact_interne" fieldname="contact_interne" datatype="varchar" maxlength="150"/>
+        <property name="fonction_contact" fieldname="fonction_contact" datatype="varchar" maxlength="150"/>
+        <property name="url_website" fieldname="url_website" datatype="varchar" default="" maxlength="255"/>
+        <property name="video_presentation_active" fieldname="video_presentation_active" datatype="tinyint" required="true"/>
+        <property name="video_presentation" fieldname="video_presentation" datatype="varchar" default="" maxlength="255"/>
+        <property name="qui_sommes_nous_active" fieldname="qui_sommes_nous_active" datatype="tinyint" required="true"/>
+        <property name="qui_sommes_nous" fieldname="qui_sommes_nous" datatype="longtext" default=""/>
+        <property name="nos_services_active" fieldname="nos_services_active" datatype="tinyint" required="true"/>
+        <property name="nos_services" fieldname="nos_services" datatype="longtext" default=""/>
+        <property name="nos_references_active" fieldname="nos_references_active" datatype="tinyint" required="true"/>
+        <property name="nos_references" fieldname="nos_references" datatype="longtext" default=""/>
+        <property name="videos_active" fieldname="videos_active" datatype="tinyint" required="true"/>
+        <property name="galerie_image_active" fieldname="galerie_image_active" datatype="tinyint" required="true"/>
+        <property name="latitude" fieldname="latitude" datatype="varchar" default="" maxlength="255"/>
+        <property name="longitude" fieldname="longitude" datatype="varchar" default="" maxlength="255"/>
+        <property name="position_recherche" fieldname="position_recherche" datatype="tinyint" required="true"/>
+        <property name="nombre_visite" fieldname="nombre_visite" datatype="int" required="true"/>
+        <property name="is_publie" fieldname="is_publie" datatype="tinyint" required="true"/>
+        <property name="date_creation" fieldname="date_creation" datatype="datetime" required="true"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime" required="true"/>
+        <property name="catalogue_active" fieldname="catalogue_active" datatype="tinyint" required="true" default="0"/>
+        <property name="editer_front_active" fieldname="editer_front_active" datatype="tinyint" required="true" default="0"/>
+        <property name="weight" fieldname="weight" datatype="int" required="true" default="0"/>
+        <property name="login" fieldname="login" datatype="varchar" required="true" maxlength="50"/>
+        <property name="password" fieldname="password" datatype="varchar" required="true" maxlength="200" selectpattern="%s"/>
+        <property name="clear_password" fieldname="clear_password" datatype="varchar" default="" maxlength="50"/>
+        <!--<property name="" fieldname="" datatype="string/int/float/date"
+        required="yes" maxlength="" minlength="" regexp="" sequence=""
+        updatepattern="" insertpattern="" selectpattern=""/>-->
+    </record>
+    <factory>
+        <method name="getByLoginPassword" type="selectfirst">
+            <parameter name="login" />
+            <parameter name="password" />
+            <conditions>
+                <eq property="login" expr="$login" />
+                <eq property="password" expr="$password" />
+            </conditions>
+        </method>
+
+        <method name="getByLogin" type="selectfirst">
+            <parameter name="login" />
+            <conditions>
+                <eq property="login" expr="$login" />
+            </conditions>
+        </method>
+
+        <method name="updatePassword" type="update">
+            <parameter name="login" />
+            <parameter name="password" />
+            <values>
+                <value property="password" expr="$password"/>
+            </values>
+            <conditions>
+                <eq property="login" expr="$login" />
+            </conditions>
+        </method>
+
+        <method name="deleteByLogin" type="delete">
+            <parameter name="login" />
+            <conditions>
+                <eq property="login" expr="$login" />
+            </conditions>
+        </method>
+
+        <method name="findByLogin" type="select">
+            <parameter name="pattern" />
+            <conditions>
+                <like property="login" expr="$pattern" />
+            </conditions>
+            <order>
+                <orderitem property="login" way="asc" />
+            </order>
+        </method>
+
+        <method name="findAll" type="select">
+            <order>
+                <orderitem property="date_creation" way="desc" />
+            </order>
+        </method>
+   </factory>
+</dao>

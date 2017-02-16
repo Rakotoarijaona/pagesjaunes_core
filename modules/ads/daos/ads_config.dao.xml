@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="ads_config" realname="ads_config" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="website_name" fieldname="website_name" datatype="varchar" required="true" maxlength="50"/>
+        <property name="contact_mail" fieldname="contact_mail" datatype="varchar" required="true" maxlength="255"/>
+        <property name="payment_methods" fieldname="payment_methods" datatype="varchar" required="true" maxlength="10"/>
+        <property name="edit_ads" fieldname="edit_ads" datatype="tinyint" required="true"/>
+        <property name="payment_after_moderate" fieldname="payment_after_moderate" datatype="tinyint" required="true"/>
+        <property name="new_window" fieldname="new_window" datatype="tinyint" required="true"/>
+        <property name="upload_image" fieldname="upload_image" datatype="tinyint" required="true"/>
+        <property name="security_question" fieldname="security_question" datatype="tinyint" required="true"/>
+    </record>
+    <factory>
+    </factory>
+</dao>
