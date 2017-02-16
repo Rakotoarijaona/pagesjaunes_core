@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Lun 13 Février 2017 à 09:32
+-- Généré le :  Jeu 16 Février 2017 à 11:35
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -71,6 +71,7 @@ INSERT INTO `pagesjaunes_ads` (`id`, `name`, `namealias`, `type`, `description`,
 CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_config` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `website_name` varchar(50) NOT NULL,
+  `contact_mail` varchar(255) NOT NULL,
   `payment_methods` varchar(10) NOT NULL,
   `edit_ads` tinyint(1) NOT NULL,
   `payment_after_moderate` tinyint(1) NOT NULL,
@@ -78,7 +79,14 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_config` (
   `upload_image` tinyint(1) NOT NULL,
   `security_question` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Contenu de la table `pagesjaunes_ads_config`
+--
+
+INSERT INTO `pagesjaunes_ads_config` (`id`, `website_name`, `contact_mail`, `payment_methods`, `edit_ads`, `payment_after_moderate`, `new_window`, `upload_image`, `security_question`) VALUES
+(1, 'Pages jaunes Madagascar', 'contact@pagesjaunes.com', 'cheque', 0, 1, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -150,6 +158,110 @@ INSERT INTO `pagesjaunes_ads_type` (`id`, `name`, `namealias`, `format`, `type_f
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `pagesjaunes_ads_zone`
+--
+
+CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_zone` (
+  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `cost_model` varchar(10) NOT NULL,
+  `width` int(5) NOT NULL,
+  `height` int(5) NOT NULL,
+  `slots_columns` int(5) NOT NULL,
+  `slots_row` int(5) NOT NULL,
+  `number_rotation` int(5) NOT NULL,
+  `number_client` int(5) NOT NULL,
+  `line_height` int(5) NOT NULL,
+  `number_ads_default` int(3) NOT NULL,
+  `ads_display_method` tinyint(1) NOT NULL,
+  `is_publie` tinyint(1) NOT NULL,
+  `date_creation` datetime NOT NULL,
+  `date_update` datetime DEFAULT NULL,
+  `date_publication` datetime DEFAULT NULL,
+  `creator` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+
+--
+-- Contenu de la table `pagesjaunes_ads_zone`
+--
+
+INSERT INTO `pagesjaunes_ads_zone` (`id`, `name`, `cost_model`, `width`, `height`, `slots_columns`, `slots_row`, `number_rotation`, `number_client`, `line_height`, `number_ads_default`, `ads_display_method`, `is_publie`, `date_creation`, `date_update`, `date_publication`, `creator`) VALUES
+(3, 'Zone1', 'jour', 300, 600, 1, 1, 10, 100, 10, 0, 0, 1, '2017-02-14 12:53:45', NULL, '2017-02-14 17:20:06', 'RAKOTOARIJAONA'),
+(4, 'zone2', 'clic', 100, 100, 1, 1, 10, 110, 10, 0, 0, 1, '2017-02-14 13:18:49', NULL, '2017-02-14 13:18:49', 'RAKOTOARIJAONA');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `pagesjaunes_ads_zone_default`
+--
+
+CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_zone_default` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `zone_id` int(3) NOT NULL,
+  `rang` int(3) DEFAULT NULL,
+  `type` tinyint(1) NOT NULL,
+  `categorie_id` int(11) DEFAULT NULL,
+  `souscategorie_id` int(11) DEFAULT NULL,
+  `image` varchar(50) DEFAULT NULL,
+  `html` text,
+  `link` varchar(255) DEFAULT NULL,
+  `is_publie` tinyint(1) NOT NULL,
+  `date_creation` datetime NOT NULL,
+  `date_publication` datetime DEFAULT NULL,
+  `date_update` datetime DEFAULT NULL,
+  `creator` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Contenu de la table `pagesjaunes_ads_zone_default`
+--
+
+INSERT INTO `pagesjaunes_ads_zone_default` (`id`, `zone_id`, `rang`, `type`, `categorie_id`, `souscategorie_id`, `image`, `html`, `link`, `is_publie`, `date_creation`, `date_publication`, `date_update`, `creator`) VALUES
+(1, 3, 10, 1, NULL, NULL, 'brahman-2.jpg', NULL, NULL, 1, '2017-02-15 16:01:24', '2017-02-15 16:01:24', NULL, 'RAKOTOARIJAONA'),
+(2, 3, 10, 1, NULL, 13, 'PENSION+COMPLETE.JPG-2.jpg', NULL, NULL, 1, '2017-02-15 16:03:07', '2017-02-15 16:03:07', NULL, 'RAKOTOARIJAONA'),
+(3, 3, 10, 2, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-15 16:12:36', '2017-02-15 16:12:36', NULL, 'RAKOTOARIJAONA'),
+(4, 3, 10, 2, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-16 11:32:30', '2017-02-16 11:32:30', NULL, 'RAKOTOARIJAONA');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `pagesjaunes_ads_zone_price`
+--
+
+CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_zone_price` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `zone_id` int(5) NOT NULL,
+  `price` int(11) NOT NULL,
+  `number` int(11) NOT NULL,
+  `unity` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+
+--
+-- Contenu de la table `pagesjaunes_ads_zone_price`
+--
+
+INSERT INTO `pagesjaunes_ads_zone_price` (`id`, `zone_id`, `price`, `number`, `unity`) VALUES
+(1, 3, 10000, 1, 'jour'),
+(3, 4, 1000, 1, 'clic'),
+(4, 4, 1500, 2, 'clic'),
+(5, 7, 1200, 1, 'jour'),
+(6, 7, 2400, 2, 'jour'),
+(7, 8, 112, 12, 'jour'),
+(8, 9, 12300, 1, 'jour'),
+(9, 10, 12, 12, 'jour'),
+(10, 11, 12, 12, 'jour'),
+(11, 12, 1000, 1, 'jour'),
+(12, 13, 123, 12, 'jour'),
+(13, 3, 20000, 2, 'jour'),
+(14, 3, 30000, 3, 'jour');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `pagesjaunes_catalogue`
 --
 
@@ -166,7 +278,7 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_catalogue` (
   `date_creation` datetime NOT NULL,
   `date_update` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
 
 --
 -- Contenu de la table `pagesjaunes_catalogue`
@@ -181,7 +293,8 @@ INSERT INTO `pagesjaunes_catalogue` (`id`, `reference_produit`, `entreprise_id`,
 (20, 'ref321', 31, 'Produit321', 'ref321.png', 'azertyuiop', 'marque32', 32000, 1, '2017-02-04 06:19:19', '2017-02-04 06:19:39'),
 (21, 'Ref2234', 27, 'prod22365', 'bg3.jpg', 'ceci est un test ehh', 'test', 200, 0, '2017-02-08 14:45:25', '2017-02-11 03:10:55'),
 (24, 'ref333', 27, 'prod333', 'image1-1.png', 'desc321', 'marque', 3211111, 1, '2017-02-10 17:02:38', '2017-02-10 17:17:04'),
-(25, 'ref14', 27, 'prod15', 'ambohipo.jpg', 'desceecececec', 'sqdf', 3132136, 0, '2017-02-10 17:18:49', '0000-00-00 00:00:00');
+(25, 'ref14', 27, 'prod15', 'ambohipo.jpg', 'desceecececec', 'sqdf', 3132136, 0, '2017-02-10 17:18:49', '0000-00-00 00:00:00'),
+(26, 'a', 31, 'b', 'pensioncompletejpg.jpg', 'ssdf', 'dfdd', 2322, 0, '2017-02-15 15:21:36', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
