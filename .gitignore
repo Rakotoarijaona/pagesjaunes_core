@@ -1,3 +1,5 @@
 var/log/errors.log
 temp
 /temp
+/docs
+/var/log
