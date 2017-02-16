@@ -29,7 +29,7 @@ class ads_zoneCtrl extends jController {
             $tpl = new jTpl();
 
             // Filtre
-            /*if ($this->param('status','') == 'publie') {
+            if ($this->param('status','') == 'publie') {
                 $toAdsZones = CAdsZone::getListPublie();
                 $tpl->assign("status", 'publie');
             } elseif ($this->param('status','') == 'notpublie') {
@@ -42,10 +42,10 @@ class ads_zoneCtrl extends jController {
             $tpl->assign("toAdsZones", $toAdsZones);
             $tpl->assign("nbAll", CAdsZone::getNbAll());
             $tpl->assign("nbPublie", CAdsZone::getNbPublie());
-            $tpl->assign("nbNotPublie", CAdsZone::getNbNotPublie());*/
+            $tpl->assign("nbNotPublie", CAdsZone::getNbNotPublie());
 
             $tpl->assign("SCRIPT", jZone::get('common~script'));
-            $resp->body->assign('MAIN', 'ato isika');
+            $resp->body->assign('MAIN', $tpl->fetch('ads~ads_zone_list'));
             $resp->body->assign('selectedMenuItem','ads');
             $resp->body->assign('selectedMenuChildItem','ads_zone');
         } else {
