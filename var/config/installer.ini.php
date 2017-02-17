@@ -82,6 +82,8 @@ search.installed=1
 search.version=0.1pre
 ads.installed=1
 ads.version=0.1pre
+abonnement.installed=1
+abonnement.version=0.1pre
 [__modules_data]
 jelix.contexts="db:default"
 
@@ -226,3 +228,6 @@ search.version=0.1pre
 
 ads.installed=1
 ads.version=0.1pre
+
+abonnement.installed=1
+abonnement.version=0.1pre

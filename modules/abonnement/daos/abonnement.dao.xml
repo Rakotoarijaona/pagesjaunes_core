@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="abonnement" realname="abonnement" primarykey="abonnement_id" />
+    </datasources>
+    <record>
+        <property name="abonnement_id" fieldname="abonnement_id" datatype="int" autoincrement="true"/>
+        <property name="abonnement_entrepriseid" fieldname="abonnement_entrepriseid" datatype="int" default=""/>
+        <property name="abonnement_nomoffre" fieldname="abonnement_nomoffre" datatype="varchar" default="" maxlength="250"/>
+        <property name="abonnement_datedebut" fieldname="abonnement_datedebut" datatype="date" default=""/>
+        <property name="abonnement_datefin" fieldname="abonnement_datefin" datatype="date" default=""/>
+        <property name="abonnement_dureeval" fieldname="abonnement_dureeval" datatype="float" default=""/>
+        <property name="abonnement_dureetype" fieldname="abonnement_dureetype" datatype="tinyint" default=""/>
+        <property name="abonnement_montant" fieldname="abonnement_montant" datatype="decimal" default=""/>
+        <property name="abonnement_removalstatus" fieldname="abonnement_removalstatus" datatype="tinyint" required="true" default="1"/>
+        <!--<property name="" fieldname="" datatype="string/int/float/date"
+        required="yes" maxlength="" minlength="" regexp="" sequence=""
+        updatepattern="" insertpattern="" selectpattern=""/>-->
+    </record>
+    <factory>
+        <!--<method name="findByStage" type="select/selectfirst/delete/update/php">
+            <parameter name="" />
+            <values>
+                <value property="" value="" />
+            </values>
+            <conditions logic="and/or">
+                <eq property="" value="" />
+            </conditions>
+            <order>
+                <orderitem property="" way="asc/desc" />
+            </order>
+            <limit offset="" count=""/>
+            <body><![CDATA[
+            ]]></body>
+        </method>-->
+    </factory>
+</dao>

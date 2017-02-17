@@ -1689,5 +1689,43 @@ class Entreprise
         }
         return $results;
     }
+
+    //auto complete
+    public static function autoComplet($term = "")
+    {
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT id,raisonsociale,region FROM " . $cnx->prefixTable("entreprise") . " 
+                        WHERE 1
+                    ";
+
+        $filters = array();
+        $filters[] = "raisonsociale LIKE '%" . $term . "%'";
+        $filters[] = "region LIKE '%" . $term . "%'";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" OR ", $filters) . ")";
+
+        // tri
+        if (!empty($sortField) && !empty($sortSens)) {
+            $query .= " ORDER BY raisonsociale ASC";
+        }
+
+        $res = $cnx->query($query);
+
+        foreach ($res as $row) {
+            $libelle = $row->raisonsociale;
+            if (!empty($row->region)) {
+                $libelle .= " (" . $row->region . ")";
+            }
+            $results[] = array("id" => $row->id, "text" => $libelle);
+        }
+
+        return $results;
+    }
 }
 ?>

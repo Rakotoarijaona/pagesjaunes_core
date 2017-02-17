@@ -53,6 +53,10 @@
 <!-- Chosen -->
 <script src="{$j_basepath}adminlibraries/js/plugins/chosen/chosen.jquery.js"></script>
 
+<!-- select2 -->
+<script src="{$j_basepath}adminlibraries/js/plugins/select2/dist/js/select2.full.min.js"></script>
+<script src="{$j_basepath}adminlibraries/js/plugins/select2/dist/js/i18n/fr.js"></script>
+
 <!-- FooTable -->
 <script src="{$j_basepath}adminlibraries/js/plugins/footable/footable.all.min.js"></script>
 
@@ -108,21 +112,23 @@
 <script src="{$j_basepath}adminlibraries/js/plugins/tinymce/plugins/spellchecker/plugin.dev.js"></script>
 <script src="{$j_basepath}adminlibraries/js/plugins/tinymce/plugins/codesample/plugin.dev.js"></script>
 
+ <!-- picker -->
+<script src="{$j_basepath}adminlibraries/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+<script src="{$j_basepath}adminlibraries/js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="{$j_basepath}adminlibraries/js/plugins/clockpicker/clockpicker.js"></script>
+<script src="{$j_basepath}adminlibraries/js/plugins/datapicker/bootstrap-datepicker.fr.js"></script>
 
 {literal}
-<script type="text/javascript">
-var $input = $('input.file[type=file]');
-if ($input.length) {
-    $input.fileinput({
-        language: 'fr',
-        browseClass: "btn btn-white",
-        showUpload: false,
-        showRemove: false,
-        allowedFileExtensions : ['jpg', 'png','gif']
-    });
-}
-</script>
-
+    <script type="text/javascript">
+        var $input = $('input.file[type=file]');
+        if ($input.length) {
+            $input.fileinput({
+                language: 'fr',
+                browseClass: "btn btn-white",
+                showUpload: false,
+                showRemove: false,
+                allowedFileExtensions : ['jpg', 'png','gif']
+            });
+        }
+    </script>
 {/literal}
-
-

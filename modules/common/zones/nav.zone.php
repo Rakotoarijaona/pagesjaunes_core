@@ -67,6 +67,10 @@ class navZone extends jZone
                 new CMenuItems ('adstype', 'Types de publicité', 'ads~ads:list_type', 'fa-bullhorn')
             );
         }
+        //Menu Gestion des abonnements
+        if( jAcl2::check("abonnement.list") && !jAcl2::check("abonnement.restrictall")) {
+            $toMenu['abonnement'] = new CMenuItems ('abonnement', 'Abonnements', 'abonnement~abonnement:index', 'fa-credit-card');
+        }
         $this->_tpl->assign('toMenu',$toMenu);
         $this->_tpl->assign('selectedMenuItem', $this->param('selectedMenuItem',''));
         $this->_tpl->assign('selectedMenuChildItem', $this->param('selectedMenuChildItem',''));

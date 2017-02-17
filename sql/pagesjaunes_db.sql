@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Jeu 16 Février 2017 à 11:35
+-- Généré le :  Ven 17 Février 2017 à 09:13
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -19,6 +19,32 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `pagesjaunes_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `pagesjaunes_abonnement`
+--
+
+CREATE TABLE IF NOT EXISTS `pagesjaunes_abonnement` (
+  `abonnement_id` int(11) NOT NULL AUTO_INCREMENT,
+  `abonnement_entrepriseid` int(11) DEFAULT NULL,
+  `abonnement_nomoffre` varchar(250) DEFAULT NULL,
+  `abonnement_datedebut` date DEFAULT NULL,
+  `abonnement_datefin` date DEFAULT NULL,
+  `abonnement_dureeval` float DEFAULT NULL,
+  `abonnement_dureetype` tinyint(2) DEFAULT NULL,
+  `abonnement_montant` decimal(19,2) DEFAULT NULL,
+  `abonnement_removalstatus` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`abonnement_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Contenu de la table `pagesjaunes_abonnement`
+--
+
+INSERT INTO `pagesjaunes_abonnement` (`abonnement_id`, `abonnement_entrepriseid`, `abonnement_nomoffre`, `abonnement_datedebut`, `abonnement_datefin`, `abonnement_dureeval`, `abonnement_dureetype`, `abonnement_montant`, `abonnement_removalstatus`) VALUES
+(1, 24, 'Offre one', '2017-07-02', '2017-02-17', 4, 2, '4568.54', 1);
 
 -- --------------------------------------------------------
 
@@ -181,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_zone` (
   `creator` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Contenu de la table `pagesjaunes_ads_zone`
@@ -793,7 +819,11 @@ INSERT INTO `pagesjaunes_jacl2_rights` (`id_aclsbj`, `id_aclgrp`, `id_aclres`, `
 ('ads.restrictall', 'custom', '-', 0),
 ('ads.type.create', 'custom', '-', 0),
 ('ads.type.list', 'custom', '-', 0),
-('ads.type.restrictall', 'custom', '-', 0);
+('ads.type.restrictall', 'custom', '-', 0),
+('abonnement.create', 'superadmin', '-', 0),
+('abonnement.list', 'superadmin', '-', 0),
+('abonnement.update', 'superadmin', '-', 0),
+('abonnement.delete', 'superadmin', '-', 0);
 
 -- --------------------------------------------------------
 
@@ -899,7 +929,12 @@ INSERT INTO `pagesjaunes_jacl2_subject` (`id_aclsbj`, `label_key`, `id_aclsbjgrp
 ('ads.restrictall', 'ads~acl2.restrictall', NULL),
 ('ads.type.restrictall', 'ads~acl2.type.restrictall', NULL),
 ('pages.restrictall', 'pages~acl2.restrictall', NULL),
-('admin.right.restrictall', 'right~acl2.admin.right.restrictall', NULL);
+('admin.right.restrictall', 'right~acl2.admin.right.restrictall', NULL),
+('abonnement.create', '', NULL),
+('abonnement.list', '', NULL),
+('abonnement.update', '', NULL),
+('abonnement.delete', '', NULL),
+('abonnement.restrictall', '', NULL);
 
 -- --------------------------------------------------------
 

@@ -27,53 +27,84 @@ final class CCommonTools
 {
 
     /**
-    * Date SQL vers Date Locale
-    *
-    * - Format local de date FR ! JJ/MM/AAAA
-    * - Format local de date EN ! MM/JJ/AAAA
-    *
-    * @param    string      $_sDateSql      Date au format SQL
-    * @return   string                      Date au format LOCALE
-    */
-    public static function dateSql2Locale ($_zDateSql = "", $_zFormat = "Y-m-d")
+     * Date SQL vers Date Locale
+     *
+     * - Format local de date FR ! JJ/MM/AAAA
+     * - Format local de date EN ! MM/JJ/AAAA
+     *
+     * @param    string      $_sDateSql      Date au format SQL
+     * @return   string                      Date au format LOCALE
+     */
+    public static function dateSql2Locale($dateSql = "", $format = "Y-m-d")
     {
-        $zRes = $_zDateSql ;
-        $zDateIn = date ($_zFormat, strtotime (str_replace ("/","-", $_zDateSql))) ;
-        $zRes = preg_replace ('#^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2})$#', '\3/\2/\1' , $zDateIn) ;
-        return $zRes ;
+        $res = $dateSql;
+        if (!empty($dateSql)) {
+            $locale = jApp::config()->locale;
+            $dateIn = date($format, strtotime(str_replace("/","-", $dateSql)));
+            if ($locale == "en_US") {
+                $res = preg_replace('#^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2})$#', '\2/\3/\1', $dateIn);
+            } else {
+                $res = preg_replace('#^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2})$#', '\3/\2/\1', $dateIn);
+            }
+        }
+        return $res;
     }
 
     // Date time
-    public static function dateTimeSql2Locale ($_zDateSql = "", $_zFormat = "Y-m-d H:i:s")
+    public static function dateTimeSql2Locale($dateSql = "", $format = "Y-m-d H:i:s")
     {
-        $zDateIn = date ($_zFormat, strtotime (str_replace ("/","-", $_zDateSql))) ;
-        $zRes = preg_replace ('#^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2}) (.*)?$#', '\3/\2/\1 \4' , $zDateIn) ;
-        return $zRes ;
+        $res = $dateSql;
+        if (!empty($dateSql)) {
+            $locale = jApp::config()->locale;
+            if ($locale == "en_US") {
+                $res = preg_replace('#^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2}) (.*)?$#', '\2/\3/\1 \4', $dateSql);
+            } else {
+                $res = preg_replace('#^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2}) (.*)?$#', '\3/\2/\1 \4', $dateSql);
+            }
+        }
+        return $res;
     }
 
     /**
-    * Date locale vers SQL
-    *
-    * - Format local de date FR ! JJ/MM/AAAA
-    * - Format local de date EN ! MM/JJ/AAAA
-    *
-    * @param    string      $_sDateLocale   Date au format LOCALE
-    * @return   string                      Date au format SQL
-    */
-    public static function dateLocale2Sql ($_zDateLocale = "")
+     * Date locale vers SQL
+     *
+     * - Format local de date FR ! JJ/MM/AAAA
+     * - Format local de date EN ! MM/JJ/AAAA
+     *
+     * @param    string      $_sDateLocale   Date au format LOCALE
+     * @return   string                      Date au format SQL
+     */
+    public static function dateLocale2Sql($dateLocale = "")
     {
-        $zDateIn = date ("Y-m-d", strtotime (str_replace ("/","-", $_zDateLocale . " 00:00:00"))) ;
-        $zRes = preg_replace ('#^([0-9]{1,2})/([0-9]{1,2})/([0-9]{2,4})$#','\3-\2-\1' , $zDateIn) ;
-        return $zRes ;
+        $res = $dateLocale;
+        if (!empty($dateLocale)) {
+            $locale = jApp::config()->locale;
+            if ($locale == "en_US") {
+                $res = preg_replace ('#^([0-9]{1,2})/([0-9]{1,2})/([0-9]{2,4})$#', '\3-\1-\2', $dateLocale);
+            } else {
+                $res = preg_replace ('#^([0-9]{1,2})/([0-9]{1,2})/([0-9]{2,4})$#', '\3-\2-\1', $dateLocale);
+            }
+        }
+        return $res;
     }
 
     // Date time locale vers SQL
-    public static function dateTimeLocale2Sql ($_zDateLocale = "")
+    public static function dateTimeLocale2Sql($dateLocale = "")
     {
-        $zRes = $_zDateLocale ;
-        $zDateIn = date ("Y-m-d H:i:s", strtotime (str_replace ("/","-", $_zDateLocale))) ;
-        $zRes = preg_replace ('#^([0-9]{1,2})/([0-9]{1,2})/([0-9]{2,4}) (.*)?$#','\3-\2-\1 \4' , $zDateIn) ;
-        return $zRes ;
+        $locale = jApp::config()->locale;
+        $res = $dateLocale;
+        if ($locale == "en_US") {
+            $res = preg_replace('#^([0-9]{1,2})/([0-9]{1,2})/([0-9]{2,4}) (.*)?$#','\3-\2-\1 \4', $dateLocale);
+        } else {
+            $res = preg_replace('#^([0-9]{1,2})/([0-9]{1,2})/([0-9]{2,4}) (.*)?$#','\3-\1-\2 \4', $dateLocale);
+        }
+        return $res;
+    }
+
+    // Date time to date
+    public static function dateTimeLocale2DateLocale($dateSql = "")
+    {
+        return preg_replace('#^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2}) (.*)?$#', '\1/\2/\3', $dateSql);
     }
 
     /**
