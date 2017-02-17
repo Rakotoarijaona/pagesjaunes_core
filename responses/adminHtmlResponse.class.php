@@ -88,10 +88,6 @@ class adminHtmlResponse extends jResponseHtml {
         //blueimp-gallery
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/blueimp/css/blueimp-gallery.min.css');
 
-        // Date picker
-        $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/datapicker/datepicker3.css');
-        $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/daterangepicker/daterangepicker-bs3.css');
-
         // jquery ui
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/jquery-ui-1.10.3.css');
 
