@@ -1052,5 +1052,21 @@ class entrepriseCtrl extends jController {
         $resp->content = $valid;
         return $resp;
     }
-}
 
+    // auto complet entreprise
+    public function autoComplet()
+    {
+        $resp = $this->getResponse('json');
+
+        // datas
+        $datas = array();
+
+        $term = $this->param("q");
+        if (!empty($term)) {
+            $datas = Entreprise::autoComplet($term);
+        }
+        $resp->data = $datas;
+
+        return $resp;
+    }
+}

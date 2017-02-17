@@ -650,6 +650,53 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h5 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse22">Gestion des abonnements</a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapse22" class="panel-collapse collapse">
+                                            <div class="panel-body ibox-content">
+                                                <div class="row">
+                                                    <div class="checkbox checkbox-inline col-md-4">
+                                                        <input class="check_list" name="right[abonnement.create]" id="checkboxAbonnementTypeCreate" type="checkbox" value="y" {if isset($right['abonnement.create'])} {$right['abonnement.create']}{/if}>
+                                                        <label for="checkboxAbonnementTypeCreate">
+                                                            Ajouter
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox checkbox-inline col-md-4">
+                                                        <input class="check_list" name="right[abonnement.list]" id="checkboxAbonnementTypeList" type="checkbox" value="y" {if isset($right['abonnement.list'])} {$right['abonnement.list']}{/if}>
+                                                        <label for="checkboxAbonnementTypeList">
+                                                            Lister
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="checkbox checkbox-inline col-md-4">
+                                                        <input class="check_list" name="right[abonnement.update]" id="checkboxAbonnementTypeUpdate" type="checkbox" value="y" {if isset($right['abonnement.update'])} {$right['abonnement.update']}{/if}>
+                                                        <label for="checkboxAbonnementTypeUpdate">
+                                                            Update
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox checkbox-inline col-md-4">
+                                                        <input class="check_list" name="right[abonnement.delete]" id="checkboxAbonnementTypeDelete" type="checkbox" value="y" {if isset($right['abonnement.delete'])} {$right['abonnement.delete']}{/if}>
+                                                        <label for="checkboxAbonnementTypeDelete">
+                                                            Supprimer
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="checkbox checkbox-danger checkbox-inline col-md-4">
+                                                        <input class="check_list" name="right[abonnement.restrictall]" id="checkboxAbonnementTypeRestrictall" type="checkbox" value="y" {if isset($right['abonnement.restrictall'])} {$right['abonnement.restrictall']}{/if}>
+                                                        <label for="checkboxAbonnementTypeRestrictall">
+                                                            Restrict all
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row hide" id="bt_save">
                                     <div class="col-sm-12 text-right">

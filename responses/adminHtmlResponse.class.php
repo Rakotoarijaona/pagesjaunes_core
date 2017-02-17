@@ -47,9 +47,20 @@ class adminHtmlResponse extends jResponseHtml {
 
         //chosen
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/chosen/chosen.css');
-        
+
+        // select2
+        $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/js/plugins/select2/dist/css/select2.min.css');
+
         // FooTable
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/footable/footable.core.css');
+
+        // pickers
+        $this->addCssLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/datapicker/datepicker3.css', array('rel' => 'stylesheet'));
+        $this->addCssLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/ionRangeSlider/ion.rangeSlider.css', array('rel' => 'stylesheet'));
+        $this->addCssLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css', array('rel' => 'stylesheet'));
+        $this->addCssLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css', array('rel' => 'stylesheet'));
+        $this->addCssLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/clockpicker/clockpicker.css', array('rel' => 'stylesheet'));
+        $this->addCssLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/daterangepicker/daterangepicker-bs3.css', array('rel' => 'stylesheet'));
 
         // general
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/plugins/iCheck/custom.css');
@@ -83,6 +94,9 @@ class adminHtmlResponse extends jResponseHtml {
 
         // jquery ui
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/jquery-ui-1.10.3.css');
+
+        // custom
+        $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/css/custom.css');
     }
 
     protected function doAfterActions() {
