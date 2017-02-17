@@ -18,8 +18,11 @@ class abonnementCtrl extends jControllerRSR
     // index
     function index()
     {
+        // check if request is ajax
+        $isAjax = jApp::coord()->request->isAjax();
+
         // response
-        $resp = $this->getResponse('html');
+        $resp = ($isAjax) ? $this->getResponse('htmlfragment') : $this->getResponse('html');
 
         // template object
         $tpl = new jTpl();
@@ -30,7 +33,7 @@ class abonnementCtrl extends jControllerRSR
             $sortSens = $this->stringParam("sortsens", "DESC", true);
             $sortField = $this->stringParam("sortfield", "abonnement_id", true);
             $listStatus = $this->intParam("ls", LIST_ACTIVE, true);
-            $search = $this->stringParam("s", "", true);
+            $search = utf8_encode($this->stringParam("s", "", true));
 
             //pagination parameters
             $paginationParams = array();
@@ -48,37 +51,55 @@ class abonnementCtrl extends jControllerRSR
             //or filters
             $orFilters = array();
             if (!empty($search)) {
-                $orFilters[] = "entreprise_raisonsociale = '%" . $search . "%'";
-                $orFilters[] = "abonnement_nomoffre = '%" . $search . "%'";
-                $orFilters[] = "abonnement_datedebut = '%" . $search . "%'";
-                $orFilters[] = "abonnement_datefin = '%" . $search . "%'";
-                $orFilters[] = "abonnement_dureeval = '%" . $search . "%'";
-                $orFilters[] = "abonnement_montant = '%" . $search . "%'";
+                $orFilters[] = "raisonsociale LIKE'%" . $search . "%'";
+                $orFilters[] = "abonnement_nomoffre LIKE '%" . $search . "%'";
+                $orFilters[] = "abonnement_datedebut LIKE '%" . $search . "%'";
+                $orFilters[] = "abonnement_datefin LIKE '%" . $search . "%'";
+                $orFilters[] = "abonnement_dureeval LIKE '%" . $search . "%'";
+                $orFilters[] = "abonnement_montant LIKE '%" . $search . "%'";
                 $paginationParams["s"] = $search;
             }
 
             // list
             $nbRecs = 0;
             $list = CAbonnement::read($andFilters, false, true, $orFilters, $nbRecs, $page, $sortField, $sortSens);
-            /*print_r($list);
-            die;*/
 
             // pagination
-            $pagination = CCommonTools::getPagination("entreprise~abonnement:all", $nbRecs, $page, NB_DATA_PER_PAGE, NB_LINK_TO_DISPLAY, $paginationParams);
+            $pagination = CCommonTools::getPagination("entreprise~abonnement:all", $nbRecs, $page, NB_DATA_PER_PAGE, NB_LINK_TO_DISPLAY, array(), false);
 
             //counts
             $nbTrashRecs = CAbonnement::count($andFilters, $orFilters);
             $nbActiveRecs = CAbonnement::count($andFilters, $orFilters);
 
-            CCommonTools::assignDefinedConstants($tpl);
-            $tpl->assign("list", $list);
-            $tpl->assign("nbRecs", $nbRecs);
-            $tpl->assign("pagination", $pagination);
-            $tpl->assign("nbTrashRecs", $nbTrashRecs);
-            $tpl->assign("nbActiveRecs", $nbActiveRecs);
-            $tpl->assign("SCRIPT", jZone::get('common~script'));
-            $resp->body->assign('MAIN', $tpl->fetch('abonnement~index'));
-            $resp->body->assign('selectedMenuItem','entreprise');
+            if ($isAjax) {
+
+                $resp->tplname = 'abonnement~index.fragment';
+                CCommonTools::assignDefinedConstants ($resp->tpl);
+                $resp->tpl->assign("list", $list);
+                $resp->tpl->assign("page", $page);
+                $resp->tpl->assign("nbRecs", $nbRecs);
+                $resp->tpl->assign("pagination", $pagination);
+                $resp->tpl->assign("nbTrashRecs", $nbTrashRecs);
+                $resp->tpl->assign("nbActiveRecs", $nbActiveRecs);
+                $resp->tpl->assign("sortsens", $sortSens);
+                $resp->tpl->assign("sortfield", $sortField);
+
+            } else {
+
+                CCommonTools::assignDefinedConstants($tpl);
+                $tpl->assign("list", $list);
+                $tpl->assign("page", $page);
+                $tpl->assign("nbRecs", $nbRecs);
+                $tpl->assign("pagination", $pagination);
+                $tpl->assign("nbTrashRecs", $nbTrashRecs);
+                $tpl->assign("nbActiveRecs", $nbActiveRecs);
+                $tpl->assign("sortsens", $sortSens);
+                $tpl->assign("sortfield", $sortField);
+                $tpl->assign("SCRIPT", jZone::get('common~script'));
+                $resp->body->assign('MAIN', $tpl->fetch('abonnement~index'));
+                $resp->body->assign('selectedMenuItem','entreprise');
+
+            }
 
         } else {
 

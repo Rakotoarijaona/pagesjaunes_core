@@ -15,7 +15,7 @@ define('TABLE_PREFIX', 'pagesjaunes_');
 define("NO", 1);
 define("YES", 2);
 
-define("NB_DATA_PER_PAGE", 6);
+define("NB_DATA_PER_PAGE", 10);
 define("NB_LINK_TO_DISPLAY", 3);
 
 define("LIST_ACTIVE", 1);
