@@ -7,7 +7,7 @@
         <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
         <property name="zone_id" fieldname="zone_id" datatype="int" required="true"/>
         <property name="rang" fieldname="rang" datatype="int"/>
-        <property name="type" fieldname="type" datatype="tinyint" required="true"/>
+        <property name="type" fieldname="type" datatype="tinyint"/>
         <property name="categorie_id" fieldname="categorie_id" datatype="int"/>
         <property name="souscategorie_id" fieldname="souscategorie_id" datatype="int"/>
         <property name="image" fieldname="image" datatype="varchar" maxlength="50"/>
@@ -23,20 +23,29 @@
         <method name="getList" type="select">
         </method>
         <method name="getListByZone" type="select">
-            <parameter name="id" />
+            <parameter name="zid" />
             <conditions >
-                <eq property="zone_id" expr="$id"/>
+                <eq property="zone_id" expr="$zid"/>
             </conditions>
+            <order>
+                <orderitem property="rang" way="asc" />
+            </order>
         </method>
         <method name="getListPublie" type="select">
             <conditions >
                 <eq property="is_publie" value="1"/>
             </conditions>
+            <order>
+                <orderitem property="rang" way="asc" />
+            </order>
         </method>
         <method name="getListNotPublie" type="select">
             <conditions >
                 <eq property="is_publie" value="0"/>
             </conditions>
+            <order>
+                <orderitem property="rang" way="asc" />
+            </order>
         </method>
         <method name="countAll" type="count">
         </method>
@@ -48,6 +57,12 @@
         <method name="countNotPublie" type="count">
             <conditions >
                 <eq property="is_publie" value="0"/>
+            </conditions>
+        </method>
+        <method name="countByZone" type="count">
+            <parameter name="id" />
+            <conditions >
+                <eq property="zone_id" expr="$id"/>
             </conditions>
         </method>
     </factory>

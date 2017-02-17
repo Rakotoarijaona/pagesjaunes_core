@@ -7,6 +7,7 @@
  */
 
 jClasses::inc("common~CCommonTools");
+jClasses::inc("ads~CAdsZoneDefault");
 
 class CAdsZone
 {
@@ -305,5 +306,45 @@ class CAdsZone
     public function canDelete()
     {
         return 1;
+    }
+
+    // nouvelle configuration: nb ad default, display method
+    public function save_new_config($nb_ad, $display)
+    {
+        $maFactory  = jDao::get('ads~ads_zone');
+        $record     = $maFactory->get($this->id);
+
+        $this->number_ads_default   = $nb_ad;
+        $this->ads_display_method   = $display;
+        $this->date_update          = CCommonTools::RgetDateNowSQL();
+
+        $cnx = jDb::getConnection();
+        $adDefaultFactory  = jDao::get('ads~ads_zone_default');
+
+        $countres = $adDefaultFactory->countByZone($this->id);
+
+        if ($countres > $nb_ad)
+        {
+            $cnx->exec("DELETE FROM ".$cnx->prefixTable ("ads_zone_default")." 
+                        WHERE zone_id =".$this->id." AND rang > ".$nb_ad);
+
+        } 
+        elseif ($countres < $nb_ad) 
+        {
+            for ($i = $countres+1; $i <= $nb_ad; $i++)
+            {
+                $oAdsZoneDefault            = new CAdsZoneDefault();
+                $oAdsZoneDefault->zone_id   = $this->id;
+                $oAdsZoneDefault->rang      = $i;
+                $oAdsZoneDefault->is_publie = 1;
+                $oAdsZoneDefault->insert();
+            }
+        }
+
+        $record->number_ads_default = $this->number_ads_default;
+        $record->ads_display_method = $this->ads_display_method;
+        $record->date_update        = $this->date_update;
+
+        $maFactory->update($record);
     }
 }

@@ -61,10 +61,9 @@ class navZone extends jZone
         if( jAcl2::check("ads.list") && !jAcl2::check("ads.restrictall")) {
             $toMenu['ads'] = new CMenuItems ('ads', 'Publicités', 'ads~ads:index', 'fa-bullhorn');
             $toMenu['ads']->childItems = array(
-                new CMenuItems ('ads', 'Liste des publicités', 'ads~ads:index', 'fa-bullhorn'),
-                new CMenuItems ('ads_config', 'Configuration', 'ads~ads_config:index', 'fa-bullhorn'),
+                new CMenuItems ('ads', 'Annonceurs', 'ads~ads:index', 'fa-bullhorn'),
                 new CMenuItems ('ads_zone', 'Zone de pub', 'ads~ads_zone:index', 'fa-bullhorn'),
-                new CMenuItems ('adstype', 'Types de publicité', 'ads~ads:list_type', 'fa-bullhorn')
+                new CMenuItems ('ads_config', 'Configuration', 'ads~ads_config:index', 'fa-bullhorn')
             );
         }
         //Menu Gestion des abonnements

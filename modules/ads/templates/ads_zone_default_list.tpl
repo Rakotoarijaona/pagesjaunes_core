@@ -10,7 +10,8 @@
         {if (sizeof($toAdsZoneDefault)>0)}
             {foreach ($toAdsZoneDefault as $oAdsZoneDefault)}
                 <tr>
-                    <td>#{$i++}</td>
+                    <td>{$oAdsZoneDefault->rang}</td>
+                    {if !empty($oAdsZoneDefault->type)}
                     <td>
                         {if ($oAdsZoneDefault->type == 1)}
                         image
@@ -27,10 +28,18 @@
                     </td>
                     <td>
                         {if (!empty($oAdsZoneDefault->souscategorie_id))}
-                            Sous catégorie: {$oAdsZoneDefault->getSouscategorie()->name}
-                        {elseif (!empty($oAdsZoneDefault->categorie))}
-                            Catégorie : {$oAdsZoneDefault->getCategorie()->name}
+                            <strong>- Sous catégorie:</strong> {$oAdsZoneDefault->getSouscategorie()->name}<br/>
+                        {elseif (!empty($oAdsZoneDefault->categorie_id))}
+                            <strong>- Catégorie :</strong> {$oAdsZoneDefault->getCategorie()->name}<br/>
                         {/if}
+                    </td>
+                    {else}
+                    <td colspan=3>
+                        <span class="text-danger">Aucun contenu</span>
+                    </td>
+                    {/if}
+                    <td>
+                        <button type="button" onclick="editAd({$oAdsZoneDefault->id})" class="btn btn-info btn-xs btn-block">Modifier</button>
                     </td>
                 </tr>
             {/foreach}

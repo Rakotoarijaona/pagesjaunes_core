@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="ads_purchase" realname="ads_purchase" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="reference" fieldname="reference" datatype="varchar" required="true" maxlength="50"/>
+        <property name="advertiser_name" fieldname="advertiser_name" datatype="varchar" required="true" maxlength="50"/>
+        <property name="advertiser_mail" fieldname="advertiser_mail" datatype="varchar" required="true" maxlength="255"/>
+        <property name="zone_type" fieldname="zone_type" datatype="int" required="true"/>
+        <property name="status" fieldname="status" datatype="tinyint" required="true"/>
+        <property name="no_follow" fieldname="no_follow" datatype="tinyint" required="true"/>
+        <property name="stats_tracking" fieldname="stats_tracking" datatype="tinyint" required="true"/>
+        <property name="price" fieldname="price" datatype="int" required="true"/>
+        <property name="currency" fieldname="currency" datatype="varchar" required="true" maxlength="40"/>
+        <property name="payment_method" fieldname="payment_method" datatype="tinyint" required="true"/>
+        <property name="payment_status" fieldname="payment_status" datatype="tinyint" required="true"/>
+        <property name="subscription" fieldname="subscription" datatype="tinyint" required="true"/>
+        <property name="charging_model" fieldname="charging_model" datatype="tinyint" required="true"/>
+        <property name="publication_start" fieldname="publication_start" datatype="datetime" required="true"/>
+        <property name="publication_day" fieldname="publication_day" datatype="int" required="true"/>
+        <property name="banner" fieldname="banner" datatype="int" required="true"/>
+        <property name="website_url" fieldname="website_url" datatype="varchar" default="" maxlength="255"/>
+        <property name="alt_text" fieldname="alt_text" datatype="text" default=""/>
+        <property name="categorie_id" fieldname="categorie_id" datatype="int" default=""/>
+        <property name="souscategorie_id" fieldname="souscategorie_id" datatype="int" default=""/>
+        <property name="date_creation" fieldname="date_creation" datatype="datetime" required="true"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime" default=""/>
+        <property name="creator" fieldname="creator" datatype="varchar" default="" maxlength="50"/>
+    </record>
+    <factory>
+        <method name="countAll" type="count">
+        </method>
+        <method name="getListEnAttente" type="select">
+            <conditions >
+                <eq property="status" value="1"/>
+            </conditions>
+            <order>
+                <orderitem property="date_creation" way="asc" />
+            </order>
+        </method>
+        <method name="countEnAttente" type="count">
+            <conditions >
+                <eq property="status" value="1"/>
+            </conditions>
+        </method>
+        <method name="getListApprove" type="select">
+            <conditions >
+                <eq property="status" value="2"/>
+            </conditions>
+            <order>
+                <orderitem property="date_creation" way="asc" />
+            </order>
+        </method>
+        <method name="countApprove" type="count">
+            <conditions >
+                <eq property="status" value="1"/>
+            </conditions>
+        </method>
+        <method name="getListRejete" type="select">
+            <conditions >
+                <eq property="status" value="3"/>
+            </conditions>
+            <order>
+                <orderitem property="date_creation" way="asc" />
+            </order>
+        </method>
+        <method name="countRejete" type="count">
+            <conditions >
+                <eq property="status" value="1"/>
+            </conditions>
+        </method>
+        <method name="getListExpire" type="select">
+            <conditions >
+                <eq property="status" value="4"/>
+            </conditions>
+            <order>
+                <orderitem property="date_creation" way="asc" />
+            </order>
+        </method>
+        <method name="countExpire" type="count">
+            <conditions >
+                <eq property="status" value="1"/>
+            </conditions>
+        </method>
+        <method name="getListReserve" type="select">
+            <conditions >
+                <eq property="status" value="5"/>
+            </conditions>
+            <order>
+                <orderitem property="date_creation" way="asc" />
+            </order>
+        </method>
+        <method name="countReserve" type="count">
+            <conditions >
+                <eq property="status" value="1"/>
+            </conditions>
+        </method>
+    </factory>
+</dao>

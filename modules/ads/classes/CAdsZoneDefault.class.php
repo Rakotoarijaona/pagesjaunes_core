@@ -201,8 +201,8 @@ class CAdsZoneDefault
     // Récupération d'une zone par id
     public static function getById($id)
     {
-        $factory    = jDao::get('ads~ads_zone_default');
-        $res        = $factory->get($id);
+        $daoFactory = jDao::get('ads~ads_zone_default');
+        $res        = $daoFactory->get($id);
         $oAdsZoneDefault   = new CAdsZoneDefault();
         if ($res) {
             $oAdsZoneDefault->fetchFromRecord($res);
@@ -241,7 +241,6 @@ class CAdsZoneDefault
         }
         $this->fetchIntoRecord($record);
         $maFactory->insert($record);
-        jMessage::add(jLocale::get("ads~ads.add.success"), "success");
 
         return $record->id;
     }
@@ -256,7 +255,6 @@ class CAdsZoneDefault
         if (($this->is_publie != $record->is_publie) && ($this->is_publie == 1)) {
             $this->date_publication = CCommonTools::RgetDateNowSQL();
         }
-        jMessage::add(jLocale::get("ads~ads.update.success"), "success");
 
         $this->fetchIntoRecord($record);
         $maFactory->update($record);
@@ -286,10 +284,6 @@ class CAdsZoneDefault
     // Fonction upload des images publicitaires
     public function uploadImage($file)
     {
-        $iErrorCode = 0 ;
-
-        $width;
-        $height;
         $iErrorCode         = 0 ;
 
         if ($iErrorCode == 0) {

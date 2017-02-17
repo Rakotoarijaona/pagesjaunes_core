@@ -280,6 +280,7 @@ class ads_zoneCtrl extends jController {
     {
         $resp = $this->getResponse('html');
         $id = $this->param('id');
+
         if (!jAcl2::check("ads.restrictall")) { //Test droit restrict all
             $tpl = new jTpl();
             $oAdsZone = CAdsZone::getById($id);
@@ -313,10 +314,37 @@ class ads_zoneCtrl extends jController {
         return $resp;
     }
 
-    // get new ad form
-    public function newAdDefault()
+    // Sauvegarde de la configuration choisie et rafraichissement de la liste
+    public function save_default_config()
     {
         $resp = $this->getResponse ('htmlfragment');
+
+        $nb_ad      = $this->param('nb_ad','');
+        $display    = $this->param('display',1);
+        $zone_id    = $this->param('zone_id');
+
+        $oAdsZone   = CAdsZone::getById($zone_id);
+
+        if ($nb_ad != '') {
+            $oAdsZone->save_new_config($nb_ad, $display);
+        }
+
+        $toAdsZoneDefault = CAdsZoneDefault::getByZoneId($zone_id);
+        $resp->tpl->assign('toAdsZoneDefault', $toAdsZoneDefault);
+
+        $resp->tplname = 'ads~ads_zone_default_list';
+        return $resp;
+    }
+
+    // get ad form for edit
+    public function editAdDefault()
+    {
+        $resp = $this->getResponse ('htmlfragment');
+
+        $id = $this->param('id');
+        $oAdsZoneDefault   = CAdsZoneDefault::getById($id);
+        $resp->tpl->assign("oAdsZoneDefault", $oAdsZoneDefault);
+
         // Liste des categories
         $oListCategorie = array();
         $oList = Categorie::getList();
@@ -332,16 +360,17 @@ class ads_zoneCtrl extends jController {
         return $resp;
     }
 
-    // save new ad form
-    public function save_new_ad()
+    // save edit ad
+    public function save_edit_ad()
     {
         $resp = $this->getResponse ('htmlfragment');
 
+        $id    = $this->param('id');
         $ad_type = $this->param('ad_type','');
         $lien_ad    = $this->param('lien_ad');
         $zone_id    = $this->param('zone_id');
-        $oAdsZoneDefault = new CAdsZoneDefault();
-        if ($ad_type != '' && $ad_type == 1 && isset($_FILES['image'])) {
+        $oAdsZoneDefault = CAdsZoneDefault::getById($id);
+        if ($ad_type != '' && $ad_type == 1) {
             if ($_FILES['image']['name'] != '')
             {
                 $oAdsZoneDefault->uploadImage('image');
@@ -351,7 +380,6 @@ class ads_zoneCtrl extends jController {
         }
         $oAdsZoneDefault->zone_id  = $zone_id;
         $oAdsZoneDefault->type     = $ad_type;
-        $oAdsZoneDefault->rang     = 10;
         $oAdsZoneDefault->is_publie     = 1;
 
         if ($this->param('categorie','') != '') {
@@ -364,11 +392,9 @@ class ads_zoneCtrl extends jController {
 
         $oAdsZoneDefault->link = $lien_ad;
 
-        $oAdsZoneDefault->insert();
+        $oAdsZoneDefault->update();
 
         $toAdsZoneDefault = CAdsZoneDefault::getByZoneId($zone_id);
-        $i = 1;
-        $resp->tpl->assign("i", $i);
         $resp->tpl->assign('toAdsZoneDefault', $toAdsZoneDefault);
 
         $resp->tplname = 'ads~ads_zone_default_list';

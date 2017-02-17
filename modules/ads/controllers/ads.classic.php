@@ -13,7 +13,8 @@ jClasses::inc("catalogue~Catalogue");
 jClasses::inc("common~CCommonTools");
 jClasses::inc("common~CPhotosUpload");
 jClasses::inc("ads~CAds");
-jClasses::inc("ads~CAds_type");
+jClasses::inc("ads~CAdsZone");
+jClasses::inc("ads~CAdsPurchase");
 
 class adsCtrl extends jController {
     /**
@@ -62,31 +63,51 @@ class adsCtrl extends jController {
         return $resp;
     }
 
-    //Page ajout
-    public function ajout()
+    // page liste annonces
+    public function liste_annonce()
+    {
+        $resp = $this->getResponse('html');
+        if (!jAcl2::check("ads.restrictall")) { //Test droit restrict all
+            $tpl = new jTpl();
+            $toListAds = CAdsPurchase::getList();
+            $tpl->assign("toListAds", $toListAds);
+            $tpl->assign("SCRIPT", jZone::get('common~script'));
+            $resp->body->assign('MAIN', $tpl->fetch('ads~index'));
+            $resp->body->assign('selectedMenuItem','ads');
+            $resp->body->assign('selectedMenuChildItem','ads');
+        } else {
+            $resp = $this->getResponse('html');
+            $tpl = new jTpl();
+            $tpl->assign("SCRIPT", jZone::get('common~script'));
+            $resp->body->assign('MAIN', $tpl->fetch('common~accessdenied'));
+        }
+        return $resp;
+    }
+
+    //Page ajout annonceur
+    public function ajout_annonceur()
     {
         if (!jAcl2::check("ads.restrictall")) { //Test droit restrict all
             $resp = $this->getResponse('html');
-            $tpl = new jTpl();        
-            $toListAdsType = CAds_type::getList();
+            $tpl = new jTpl();
 
-            $toListEntreprise = Entreprise::getList();
+            // Liste des zones            
+            $toListAdsType = CAdsZone::getList();
+            $tpl->assign("toListAdsType", $toListAdsType);
 
-            $toListCategorie = Categorie::getList();
-            $toListCategorieSouscategorie = array();
-
+            // Liste des categories
+            $oListCategorie = array();
+            $oList = Categorie::getList();
             $i = 0;
-            foreach ($toListCategorie as $categorie) {
-                $toListCategorieSouscategorie[$i]['categorie'] = $categorie;
-                $toListCategorieSouscategorie[$i]['souscategorie'] = $categorie->getChild();
+            foreach ($oList as $categorie) {
+                $oListCategorie[$i]['categorie'] = $categorie;
+                $oListCategorie[$i]['souscategorie'] = $categorie->getChild();
                 $i+=1;
             }
-            $tpl->assign("toListCategorieSouscategorie", $toListCategorieSouscategorie);
-            $tpl->assign("toListCategorie", $toListCategorie);
-            $tpl->assign("toListEntreprise", $toListEntreprise);
-            $tpl->assign("toListAdsType", $toListAdsType);
+            $tpl->assign("oListCategorie", $oListCategorie);
+
             $tpl->assign("SCRIPT", jZone::get('common~script'));
-            $resp->body->assign('MAIN', $tpl->fetch('ads~ajout'));
+            $resp->body->assign('MAIN', $tpl->fetch('ads~ads_purchase_add'));
             $resp->body->assign('selectedMenuItem','ads');
             $resp->body->assign('selectedMenuChildItem','ads');
         } else {
@@ -99,44 +120,78 @@ class adsCtrl extends jController {
     }
 
     // Enregistrement de l'ajout
-    public function save_add()
+    public function save_add_annonceur()
     {
         if (!jAcl2::check("ads.restrictall")) { //Test droit restrict all
-            if (($this->param('name') != '') &&
-                ($this->param('adstype') != '') &&
-                (isset($_FILES['image'])))
+            $advertiser_name    = $this->param('advertiser_name','');
+            $advertiser_mail    = $this->param('advertiser_mail','');
+            $type_zone          = $this->param('type_zone','');
+            $status             = $this->param('status','');
+            $no_follow          = $this->param('no_follow','');
+            $stats_tracking     = $this->param('stats_tracking','');
+            $price              = $this->param('price','');
+            $currency           = $this->param('currency','');
+            $payment_method     = $this->param('payment_method','');
+            $payment_status     = $this->param('payment_status','');
+            $inscription        = $this->param('inscription','');
+            $cost_model         = $this->param('cost_model','');
+            $publication_start  = $this->param('publication_start','');
+            $publication_day    = $this->param('publication_day','');
+            $image              = $this->param('image','');
+            $website_url        = $this->param('website_url','');
+            $alt_text           = $this->param('alt_text','');
+            $categorie_filtre   = $this->param('categorie_filtre','');
+            $sub_id             = $this->param('sub_id','');
+
+        
+            if (($advertiser_name != '') && ($advertiser_mail != '') && ($type_zone != '') && 
+                ($status != '') && ($price != '') && ($currency != '') && 
+                ($payment_method != '') && ($payment_status != '') && 
+                (($inscription == 1 && $sub_id != '') || $inscription == 0) && ($cost_model != '') && 
+                ($publication_start != '') && ($publication_day != '') && (isset($_FILES['image'])))
             {
-                $oAds = new CAds();
-                if ($oAds->uploadImage('image', $this->param('adstype')) == 0)
-                {            	
-                    $oAds->name = $this->param('name');
-                    $namealias = CCommonTools::generateAlias ($oAds->name,"");
-                    $oAds->namealias = $namealias;
 
-                    $oAds->type = $this->param('adstype');
+                $oAdsPurchase = new CAdsPurchase();
+                if ($_FILES['image']['name'] != '')
+                {          	
+                    $oAdsPurchase->reference            = CCommonTools::randomString(8);;
+                    $oAdsPurchase->advertiser_name      = $advertiser_name;
+                    $oAdsPurchase->advertiser_mail      = $advertiser_mail;
+                    $oAdsPurchase->zone_type            = $type_zone;
+                    $oAdsPurchase->status               = $status;
+                    $oAdsPurchase->no_follow            = $no_follow;
+                    $oAdsPurchase->stats_tracking       = $stats_tracking;
+                    $oAdsPurchase->price                = $price;
+                    $oAdsPurchase->currency             = $currency;
+                    $oAdsPurchase->payment_method       = $payment_method;
+                    $oAdsPurchase->payment_status       = $payment_status;
+                    $oAdsPurchase->subscription         = $inscription;
+                    $oAdsPurchase->charging_model       = $cost_model;
+                    $oAdsPurchase->publication_start    = $publication_start;
+                    $oAdsPurchase->publication_day      = $publication_day;
+                    $oAdsPurchase->uploadImage('image', $type_zone);
+                    $oAdsPurchase->website_url          = $website_url;
+                    $oAdsPurchase->alt_text             = $alt_text;
 
-                    $oAds->description = $this->param('description');
-
-                    if (($this->param('annonceur') != '') && ($this->param('annonceur') != 0)) {
-                        $oAds->annonceur = $this->param('annonceur');
-                    }
-
-                    if (($this->param('souscategorie') != ''))
+                    if ($categorie_filtre != '')
                     {
-                        $oAds->souscategorie = $this->param('souscategorie');
+                        $filtre = explode(',', $categorie_filtre);
+
+                        if (trim($filtre[0]) == 'categorie')
+                        {
+                            $oAdsPurchase->categorie_id     = trim($filtre[1]);
+                        }
+                        elseif (trim($filtre[0]) == 'souscategorie')
+                        {
+                            $oAdsPurchase->souscategorie_id = trim($filtre[1]);
+                        } 
                     }
 
-                    $oAds->is_publie = $this->param('ispublie');
-                    if ($this->param('isdefault') == 1)
-                    {
-                        $oAds->is_default = 1;
-                        $oAds->setDefault($oAds->type);
-                    } else {
-                        $oAds->is_default = 0;
-                    }
+                    $oAdsPurchase->insert();
+                    $toListAds = CAdsPurchase::getList();
+                    print_r($toListAds);
+                    die;
 
-                    $oAds->is_default = $this->param('isdefault');
-                    $oAds->insert();
                     jMessage::add(jLocale::get("ads~ads.add.success"), "success");
                 } else {
                     jMessage::add(jLocale::get("ads~ads.error"), "danger");
@@ -145,7 +200,7 @@ class adsCtrl extends jController {
                 jMessage::add(jLocale::get("ads~ads.error"), "danger");
             }
             $resp = $this->getResponse ('redirect');
-            $resp->action = 'ads~ads:index';
+            $resp->action = 'ads~ads:liste_annonce';
         }
         else {
             $resp = $this->getResponse('html');
