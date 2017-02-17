@@ -8,7 +8,7 @@
             <li class="active">
                 <a><strong>Abonnements</strong></a>
             </li>
-        </ol>       
+        </ol>
     </div>
 </div>
 
@@ -21,12 +21,15 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="input-group">
-                                <input type="text" placeholder="Filtre" id="table-filter" class="form-control">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-white"> <i class="fa fa-search"></i></button>
-                                </span>
-                            </div>
+                            <form name="searchForm" id="searchForm" action="" method="get">
+                                <div class="input-group">
+                                    <input type="text" placeholder="Filtre" id="table-filter" class="form-control">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-white"> <i class="fa fa-search"></i></button>
+                                    </s
+                                    pan>
+                                </div>
+
                         </div>
                         <div class="col-sm-8 text-left">
                             {ifacl2 "abonnement.create"}

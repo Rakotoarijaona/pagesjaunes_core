@@ -1,25 +1,302 @@
--- 2017-02-17
+-- phpMyAdmin SQL Dump
+-- version 4.1.14
+-- http://www.phpmyadmin.net
+--
+-- Client :  127.0.0.1
+-- Généré le :  Ven 17 Février 2017 à 09:39
+-- Version du serveur :  5.6.17
+-- Version de PHP :  5.5.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
 
 --
--- Structure de la table `pagesjaunes_abonnement`
+-- Base de données :  `pagesjaunes_db`
 --
 
-CREATE TABLE IF NOT EXISTS `pagesjaunes_abonnement` (
-  `abonnement_id` int(11) NOT NULL AUTO_INCREMENT,
-  `abonnement_entrepriseid` int(11) DEFAULT NULL,
-  `abonnement_nomoffre` varchar(250) DEFAULT NULL,
-  `abonnement_datedebut` date DEFAULT NULL,
-  `abonnement_datefin` date DEFAULT NULL,
-  `abonnement_dureeval` float DEFAULT NULL,
-  `abonnement_dureetype` tinyint(2) DEFAULT NULL,
-  `abonnement_montant` decimal(19,2) DEFAULT NULL,
-  `abonnement_removalstatus` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`abonnement_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+-- --------------------------------------------------------
 
 --
--- Contenu de la table `pagesjaunes_abonnement`
+-- Structure de la table `pagesjaunes_jacl2_rights`
 --
 
-INSERT INTO `pagesjaunes_abonnement` (`abonnement_id`, `abonnement_entrepriseid`, `abonnement_nomoffre`, `abonnement_datedebut`, `abonnement_datefin`, `abonnement_dureeval`, `abonnement_dureetype`, `abonnement_montant`, `abonnement_removalstatus`) VALUES
-(1, 24, 'Offre one', '2017-07-02', '2017-02-17', 4, 2, '4568.54', 1);
+CREATE TABLE IF NOT EXISTS `pagesjaunes_jacl2_rights` (
+  `id_aclsbj` varchar(100) NOT NULL,
+  `id_aclgrp` varchar(50) NOT NULL,
+  `id_aclres` varchar(100) NOT NULL DEFAULT '-',
+  `canceled` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_aclsbj`,`id_aclgrp`,`id_aclres`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `pagesjaunes_jacl2_rights`
+--
+
+INSERT INTO `pagesjaunes_jacl2_rights` (`id_aclsbj`, `id_aclgrp`, `id_aclres`, `canceled`) VALUES
+('jprefs.prefs.list', 'admins', '-', 0),
+('categorie.update', 'administrateur', '-', 0),
+('user.create', 'administrateur', '-', 0),
+('categorie.list', 'administrateur', '-', 0),
+('categorie.create', 'administrateur', '-', 0),
+('homepage.update', 'administrateur', '-', 0),
+('right.list', 'administrateur', '-', 0),
+('slideshow.list', 'administrateur', '-', 0),
+('homepage.update', 'superadmin', '-', 0),
+('entreprise.create', 'administrateur', '-', 0),
+('profile.list', 'superadmin', '-', 0),
+('acl.group.create', '__priv_admin', '-', 0),
+('acl.group.delete', '__priv_admin', '-', 0),
+('acl.group.modify', '__priv_admin', '-', 0),
+('acl.group.view', '__priv_admin', '-', 0),
+('acl.user.modify', '__priv_admin', '-', 0),
+('acl.user.view', '__priv_admin', '-', 0),
+('auth.user.change.password', '__priv_admin', '-', 0),
+('auth.user.modify', '__priv_admin', '-', 0),
+('auth.user.view', '__priv_admin', '-', 0),
+('auth.users.change.password', '__priv_admin', '-', 0),
+('auth.users.create', '__priv_admin', '-', 0),
+('auth.users.delete', '__priv_admin', '-', 0),
+('auth.users.list', '__priv_admin', '-', 0),
+('auth.users.modify', '__priv_admin', '-', 0),
+('auth.users.view', '__priv_admin', '-', 0),
+('jprefs.prefs.list', '__priv_admin', '-', 0),
+('topsrecherche.delete', 'superadmin', '-', 0),
+('topsrecherche.update', 'superadmin', '-', 0),
+('categorie.create', 'superadmin', '-', 0),
+('slideshow.delete', 'superadmin', '-', 0),
+('topsrecherche.list', 'superadmin', '-', 0),
+('topsrecherche.list', 'administrateur', '-', 0),
+('topsrecherche.create', 'superadmin', '-', 0),
+('topsrecherche.create', 'administrateur', '-', 0),
+('slideshow.update', 'superadmin', '-', 0),
+('slideshow.list', 'superadmin', '-', 0),
+('slideshow.create', 'superadmin', '-', 0),
+('entreprise.delete', 'superadmin', '-', 0),
+('entreprise.list', 'administrateur', '-', 0),
+('entreprise.update', 'superadmin', '-', 0),
+('entreprise.list', 'superadmin', '-', 0),
+('entreprise.create', 'superadmin', '-', 0),
+('dashboard.menu', 'superadmin', '-', 0),
+('right.update', 'superadmin', '-', 0),
+('right.list', 'superadmin', '-', 0),
+('admin.right.update', 'superadmin', '-', 0),
+('admin.right.list', 'superadmin', '-', 0),
+('user.delete', 'superadmin', '-', 0),
+('user.menu', 'superadmin', '-', 0),
+('user.update', 'superadmin', '-', 0),
+('user.list', 'superadmin', '-', 0),
+('user.create', 'superadmin', '-', 0),
+('profile.delete', 'superadmin', '-', 0),
+('profile.menu', 'superadmin', '-', 0),
+('profile.update', 'superadmin', '-', 0),
+('profile.create', 'superadmin', '-', 0),
+('topsrecherche.delete', 'administrateur', '-', 0),
+('topsrecherche.update', 'administrateur', '-', 0),
+('categorie.delete', 'administrateur', '-', 0),
+('right.update', 'administrateur', '-', 0),
+('profile.list', 'administrateur', '-', 0),
+('admin.right.list', 'administrateur', '-', 0),
+('admin.right.update', 'administrateur', '-', 0),
+('user.menu', 'administrateur', '-', 0),
+('user.delete', 'administrateur', '-', 0),
+('user.list', 'administrateur', '-', 0),
+('user.update', 'administrateur', '-', 0),
+('profile.delete', 'administrateur', '-', 0),
+('profile.menu', 'administrateur', '-', 0),
+('profile.update', 'administrateur', '-', 0),
+('profile.create', 'administrateur', '-', 0),
+('categorie.list', 'superadmin', '-', 0),
+('categorie.update', 'superadmin', '-', 0),
+('entreprise.update', 'administrateur', '-', 0),
+('categorie.delete', 'superadmin', '-', 0),
+('keywords.create', 'superadmin', '-', 0),
+('keywords.list', 'superadmin', '-', 0),
+('keywords.update', 'superadmin', '-', 0),
+('entreprise.delete', 'administrateur', '-', 0),
+('keywords.delete', 'superadmin', '-', 0),
+('homepage.menu', 'superadmin', '-', 0),
+('keywords.create', 'administrateur', '-', 0),
+('keywords.list', 'administrateur', '-', 0),
+('keywords.update', 'administrateur', '-', 0),
+('keywords.delete', 'administrateur', '-', 0),
+('homepage.menu', 'administrateur', '-', 0),
+('pages.update', 'administrateur', '-', 0),
+('pages.list', 'administrateur', '-', 0),
+('pages.update', 'superadmin', '-', 0),
+('pages.list', 'superadmin', '-', 0),
+('pages.create', 'superadmin', '-', 0),
+('pages.delete', 'superadmin', '-', 0),
+('pages.create', 'administrateur', '-', 0),
+('ads.list', 'superadmin', '-', 0),
+('ads.create', 'superadmin', '-', 0),
+('ads.update', 'superadmin', '-', 0),
+('ads.delete', 'superadmin', '-', 0),
+('ads.type.list', 'superadmin', '-', 0),
+('ads.type.create', 'superadmin', '-', 0),
+('ads.type.update', 'superadmin', '-', 0),
+('ads.type.delete', 'superadmin', '-', 0),
+('profile.restrictall', 'custom', '-', 0),
+('right.list', 'custom', '-', 0),
+('dashboard.restrictall', 'custom', '-', 0),
+('dashboard.menu', 'custom', '-', 0),
+('admin.right.restrictall', 'custom', '-', 0),
+('profile.create', 'custom', '-', 0),
+('profile.list', 'custom', '-', 0),
+('profile.menu', 'custom', '-', 0),
+('pages.delete', 'administrateur', '-', 0),
+('pages.restrictall', 'administrateur', '-', 0),
+('ads.create', 'administrateur', '-', 0),
+('ads.list', 'administrateur', '-', 0),
+('ads.update', 'administrateur', '-', 0),
+('ads.delete', 'administrateur', '-', 0),
+('ads.restrictall', 'administrateur', '-', 0),
+('ads.type.create', 'administrateur', '-', 0),
+('ads.type.list', 'administrateur', '-', 0),
+('ads.type.update', 'administrateur', '-', 0),
+('ads.type.delete', 'administrateur', '-', 0),
+('ads.type.restrictall', 'administrateur', '-', 0),
+('profile.restrictall', 'administrateur', '-', 0),
+('user.restrictall', 'administrateur', '-', 0),
+('entreprise.update', 'custom', '-', 0),
+('entreprise.list', 'custom', '-', 0),
+('dashboard.menu', 'administrateur', '-', 0),
+('entreprise.create', 'custom', '-', 0),
+('homepage.menu', 'custom', '-', 0),
+('entreprise.delete', 'custom', '-', 0),
+('topsrecherche.list', 'custom', '-', 0),
+('topsrecherche.restrictall', 'custom', '-', 0),
+('pages.create', 'custom', '-', 0),
+('pages.list', 'custom', '-', 0),
+('ads.create', 'custom', '-', 0),
+('ads.list', 'custom', '-', 0),
+('ads.update', 'custom', '-', 0),
+('ads.delete', 'custom', '-', 0),
+('ads.restrictall', 'custom', '-', 0),
+('ads.type.create', 'custom', '-', 0),
+('ads.type.list', 'custom', '-', 0),
+('ads.type.restrictall', 'custom', '-', 0),
+('abonnement.create', 'superadmin', '-', 0),
+('abonnement.list', 'superadmin', '-', 0),
+('abonnement.update', 'superadmin', '-', 0),
+('abonnement.delete', 'superadmin', '-', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `pagesjaunes_jacl2_subject`
+--
+
+CREATE TABLE IF NOT EXISTS `pagesjaunes_jacl2_subject` (
+  `id_aclsbj` varchar(100) NOT NULL,
+  `label_key` varchar(100) DEFAULT NULL,
+  `id_aclsbjgrp` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_aclsbj`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `pagesjaunes_jacl2_subject`
+--
+
+INSERT INTO `pagesjaunes_jacl2_subject` (`id_aclsbj`, `label_key`, `id_aclsbjgrp`) VALUES
+('acl.user.view', 'jacl2db~acl2db.acl.user.view', 'acl.grp.user.management'),
+('acl.user.modify', 'jacl2db~acl2db.acl.user.modify', 'acl.grp.user.management'),
+('acl.group.modify', 'jacl2db~acl2db.acl.group.modify', 'acl.grp.group.management'),
+('acl.group.create', 'jacl2db~acl2db.acl.group.create', 'acl.grp.group.management'),
+('acl.group.delete', 'jacl2db~acl2db.acl.group.delete', 'acl.grp.group.management'),
+('acl.group.view', 'jacl2db~acl2db.acl.group.view', 'acl.grp.group.management'),
+('auth.users.list', 'jelix~auth.acl.users.list', 'auth.grp.user.management'),
+('auth.users.view', 'jelix~auth.acl.users.view', 'auth.grp.user.management'),
+('auth.users.modify', 'jelix~auth.acl.users.modify', 'auth.grp.user.management'),
+('auth.users.create', 'jelix~auth.acl.users.create', 'auth.grp.user.management'),
+('auth.users.delete', 'jelix~auth.acl.users.delete', 'auth.grp.user.management'),
+('auth.users.change.password', 'jelix~auth.acl.users.change.password', 'auth.grp.user.management'),
+('auth.user.view', 'jelix~auth.acl.user.view', 'auth.grp.user.management'),
+('auth.user.modify', 'jelix~auth.acl.user.modify', 'auth.grp.user.management'),
+('auth.user.change.password', 'jelix~auth.acl.user.change.password', 'auth.grp.user.management'),
+('jprefs.prefs.list', 'jpref_admin~admin.acl.prefs.list', 'jprefs.prefs.management'),
+('user.menu', 'user~acl2.menu', NULL),
+('user.create', 'user~acl2.create', NULL),
+('user.update', 'user~acl2.update', NULL),
+('user.delete', 'user~acl2.delete', NULL),
+('user.list', 'user~acl2.list', NULL),
+('profile.menu', 'profile~acl2.menu', NULL),
+('profile.create', 'profile~acl2.create', NULL),
+('profile.update', 'profile~acl2.update', NULL),
+('profile.delete', 'profile~acl2.delete', NULL),
+('profile.list', 'profile~acl2.list', NULL),
+('right.menu', 'right~acl2.menu', NULL),
+('right.create', 'right~acl2.create', NULL),
+('right.update', 'right~acl2.update', NULL),
+('right.delete', 'right~acl2.delete', NULL),
+('right.list', 'right~acl2.list', NULL),
+('dashboard.menu', 'dashboard~acl2.menu', NULL),
+('entreprise.menu', 'entreprise~acl2.menu', NULL),
+('entreprise.create', 'entreprise~acl2.create', NULL),
+('entreprise.update', 'entreprise~acl2.update', NULL),
+('entreprise.delete', 'entreprise~acl2.delete', NULL),
+('entreprise.list', 'entreprise~acl2.list', NULL),
+('entreprise.restrictall', 'entreprise~acl2.restrictall', NULL),
+('slideshow.menu', 'slideshow~acl2.menu', NULL),
+('slideshow.create', 'slideshow~acl2.create', NULL),
+('slideshow.list', 'slideshow~acl2.list', NULL),
+('slideshow.update', 'slideshow~acl2.update', NULL),
+('slideshow.restrictall', 'slideshow~acl2.restrictall', NULL),
+('slideshow.delete', 'slideshow~acl2.delete', NULL),
+('categorie.menu', 'categorie~acl2.menu', NULL),
+('categorie.create', 'categorie~acl2.create', NULL),
+('categorie.list', 'categorie~acl2.list', NULL),
+('categorie.update', 'categorie~acl2.update', NULL),
+('categorie.restrictall', 'categorie~acl2.restrictall', NULL),
+('categorie.delete', 'categorie~acl2.delete', NULL),
+('keywords.menu', 'keywords~acl2.menu', NULL),
+('keywords.create', 'keywords~acl2.create', NULL),
+('keywords.list', 'keywords~acl2.list', NULL),
+('keywords.update', 'keywords~acl2.update', NULL),
+('keywords.restrictall', 'keywords~acl2.restrictall', NULL),
+('keywords.delete', 'keywords~acl2.delete', NULL),
+('homepage.menu', 'homepage~acl2.menu', NULL),
+('admin.right.list', 'right~acl2.admin.right.list', NULL),
+('admin.right.update', 'right~acl2.admin.right.update', NULL),
+('homepage.create', 'homepage~acl2.create', NULL),
+('homepage.update', 'homepage~acl2.update', NULL),
+('topsrecherche.list', 'right~acl2.topsrecherche.list', NULL),
+('topsrecherche.create', 'right~acl2.topsrecherche.create', NULL),
+('topsrecherche.delete', 'right~acl2.topsrecherche.delete', NULL),
+('topsrecherche.restrictall', 'right~acl2.topsrecherche.restrictall', NULL),
+('topsrecherche.update', 'right~acl2.topsrecherche.update', NULL),
+('pages.list', 'pages~acl2.list', NULL),
+('pages.update', 'pages~acl2.update', NULL),
+('pages.create', 'pages~acl2.create', NULL),
+('pages.delete', 'pages~acl2.delete', NULL),
+('ads.list', 'ads~acl2.list', NULL),
+('ads.create', 'ads~acl2.create', NULL),
+('ads.update', 'ads~acl2.update', NULL),
+('ads.delete', 'ads~acl2.delete', NULL),
+('ads.type.list', 'ads~acl2.type.list', NULL),
+('ads.type.create', 'ads~acl2.type.create', NULL),
+('ads.type.update', 'ads~acl2.type.update', NULL),
+('ads.type.delete', 'ads~acl2.type.delete', NULL),
+('dashboard.restrictall', 'dashboard~acl2.restrictall', NULL),
+('homepage.restrictall', 'homepage~acl2.restrictall', NULL),
+('profile.restrictall', 'profile~acl2.restrictall', NULL),
+('right.restrictall', 'right~acl2.restrictall', NULL),
+('user.restrictall', 'user~acl2.restrictall', NULL),
+('ads.restrictall', 'ads~acl2.restrictall', NULL),
+('ads.type.restrictall', 'ads~acl2.type.restrictall', NULL),
+('pages.restrictall', 'pages~acl2.restrictall', NULL),
+('admin.right.restrictall', 'right~acl2.admin.right.restrictall', NULL),
+('abonnement.create', '', NULL),
+('abonnement.list', '', NULL),
+('abonnement.update', '', NULL),
+('abonnement.delete', '', NULL),
+('abonnement.restrictall', '', NULL);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
