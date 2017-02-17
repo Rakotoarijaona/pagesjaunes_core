@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Jeu 16 Février 2017 à 11:35
+-- Généré le :  Ven 17 Février 2017 à 09:20
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -87,6 +87,48 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_config` (
 
 INSERT INTO `pagesjaunes_ads_config` (`id`, `website_name`, `contact_mail`, `payment_methods`, `edit_ads`, `payment_after_moderate`, `new_window`, `upload_image`, `security_question`) VALUES
 (1, 'Pages jaunes Madagascar', 'contact@pagesjaunes.com', 'cheque', 0, 1, 1, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `pagesjaunes_ads_purchase`
+--
+
+CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_purchase` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference` varchar(50) NOT NULL,
+  `advertiser_name` varchar(50) NOT NULL,
+  `advertiser_mail` varchar(255) NOT NULL,
+  `zone_type` int(5) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `no_follow` tinyint(1) NOT NULL,
+  `stats_tracking` tinyint(1) NOT NULL,
+  `price` int(11) NOT NULL,
+  `currency` varchar(40) NOT NULL,
+  `payment_method` tinyint(1) NOT NULL,
+  `payment_status` tinyint(1) NOT NULL,
+  `subscription` tinyint(1) NOT NULL,
+  `charging_model` tinyint(1) NOT NULL,
+  `publication_start` datetime NOT NULL,
+  `publication_day` int(5) NOT NULL,
+  `banner` varchar(255) NOT NULL,
+  `website_url` varchar(255) DEFAULT NULL,
+  `alt_text` text,
+  `categorie_id` int(11) DEFAULT NULL,
+  `souscategorie_id` int(11) DEFAULT NULL,
+  `date_creation` datetime NOT NULL,
+  `date_update` datetime DEFAULT NULL,
+  `creator` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Contenu de la table `pagesjaunes_ads_purchase`
+--
+
+INSERT INTO `pagesjaunes_ads_purchase` (`id`, `reference`, `advertiser_name`, `advertiser_mail`, `zone_type`, `status`, `no_follow`, `stats_tracking`, `price`, `currency`, `payment_method`, `payment_status`, `subscription`, `charging_model`, `publication_start`, `publication_day`, `banner`, `website_url`, `alt_text`, `categorie_id`, `souscategorie_id`, `date_creation`, `date_update`, `creator`) VALUES
+(1, 'fL37GXJp', 'RAKOTO', 'rakoto@gmail.com', 3, 1, 0, 0, 1000, 'Ar', 1, 1, 0, 1, '0000-00-00 00:00:00', 12, 'ambohipo-13.jpg', NULL, NULL, 11, NULL, '2017-02-17 08:46:03', NULL, 'RAKOTOARIJAONA'),
+(2, 'iJowW3Xp', 'RAKOTO', 'rakoto@gmail.com', 4, 1, 0, 0, 255000, 'Ar', 1, 1, 0, 2, '0000-00-00 00:00:00', 12, 'ambohipo-14.jpg', NULL, NULL, NULL, 1, '2017-02-17 08:51:23', NULL, 'RAKOTOARIJAONA');
 
 -- --------------------------------------------------------
 
@@ -188,8 +230,8 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_zone` (
 --
 
 INSERT INTO `pagesjaunes_ads_zone` (`id`, `name`, `cost_model`, `width`, `height`, `slots_columns`, `slots_row`, `number_rotation`, `number_client`, `line_height`, `number_ads_default`, `ads_display_method`, `is_publie`, `date_creation`, `date_update`, `date_publication`, `creator`) VALUES
-(3, 'Zone1', 'jour', 300, 600, 1, 1, 10, 100, 10, 0, 0, 1, '2017-02-14 12:53:45', NULL, '2017-02-14 17:20:06', 'RAKOTOARIJAONA'),
-(4, 'zone2', 'clic', 100, 100, 1, 1, 10, 110, 10, 0, 0, 1, '2017-02-14 13:18:49', NULL, '2017-02-14 13:18:49', 'RAKOTOARIJAONA');
+(3, 'Zone1', 'jour', 300, 600, 1, 1, 10, 100, 10, 4, 1, 1, '2017-02-14 12:53:45', '2017-02-16 18:26:34', '2017-02-14 17:20:06', 'RAKOTOARIJAONA'),
+(4, 'zone2', 'clic', 100, 100, 1, 1, 10, 110, 10, 5, 1, 1, '2017-02-14 13:18:49', '2017-02-16 16:42:01', '2017-02-14 13:18:49', 'RAKOTOARIJAONA');
 
 -- --------------------------------------------------------
 
@@ -201,7 +243,7 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_zone_default` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `zone_id` int(3) NOT NULL,
   `rang` int(3) DEFAULT NULL,
-  `type` tinyint(1) NOT NULL,
+  `type` tinyint(1) DEFAULT NULL,
   `categorie_id` int(11) DEFAULT NULL,
   `souscategorie_id` int(11) DEFAULT NULL,
   `image` varchar(50) DEFAULT NULL,
@@ -213,17 +255,22 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_zone_default` (
   `date_update` datetime DEFAULT NULL,
   `creator` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=82 ;
 
 --
 -- Contenu de la table `pagesjaunes_ads_zone_default`
 --
 
 INSERT INTO `pagesjaunes_ads_zone_default` (`id`, `zone_id`, `rang`, `type`, `categorie_id`, `souscategorie_id`, `image`, `html`, `link`, `is_publie`, `date_creation`, `date_publication`, `date_update`, `creator`) VALUES
-(1, 3, 10, 1, NULL, NULL, 'brahman-2.jpg', NULL, NULL, 1, '2017-02-15 16:01:24', '2017-02-15 16:01:24', NULL, 'RAKOTOARIJAONA'),
-(2, 3, 10, 1, NULL, 13, 'PENSION+COMPLETE.JPG-2.jpg', NULL, NULL, 1, '2017-02-15 16:03:07', '2017-02-15 16:03:07', NULL, 'RAKOTOARIJAONA'),
-(3, 3, 10, 2, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-15 16:12:36', '2017-02-15 16:12:36', NULL, 'RAKOTOARIJAONA'),
-(4, 3, 10, 2, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-16 11:32:30', '2017-02-16 11:32:30', NULL, 'RAKOTOARIJAONA');
+(12, 4, 1, 2, 11, NULL, NULL, '                        ', NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-17 06:56:06', 'RAKOTOARIJAONA'),
+(18, 4, 2, 1, NULL, 15, 'silence.jpg', NULL, NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-16 16:17:51', 'RAKOTOARIJAONA'),
+(23, 4, 3, 2, NULL, NULL, NULL, '            ', NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-16 16:19:19', 'RAKOTOARIJAONA'),
+(24, 4, 4, 2, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-16 15:03:06', '2017-02-16 15:03:06', NULL, 'RAKOTOARIJAONA'),
+(25, 4, 5, 1, NULL, NULL, 'brahman-3.jpg', NULL, NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-16 16:21:11', 'RAKOTOARIJAONA'),
+(77, 3, 1, 2, NULL, 1, NULL, '            ', NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-16 18:37:02', 'RAKOTOARIJAONA'),
+(78, 3, 2, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-16 17:00:47', '2017-02-16 17:00:47', NULL, 'RAKOTOARIJAONA'),
+(79, 3, 3, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-16 17:00:47', '2017-02-16 17:00:47', NULL, 'RAKOTOARIJAONA'),
+(80, 3, 4, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-16 17:00:47', '2017-02-16 17:00:47', NULL, 'RAKOTOARIJAONA');
 
 -- --------------------------------------------------------
 

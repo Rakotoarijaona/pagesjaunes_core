@@ -22,19 +22,29 @@
                     <h2>Zone: {$oAdsZone->name}</h2>
                     <form id="adzoneform" role="form" action="{jurl 'ads~ads_zone:save_ajout'}" method="POST">
                         <input type="hidden" name="zone_id" id="zone_id" value="{$oAdsZone->id}">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group r-form">
-                                    <label>Nombre de pubs</label>
-                                    <input type="text" id="nb_pub" name="nb_pub" class="form-control" style="width:200px" value=""/>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group r-form">
+                                            <label>Nombre de pubs</label>
+                                            <input type="text" id="nb_pub" name="nb_pub" class="form-control" value="{$oAdsZone->number_ads_default}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group r-form">
+                                            <label>Méthode d'affichage</label>
+                                            <select class="form-control" name="display_method" id="display_method">
+                                                <option value="1" {if ($oAdsZone->ads_display_method == 1)}selected{/if}>Renseigner les éspaces vides</option>
+                                                <option value="2" {if ($oAdsZone->ads_display_method == 2)}selected{/if}>Weighted ad rotation</option>
+                                                <option value="3" {if ($oAdsZone->ads_display_method == 3)}selected{/if}>Rotate equally with purchases</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group r-form">
-                                    <label>Méthode d'affichage</label>
-                                    <select class="form-control" name="cost_model" id="cost_model" style="width:200px">
-                                        <option value="1">Renseigner les éspaces vides</option>
-                                        <option value="2">Weighted ad rotation</option>
-                                        <option value="3">Rotate equally with purchases</option>
-                                    </select>
+                                <div class="form-group">
+                                    <a href="{jurl 'ads~ads_zone:index'}" class="btn btn-white">Annuler</a>
+                                    <button type="button" onclick="saveConfiguration()" class="btn btn-success btn-save-ad">Executer</button>
                                 </div>
                             </div>
                         </div>
@@ -45,53 +55,7 @@
                                         Formulaire
                                     </div>
                                     <div class="panel-body" id="adsform">
-                                        <div class="form-group r-form">
-                                            <label>Type</label>
-                                            <select class="form-control" name="ad_type" id="ad_type" style="width:300px">
-                                                <option value="1">Image</option>
-                                                <option value="2">Html</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group r-form">
-                                            <div style="width:300px">
-                                                <label>Catégorie / sous-catégorie</label>
-                                                <select class="form-control m-b" name="categorie_filtre">
-                                                    <option value="">Selection :</option>
-                                                    {foreach ($oListCategorie as $rowCategorie)}
-                                                    <option value="categorie,{$rowCategorie['categorie']->id}" style="font-weight: bold;">{$rowCategorie['categorie']->name}</option>
-                                                        {foreach ($rowCategorie['souscategorie'] as $souscategorie)} 
-                                                        <option style="padding-left: 10px" value='souscategorie,{$souscategorie->id}'>{$souscategorie->name} </option>
-                                                        {/foreach}
-                                                    {/foreach}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group r-form" id="ad_image">
-                                            <label>Image</label>
-                                            <div class="fileupload fileupload-new" data-provides="fileupload">
-                                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 300px; max-height: 400px; line-height: 20px;"></div>
-                                                <div>
-                                                    <span class="btn btn-white btn-file">
-                                                    <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Parcourir</span>
-                                                    <span class="fileupload-exists"><i class="fa fa-undo"></i></span>
-                                                    <input type="file" class="default" id="image" name="image"/>
-                                                    </span>&nbsp;
-                                                    <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group r-form" id="ad_html">
-                                            <label class="control-label">Html</label> 
-                                            <textarea class="form-control ckeditor" name="html" id="html"></textarea>
-                                        </div>
-                                        <div class="form-group r-form">
-                                            <label>Lien ad</label>
-                                            <input type="text" id="lien_ad" name="lien_ad" class="form-control" value=""/>
-                                        </div>
-                                        <div class="form-group">
-                                            <a href="{jurl 'ads~ads:index'}" class="btn btn-white" id="cancel">Annuler</a>
-                                            <button type="button" onclick="saveNewAd()" class="btn btn-success btn-save-ad">Enregistrer le pub par défaut</button>
-                                        </div>
+                                        <div class="alert alert-info">Veuillez choisir un pub à modifier.</div>
                                     </div>
                                 </div>
                             </div>
@@ -101,9 +65,6 @@
                                         Liste des pubs par défauts
                                     </div>
                                     <div class="panel-body">
-                                        <div class="form-group">
-                                            <button type="button" onclick="newAd()" class="btn btn-white"><i class="fa fa-plus"></i> Nouveau</button>
-                                        </div>
                                         <div id="ad_list">
                                             <table class="table table-hover table-responsive">
                                                 <thead>
@@ -117,7 +78,8 @@
                                                     {if (sizeof($toAdsZoneDefault)>0)}
                                                         {foreach ($toAdsZoneDefault as $oAdsZoneDefault)}
                                                             <tr>
-                                                                <td>#{$i++}</td>
+                                                                <td>{$oAdsZoneDefault->rang}</td>
+                                                                {if !empty($oAdsZoneDefault->type)}
                                                                 <td>
                                                                     {if ($oAdsZoneDefault->type == 1)}
                                                                     image
@@ -134,10 +96,18 @@
                                                                 </td>
                                                                 <td>
                                                                     {if (!empty($oAdsZoneDefault->souscategorie_id))}
-                                                                        Sous catégorie: {$oAdsZoneDefault->getSouscategorie()->name}
-                                                                    {elseif (!empty($oAdsZoneDefault->categorie))}
-                                                                        Catégorie : {$oAdsZoneDefault->getCategorie()->name}
+                                                                        <strong>- Sous catégorie:</strong> {$oAdsZoneDefault->getSouscategorie()->name}<br/>
+                                                                    {elseif (!empty($oAdsZoneDefault->categorie_id))}
+                                                                        <strong>- Catégorie :</strong> {$oAdsZoneDefault->getCategorie()->name}<br/>
                                                                     {/if}
+                                                                </td>
+                                                                {else}
+                                                                <td colspan=3>
+                                                                    <span class="text-danger">Aucun contenu</span>
+                                                                </td>
+                                                                {/if}
+                                                                <td>
+                                                                    <button type="button" onclick="editAd({$oAdsZoneDefault->id})" class="btn btn-info btn-xs btn-block">Modifier</button>
                                                                 </td>
                                                             </tr>
                                                         {/foreach}
@@ -153,13 +123,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12 hr-line-dashed"></div>
-                        <div class="row">
-                            <div class="col-lg-12 text-right">
-                                <a href="{jurl 'ads~ads:index'}" class="btn btn-white" id="cancel">Annuler</a>
-                                <button type="submit" class="btn btn-success btn-save">Enregistrer tous</button>
-                            </div>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -171,15 +134,78 @@
 <script type="text/javascript">
 $(document).ready(function()
 {
-    newAdFormInit();
+    newAdFormInit()
 });
 
 // Initialisation de la form
 function newAdFormInit()
 {
-    CKEDITOR.replace('html');
-    validator = $('#adzoneform').validate();
+    if ($('#html').length > 0)
+    {
+        CKEDITOR.replace('html');
+    }
+    if ($('.chosen-select').length > 0)
+    {
+        $('.chosen-select').chosen({
+            no_results_text:'Aucun résultat!'
+        });
+    }
+    validator = $('#adzoneform').validate({
+        rules: {
+            nb_pub: {
+                required: true,
+                number: true
+            }
+        },
+        messages: {
+            nb_pub: {
+                required: "Veuillez renseigner ce champs",
+                number: "Veuillez renseigner un nombre"
+            }
+        }
+    });
     toggleHideByType();
+}
+
+// Sauvegarde de la configuration
+function saveConfiguration()
+{
+    if (validator.element('#nb_pub'))
+    {
+        continue_action = true;
+        if ($('#nb_pub').val() < $('#ad_list tbody tr').length)
+        {
+            continue_action = confirm("{/literal}{@ads~ads.confirm.change.number.ad@}{literal}");
+        }
+        if (continue_action)
+        {
+            var formdata = new FormData();
+
+            var nb_ad               = $('#nb_pub').val();
+            var display             = $('#display_method').val();
+            var zone_id             = $('#zone_id').val();
+
+            formdata.append("nb_ad",nb_ad);
+            formdata.append("display",display);
+            formdata.append("zone_id",zone_id);
+
+            loader('#ad_list');
+            $.ajax({
+                type: 'POST',
+                url: '{/literal}{jfullurl "ads~ads_zone:save_default_config"}{literal}',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $('#ad_list').html(data);
+                },
+                error: function() {
+                    $('#ad_list').html('<div class="alert alert-warning>La requête n\'a pas abouti</div>');                
+                    $('#adsform').load('{/literal}{jfullurl "ads~ads_zone:newAdDefault"}{literal}');
+                }
+            });
+        }
+    }
 }
 
 // gestion des affichages d'input par rapport au type choisi
@@ -223,9 +249,19 @@ function loader(el)
 function newAd()
 {    
     loader('#adsform');
+    $('#adsform').html('<div class="alert alert-info">Veuillez choisir un pub à modifier.</div>');
+}
+
+// Edit ad
+function editAd(id)
+{
+    loader('#adsform');
+    var formdata = new FormData();
+    formdata.append("id",id);
     $.ajax({
         type: 'POST',
-        url: '{/literal}{jfullurl "ads~ads_zone:newAdDefault"}{literal}',
+        url: '{/literal}{jfullurl "ads~ads_zone:editAdDefault"}{literal}',
+        data: formdata,
         processData: false,
         contentType: false,
         success: function(data) {
@@ -238,8 +274,8 @@ function newAd()
     });
 }
 
-// Save new add
-function saveNewAd()
+// Save edit add
+function saveEditAd(id)
 {
     if ($('select[name="ad_type"]').val() == 1)
     {
@@ -254,8 +290,10 @@ function saveNewAd()
 
     if (validator.element('#image'))
     {
+        loader('#ad_list');
         var formdata = new FormData();
 
+        var id                  = id;
         var image               = $('#image')[0].files[0];
         var ad_type             = $('select[name="ad_type"]').val();
         var filtre              = $('select[name="categorie_filtre"]').val().split(",");
@@ -270,22 +308,21 @@ function saveNewAd()
         var html                = $('#html').val();
         var lien_ad             = $('#lien_ad').val();
         var zone_id             = $('#zone_id').val();
+        formdata.append("id",id);
         formdata.append("image",image);
         formdata.append("ad_type",ad_type);
         formdata.append("html",html);
         formdata.append("lien_ad",lien_ad);
         formdata.append("zone_id",zone_id);
 
-        loader('#adsform');
-
         $.ajax({
             type: 'POST',
-            url: '{/literal}{jfullurl "ads~ads_zone:save_new_ad"}{literal}',
+            url: '{/literal}{jfullurl "ads~ads_zone:save_edit_ad"}{literal}',
             data: formdata,
             processData: false,
             contentType: false,
             success: function(data) {
-                $('#adsform').load('{/literal}{jfullurl "ads~ads_zone:newAdDefault"}{literal}');
+                newAd();
                 $('#ad_list').html(data);
             },
             error: function() {
@@ -295,6 +332,5 @@ function saveNewAd()
         });
     }
 }
-
 </script>
 {/literal}

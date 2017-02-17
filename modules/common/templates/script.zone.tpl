@@ -108,6 +108,15 @@
 <script src="{$j_basepath}adminlibraries/js/plugins/tinymce/plugins/spellchecker/plugin.dev.js"></script>
 <script src="{$j_basepath}adminlibraries/js/plugins/tinymce/plugins/codesample/plugin.dev.js"></script>
 
+<!-- Date range picker -->
+<script src="{$j_basepath}adminlibraries/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Date picker -->
+<script src="{$j_basepath}adminlibraries/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+<!-- Date range use moment.js same as full calendar plugin -->
+<script src="{$j_basepath}adminlibraries/js/plugins/fullcalendar/moment.min.js"></script>
+
 
 {literal}
 <script type="text/javascript">
