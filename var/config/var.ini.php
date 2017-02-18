@@ -15,7 +15,7 @@ define('TABLE_PREFIX', 'pagesjaunes_');
 define("NO", 1);
 define("YES", 2);
 
-define("NB_DATA_PER_PAGE", 6);
+define("NB_DATA_PER_PAGE", 10);
 define("NB_LINK_TO_DISPLAY", 3);
 
 define("LIST_ACTIVE", 1);
@@ -25,3 +25,6 @@ define("DELAY_TYPE_DAY", 1);
 define("DELAY_TYPE_WEEK", 2);
 define("DELAY_TYPE_MONTH", 3);
 define("DELAY_TYPE_YEAR", 4);
+
+define("EMAIL_CONTACT_ADMIN", "contact@pagesjaunes.mg");
+define("EMAIL_ADMIN_ADMIN", "admin@pagesjaunes.mg");

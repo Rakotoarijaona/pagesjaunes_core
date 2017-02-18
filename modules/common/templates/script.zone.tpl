@@ -123,6 +123,8 @@
 
 {literal}
     <script type="text/javascript">
+
+        // input file
         var $input = $('input.file[type=file]');
         if ($input.length) {
             $input.fileinput({
@@ -133,5 +135,83 @@
                 allowedFileExtensions : ['jpg', 'png','gif']
             });
         }
+
+        // custom footable tri
+        function customTri(sortField, _this)
+        {
+            var sortsens = $("#sortsens").val();
+            sortsens = (sortsens == "ASC") ? "DESC" : "ASC";
+            var page = $("#page").val();
+
+            $.ajax({
+                type: 'POST',
+                url: {/literal}{urljsstring 'abonnement~abonnement:index'}{literal},
+                data: {
+                    sortsens: sortsens,
+                    sortfield: sortField,
+                    page: page,
+                    s: $("#searchForm #s").val()
+                },
+                async: false,
+                success: function(resp) {
+                    $("#ajaxListTarget").html(resp);
+                },
+                error: function() {
+                }
+            });
+        }
+
+        // pagination
+        function paginate(curPage)
+        {
+            var sortsens = $("#sortsens").val();
+            var sortfield = $("#sortfield").val();
+
+            $.ajax({
+                type: 'POST',
+                url: {/literal}{urljsstring 'abonnement~abonnement:index'}{literal},
+                data: {
+                    sortsens: sortsens,
+                    sortfield: sortfield,
+                    page: curPage,
+                    s: $("#searchForm #s").val()
+                },
+                async: false,
+                success: function(resp) {
+                    $("#ajaxListTarget").html(resp);
+                },
+                error: function() {
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+            // validate search form
+            $('#searchForm').validate({
+                ignore: [],
+                onkeyup: false,
+                errorPlacement: function (error, element) {
+                    $(element).closest(".input-group").append(error);
+                },
+                errorElement: "label",
+                submitHandler: function (form) {
+                    $.ajax({
+                        type: 'POST',
+                        url: {/literal}{urljsstring 'abonnement~abonnement:index'}{literal},
+                        data: {
+                            s: $("#searchForm #s").val()
+                        },
+                        async: false,
+                        success: function(resp) {
+                            $("#ajaxListTarget").html(resp);
+                        },
+                        error: function() {
+                        }
+                    });
+                }
+            });
+        });
+
     </script>
 {/literal}

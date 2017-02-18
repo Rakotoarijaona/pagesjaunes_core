@@ -8,6 +8,8 @@
 * @license    All rights reserved
 */
 
+require_once(jApp::appPath().'modules/common/controllers/jControllerRSR.php');
+
 jClasses::inc("slideshow~CSlideshow");
 jClasses::inc("entreprise~Entreprise");
 jClasses::inc("homepage~Contenuhomepage");
@@ -18,11 +20,11 @@ jClasses::inc("front_office~CPagination");
 jClasses::inc("catalogue~Catalogue");
 jClasses::inc("pages~CPages");
 jClasses::inc("common~CPhotosUpload");
-jClasses::inc ("common~ImageWorkshop") ;
-jClasses::inc ("common~CCommonTools") ;
+jClasses::inc("common~ImageWorkshop");
+jClasses::inc("common~CCommonTools");
 
-class defaultCtrl extends jController {
-
+class defaultCtrl extends jControllerRSR
+{
     public $pluginParams = array(
         '*' => array('auth.required' => false),
         'edition' => array('auth.required' => true)
@@ -166,14 +168,34 @@ class defaultCtrl extends jController {
     }
 
     // recherche
-    function search() 
+    function search()
+    {
+        $resp = $this->getResponse('redirect');
+
+        // parameter
+        $search = $this->param('s');
+
+        // build query params
+        $to_find = "";
+        if (!empty($search)) {
+            $to_find = implode(",", $search);
+        }
+
+        $resp->action = "front_office~default:recherche";
+        if (!empty($to_find)) {
+            $resp->params = array("s" => $to_find);
+        }
+
+        return $resp;
+    }
+
+    // recherche list
+    function recherche()
     {
         $resp = $this->getResponse('html');
 
         // parameters
-        $search_one = $this->param('search_one');
-        $search_two = $this->param('search_two');
-        $search_three = $this->param('search_three');
+        $search = $this->param('s');
 
         // pagination
         $nbRecs = 0;
@@ -185,27 +207,11 @@ class defaultCtrl extends jController {
 
         $toEntreprise = array();
         $paginationParams = array();
+        $to_find = "";
 
-        if (!empty($search_one) || !empty($search_two) || !empty($search_three))
-        {
-            // filters
-            $to_finds = array();
-            if (!empty($search_one)) {
-                $to_finds[] = str_replace(",", "", $search_one);
-                $paginationParams["search_one"] = str_replace(",", "", $search_one);
-            }
-            if (!empty($search_two)) {
-                $to_finds[] = str_replace(",", "", $search_two);
-                $paginationParams["search_two"] = str_replace(",", "", $search_two);
-            }
-            if (!empty($search_three)) {
-                $to_finds[] = str_replace(",", "", $search_three);
-                $paginationParams["search_three"] = str_replace(",", "", $search_three);
-            }
-            $to_find = implode(" ", $to_finds);
-
-            $to_finds = explode(" ", $to_find);
-            $to_find = implode(" +", $to_finds);
+        if (!empty($search)) {
+            $search = explode(",", $search);
+            $to_find = implode(" +", $search);
         }
 
         $toEntreprise = Entreprise::search($to_find, true, $nbRecs, $currentPage, $sortField, $sortSens);
@@ -226,6 +232,20 @@ class defaultCtrl extends jController {
         $tpl->assign("COMMONSCRIPT", jZone::get('front_office~commonscript'));
         $resp->body->assign('MAIN', $tpl->fetch('front_office~search_result'));
 
+        return $resp;
+    }
+
+    function autoComplSearch() 
+    {
+        $resp = $this->getResponse('json');
+        // datas
+        $datas = array();
+        $term = $this->param("q");
+        $selected = $this->param("selected");
+        if (!empty($term) && strlen($term) > 3) {
+            $datas = Entreprise::frontAutoComplet($term, $selected);
+        }
+        $resp->data = $datas;
         return $resp;
     }
 

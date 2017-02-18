@@ -41,8 +41,9 @@ pages.access=2
 search.access=2
 ads.access=2
 abonnement.access=2
+setting.access=2
 [simple_urlengine_entrypoints]
-admin="jacl2db~*@classic, jauth~*@classic, jacl2db_admin~*@classic, jauthdb_admin~*@classic, master_admin~*@classic, jpref_admin~*@classic, user~*@classic, acl2db~*@classic, authdb~*@classic, dashboard~*@classic, profile~*@classic, right~*@classic, slideshow~*@classic, categorie~*@classic, homepage~*@classic, entreprise~*@classic, catalogue~*@classic, toprecherche~*@classic, pages~*@classic, ads~*@classic, abonnement~*@classic"
+admin="jacl2db~*@classic, jauth~*@classic, jacl2db_admin~*@classic, jauthdb_admin~*@classic, master_admin~*@classic, jpref_admin~*@classic, user~*@classic, acl2db~*@classic, authdb~*@classic, dashboard~*@classic, profile~*@classic, right~*@classic, slideshow~*@classic, categorie~*@classic, homepage~*@classic, entreprise~*@classic, catalogue~*@classic, toprecherche~*@classic, pages~*@classic, ads~*@classic, abonnement~*@classic, setting~*@classic"
 
 [coordplugins]
 auth="admin/auth.coord.ini.php"
@@ -52,6 +53,7 @@ jacl2=1
 on_error=2
 error_message="right~errors.action.right.needed"
 on_error_action="right~error:badright"
+
 
 
 

@@ -104,8 +104,11 @@ class CAbonnement
         $results = array();
         $cnx = jDb::getConnection();
 
-        $query =   "
-                        SELECT SQL_CALC_FOUND_ROWS * FROM " . $cnx->prefixTable("abonnement") . " 
+        $query =    "
+                        SELECT SQL_CALC_FOUND_ROWS * 
+                        FROM " . $cnx->prefixTable("abonnement") . " 
+                        INNER JOIN " . $cnx->prefixTable("entreprise") . " 
+                        ON abonnement_entrepriseid = id 
                         WHERE 1
                     ";
 
@@ -185,11 +188,13 @@ class CAbonnement
         $results = array();
         $cnx = jDb::getConnection();
 
-        $query =    "
-                        SELECT SQL_CALC_FOUND_ROWS abonnement_id 
-                        FROM " . $cnx->prefixTable("abonnement") . " 
-                        WHERE 1
-                    ";
+       $query = "
+                    SELECT SQL_CALC_FOUND_ROWS * 
+                    FROM " . $cnx->prefixTable("abonnement") . " 
+                    INNER JOIN " . $cnx->prefixTable("entreprise") . " 
+                    ON abonnement_entrepriseid = id 
+                    WHERE 1
+                ";
 
         // and filters
         if (!empty($andFilters)) {
