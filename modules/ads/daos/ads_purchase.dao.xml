@@ -17,10 +17,11 @@
         <property name="payment_method" fieldname="payment_method" datatype="tinyint" required="true"/>
         <property name="payment_status" fieldname="payment_status" datatype="tinyint" required="true"/>
         <property name="subscription" fieldname="subscription" datatype="tinyint" required="true"/>
+        <property name="subscription_id" fieldname="subscription_id" datatype="int" default=""/>
         <property name="charging_model" fieldname="charging_model" datatype="tinyint" required="true"/>
-        <property name="publication_start" fieldname="publication_start" datatype="datetime" required="true"/>
+        <property name="publication_start" fieldname="publication_start" datatype="date" required="true"/>
         <property name="publication_day" fieldname="publication_day" datatype="int" required="true"/>
-        <property name="banner" fieldname="banner" datatype="int" required="true"/>
+        <property name="banner" fieldname="banner" datatype="varchar" required="true" maxlength="255"/>
         <property name="website_url" fieldname="website_url" datatype="varchar" default="" maxlength="255"/>
         <property name="alt_text" fieldname="alt_text" datatype="text" default=""/>
         <property name="categorie_id" fieldname="categorie_id" datatype="int" default=""/>
@@ -32,12 +33,17 @@
     <factory>
         <method name="countAll" type="count">
         </method>
+        <method name="getList" type="select">
+            <order>
+                <orderitem property="date_creation" way="desc" />
+            </order>
+        </method>
         <method name="getListEnAttente" type="select">
             <conditions >
                 <eq property="status" value="1"/>
             </conditions>
             <order>
-                <orderitem property="date_creation" way="asc" />
+                <orderitem property="date_creation" way="desc" />
             </order>
         </method>
         <method name="countEnAttente" type="count">
@@ -50,12 +56,12 @@
                 <eq property="status" value="2"/>
             </conditions>
             <order>
-                <orderitem property="date_creation" way="asc" />
+                <orderitem property="date_creation" way="desc" />
             </order>
         </method>
         <method name="countApprove" type="count">
             <conditions >
-                <eq property="status" value="1"/>
+                <eq property="status" value="2"/>
             </conditions>
         </method>
         <method name="getListRejete" type="select">
@@ -63,12 +69,12 @@
                 <eq property="status" value="3"/>
             </conditions>
             <order>
-                <orderitem property="date_creation" way="asc" />
+                <orderitem property="date_creation" way="desc" />
             </order>
         </method>
         <method name="countRejete" type="count">
             <conditions >
-                <eq property="status" value="1"/>
+                <eq property="status" value="3"/>
             </conditions>
         </method>
         <method name="getListExpire" type="select">
@@ -76,12 +82,12 @@
                 <eq property="status" value="4"/>
             </conditions>
             <order>
-                <orderitem property="date_creation" way="asc" />
+                <orderitem property="date_creation" way="desc" />
             </order>
         </method>
         <method name="countExpire" type="count">
             <conditions >
-                <eq property="status" value="1"/>
+                <eq property="status" value="4"/>
             </conditions>
         </method>
         <method name="getListReserve" type="select">
@@ -89,12 +95,12 @@
                 <eq property="status" value="5"/>
             </conditions>
             <order>
-                <orderitem property="date_creation" way="asc" />
+                <orderitem property="date_creation" way="desc" />
             </order>
         </method>
         <method name="countReserve" type="count">
             <conditions >
-                <eq property="status" value="1"/>
+                <eq property="status" value="5"/>
             </conditions>
         </method>
     </factory>

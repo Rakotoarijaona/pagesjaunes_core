@@ -25,6 +25,7 @@ class CAdsPurchase
 	public $payment_method;
 	public $payment_status;
 	public $subscription;
+    public $subscription_id;
 	public $charging_model;
 	public $publication_start;
 	public $publication_day;
@@ -53,6 +54,7 @@ class CAdsPurchase
 		$this->payment_method 		= null;
 		$this->payment_status 		= null;
 		$this->subscription 		= null;
+        $this->subscription_id      = null;
 		$this->charging_model 		= null;
 		$this->publication_start 	= null;
 		$this->publication_day 		= null;
@@ -83,6 +85,7 @@ class CAdsPurchase
 			$this->payment_method 		= $record->payment_method;
 			$this->payment_status 		= $record->payment_status;
 			$this->subscription 		= $record->subscription;
+            $this->subscription_id      = $record->subscription_id;
 			$this->charging_model 		= $record->charging_model;
 			$this->publication_start 	= $record->publication_start;
 			$this->publication_day 		= $record->publication_day;
@@ -139,6 +142,9 @@ class CAdsPurchase
         if ($this->subscription  != '') {
             $record->subscription        		= $this->subscription;
         }
+        if ($this->subscription_id  != '') {
+            $record->subscription_id            = $this->subscription_id;
+        }
         if (!empty($this->charging_model)) {
             $record->charging_model        		= $this->charging_model;
         }
@@ -164,14 +170,26 @@ class CAdsPurchase
             $record->souscategorie_id       	= $this->souscategorie_id;
         }
         if (!empty($this->date_creation)) {
-            $record->date_creation            	= $this->date_creation;
+            $record->date_creation            	= CCommonTools::RDateLANGtoSQL($this->date_creation);
         }
         if (!empty($this->date_update)) {
-	            $record->date_update            = $this->date_update;
+	            $record->date_update            = CCommonTools::RDateLANGtoSQL($this->date_update);;
 	        }
         if (!empty($this->creator)) {
             $record->creator                  	= $this->creator;
         }
+    }
+
+    // Récupération par ID
+    public static function getById($id)
+    {
+        $factory    = jDao::get('ads~ads_purchase');
+        $res        = $factory->get($id);
+        $oAdsPurchase       = new CAdsPurchase();
+        if ($res) {
+            $oAdsPurchase->fetchFromRecord($res);
+        }
+        return $oAdsPurchase;
     }
 
     // Récupération de tous les enregistrements
@@ -179,7 +197,7 @@ class CAdsPurchase
     {
         $toRes      = array () ;
         $daoFactory = jDao::get('ads~ads_purchase');
-        $list        = $daoFactory->findAll();
+        $list        = $daoFactory->getList();
         $toResult   = array();
 
         foreach ($list as $row) {
@@ -324,6 +342,80 @@ class CAdsPurchase
         return $res;
     }
 
+    // Récupération du type de zone
+    public function getZone()
+    {
+        return CAdsZone::getById($this->zone_type);
+    }
+
+    // Récupération de la date de début
+    public function getPublicationStart()
+    {
+        $dt = new jDateTime();
+        $dt->setFromString($this->publication_start, jDateTime::DB_DFORMAT);
+        return $dt->toString(jDateTime::LANG_DFORMAT);
+    }
+
+    // Récupération de la date de fin
+    public function getPublicationEnd()
+    {
+        $dt = new jDateTime();
+        $dt->setFromString($this->publication_start, jDateTime::DB_DFORMAT);
+        $duration = new jDuration(array('day'=>$this->publication_day));
+        $dt->add($duration);
+        return $dt->toString(jDateTime::LANG_DFORMAT);
+    }
+
+    // Récupération du statut de paiement
+    public function getPaymentStatus()
+    {
+        switch ($this->payment_status) {
+            case 1:
+                return 'Payé';
+                break;
+            case 2:
+                return 'Non payé';
+                break;
+            case 3:
+                return 'Invalide';
+                break;
+            default:
+                return 'Invalide';
+                break;
+        }
+    }
+
+    // Change status
+    public function changeStatus($iStatus)
+    {
+        $maFactory  = jDao::get('ads~ads_purchase');
+        $record     = $maFactory->get($this->id);
+        switch ($iStatus) {
+            case 1:
+                $record->status = 1;
+                break;
+            case 2:
+                $record->status = 2;
+                break;
+            case 3:
+                $record->status = 3;
+                break;
+            case 4:
+                $record->status = 4;
+                break;
+            case 5:
+                $record->status = 5;
+                break;
+            default:
+                $record->status = 2;
+                break;
+        }
+
+        $record->date_update = CCommonTools::RgetDateNowSQL();
+
+        $maFactory->update($record);
+    }
+
     // Insertion
     public function insert()
     {
@@ -331,7 +423,7 @@ class CAdsPurchase
         $record     = jDao::createRecord('ads~ads_purchase');
 
         $this->creator          = CCommonTools::getUserInSessionName();
-        $this->date_creation    = CCommonTools::RgetDateNowSQL();
+        $this->date_creation    = CCommonTools::RgetDateNowLANG();
         $this->fetchIntoRecord($record);
         $maFactory->insert($record);
 
@@ -341,9 +433,9 @@ class CAdsPurchase
     // Update
     public function update()
     {
-        $maFactory  = jDao::get('ads~ads_zone');
+        $maFactory  = jDao::get('ads~ads_purchase');
         $record     = $maFactory->get($this->id);
-        $this->date_update = CCommonTools::RgetDateNowSQL();
+        $this->date_update = CCommonTools::RgetDateNowLANG();
 
         $this->fetchIntoRecord($record);
         $maFactory->update($record);
@@ -352,7 +444,7 @@ class CAdsPurchase
     // Delete
     public function delete()
     {
-        $maFactory = jDao::get('ads~ads_zone');
+        $maFactory = jDao::get('ads~ads_purchase');
         if ($this->canDelete() == 1) {
             $maFactory->delete($this->id);
         }
@@ -362,6 +454,14 @@ class CAdsPurchase
     public function canDelete()
     {
         return 1;
+    }
+
+    // Copie
+    public function copy()
+    {
+        $newAdsPurchase = $this;
+        $newAdsPurchase->id = null;
+        return ($newAdsPurchase->insert());
     }
 
     // Fonction upload des images publicitaires
@@ -420,10 +520,39 @@ class CAdsPurchase
             $oLayerThumbnail->save ("publicites/thumbnail", $zFileName, $bCreateFolders, $zBackgroundColor, $iImageQuality) ;
             // rename file if already exists
 
-            if ($iErrorCode == 0) {
-                $this->banner = $zFileName;
-            }
-            return $iErrorCode;
+            $this->banner = $zFileName;
         }
+    }
+    //auto complete
+    public static function autoComplet($term = "")
+    {
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT id FROM " . $cnx->prefixTable("ads_purchase") . " 
+                        WHERE 1
+                    ";
+
+        $filters = array();
+        $filters[] = "id LIKE '%" . $term . "%'";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" OR ", $filters) . ")";
+
+        // tri
+        if (!empty($sortField) && !empty($sortSens)) {
+            $query .= " ORDER BY id ASC";
+        }
+
+        $res = $cnx->query($query);
+
+        foreach ($res as $row) {
+            $results[] = array("id" => $row->id, "text"=>$row->id);
+        }
+
+        return $results;
     }
 }

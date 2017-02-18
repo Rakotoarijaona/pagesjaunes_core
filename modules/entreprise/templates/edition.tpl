@@ -56,7 +56,7 @@
                                             <span class="btn btn-default btn-file">
                                             <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Parcourir</span>
                                             <span class="fileupload-exists"><i class="fa fa-undo"></i></span>
-                                            <input type="file" class="default" name="logo" id="logo"/>
+                                            <input type="file" class="default" name="logo" id="logo" accept="image/*"/>
                                             </span>&nbsp;
                                             <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i></a>
                                         </div>
@@ -874,8 +874,10 @@ $(document).ready(function(){
         if (isValidEmailAddress(emailText))
         {
             $.post('{/literal}{jfullurl "entreprise~entreprise:updateEmails"}{literal}', {'emailText':emailText, 'entrepriseId': entrepriseId, 'operation': operation}, function(data) {
-                $('#emailList').html(data);
-                });
+                $('#emailList').html(data);     
+                swal("Ajouté!", "L'email a été ajouté", "success");
+                $('#email-add-form .input-text').val('');
+            });
         }
     });    
     $('#btn-add-num').click(function(){
@@ -884,7 +886,9 @@ $(document).ready(function(){
         var operation = "insert";
         $.post('{/literal}{jfullurl "entreprise~entreprise:updateTelephones"}{literal}', {'numero':numero, 'entrepriseId': entrepriseId, 'operation': operation}, function(data) {
             $('#telephoneList').html(data);
-            });
+            swal("Ajouté!", "Le téléphone a été ajouté", "success");
+            $('#num-add-form .input-text').val('');
+        });
     });
     $('#btn-add-service').click(function(){
         var name = $('#service-add-form .input-text').val();
@@ -892,7 +896,9 @@ $(document).ready(function(){
         var operation = "insert";
         $.post('{/literal}{jfullurl "entreprise~entreprise:updateServices"}{literal}', {'name':name, 'entrepriseId': entrepriseId, 'operation': operation}, function(data) {
             $('#serviceList').html(data);
-            });
+            swal("Ajouté!", "Le service a été ajouté", "success");
+            $('#service-add-form .input-text').val('');
+        });
     });
     $('#btn-add-produit').click(function(){
         var name = $('#produit-add-form .input-text').val();
@@ -900,7 +906,9 @@ $(document).ready(function(){
         var operation = "insert";
         $.post('{/literal}{jfullurl "entreprise~entreprise:updateProduits"}{literal}', {'name':name, 'entrepriseId': entrepriseId, 'operation': operation}, function(data) {
             $('#produitList').html(data);
-            });
+            swal("Ajouté!", "Le produit a été ajouté", "success");
+            $('#produit-add-form .input-text').val('');
+        });
     });
     $('#btn-add-marque').click(function(){
         var name = $('#marque-add-form .input-text').val();
@@ -908,7 +916,9 @@ $(document).ready(function(){
         var operation = "insert";
         $.post('{/literal}{jfullurl "entreprise~entreprise:updateMarques"}{literal}', {'name':name, 'entrepriseId': entrepriseId, 'operation': operation}, function(data) {
             $('#marqueList').html(data);
-            });
+            swal("Ajouté!", "La marque a été ajouté", "success");
+            $('#marque-add-form .input-text').val('');
+        });
     });
 
     function isValidEmailAddress(emailAddress) {
@@ -1190,8 +1200,8 @@ function deleteEmail(el)
         }, function () {
             if ($('#emailList .rMultiItem').length > 1)
             {
-                res = setRemote(el);                
-                swal("Supprimé!", "L'email a été supprimée", "success");   
+                res = setRemote(el);
+                swal("Supprimé!", "L'email a été supprimée", "success"); 
             }
             else
             {

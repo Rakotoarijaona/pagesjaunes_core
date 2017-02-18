@@ -9,7 +9,7 @@
                 <a href="{jurl 'ads~ads:liste_annonce'}">Annonceur</a>
             </li>
             <li class="active">
-                <a><strong>Ajouter</strong></a>
+                <a><strong>Editer</strong></a>
             </li>
         </ol>
     </div>
@@ -19,27 +19,28 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <form id="adform" role="form" action="{jurl 'ads~ads:save_add_annonceur'}" method="POST" enctype="multipart/form-data">
+                    <form id="adform" role="form" action="{jurl 'ads~ads:save_edit_annonceur'}" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="annonce_id" value="{$oAdsPurchase->id}">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group r-form">
                                     <label>Référence</label>
-                                    <div class="form-control" disabled>N/A</div>
+                                    <div class="form-control" disabled>{$oAdsPurchase->reference}</div>
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Nom annonceur (*)</label>
-                                    <input type="text" id="advertiser_name" name="advertiser_name" class="form-control">
+                                    <input type="text" id="advertiser_name" name="advertiser_name" class="form-control" value="{$oAdsPurchase->advertiser_name}">
                                 </div>
                                 <div class="form-group r-form">
                                     <label>E-mail annonceur (*)</label>
-                                    <input type="text" id="advertiser_mail" name="advertiser_mail" class="form-control">
+                                    <input type="text" id="advertiser_mail" name="advertiser_mail" class="form-control" value="{$oAdsPurchase->advertiser_mail}">
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Type zone (*)</label>
                                     <select class="form-control" name="type_zone" id="type_zone">
                                         <option value="">Sélection...</option>
                                         {foreach $toListAdsType as $oAdsZone}
-                                            <option value="{$oAdsZone->id}">{$oAdsZone->name}</option>
+                                            <option value="{$oAdsZone->id}" {if ($oAdsZone->id == $oAdsPurchase->zone_type)}selected{/if}>{$oAdsZone->name}</option>
                                         {/foreach}
                                     </select>
                                 </div>
@@ -47,22 +48,20 @@
                                     <label>Statut (*)</label>
                                     <select class="form-control" name="status" id="status">
                                         <option value="">Sélection...</option>
-                                        <option value="1">En attente</option>
-                                        <option value="2">Approuvé</option>
-                                        <option value="3">Rejeté</option>
-                                        <option value="4">Expiré</option>
-                                        <option value="5">Réservé</option>
+                                        {foreach $toStatus as $status}
+                                            <option value="{$status[0]}" {if ($status[0] == $oAdsPurchase->status)}selected{/if}>{$status[1]}</option>
+                                        {/foreach}
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">No follow</label>
                                     <div class="input-group">
                                         <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="radionofollow1" value="1" name="no_follow">
+                                            <input type="radio" id="radionofollow1" value="1" name="no_follow" {if ($oAdsPurchase->no_follow) == 1}checked{/if}>
                                             <label for="radionofollow1"> oui </label>
                                         </div>
                                         <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="radionofollow2"  checked value="0" name="no_follow">
+                                            <input type="radio" id="radionofollow2" value="0" name="no_follow" {if ($oAdsPurchase->no_follow) == 0}checked{/if}>
                                             <label for="radionofollow2"> non </label>
                                         </div>
                                     </div>
@@ -71,40 +70,39 @@
                                     <label class="control-label">Stats tracking</label>
                                     <div class="input-group">
                                         <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="radiostattrack1" value="1" name="stats_tracking">
+                                            <input type="radio" id="radiostattrack1" value="1" name="stats_tracking" {if ($oAdsPurchase->stats_tracking) == 1}checked{/if}>
                                             <label for="radiostattrack1"> oui </label>
                                         </div>
                                         <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="radiostattrack2"  checked value="0" name="stats_tracking">
+                                            <input type="radio" id="radiostattrack2"  checked value="0" name="stats_tracking" {if ($oAdsPurchase->stats_tracking) == 0}checked{/if}>
                                             <label for="radiostattrack2"> non </label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Prix (*)</label>
-                                    <input type="text" id="price" name="price" class="form-control">
+                                    <input type="text" id="price" name="price" class="form-control" value="{$oAdsPurchase->price}">
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Devise (*)</label>
-                                    <input type="text" id="currency" name="currency" class="form-control">
+                                    <input type="text" id="currency" name="currency" class="form-control" value="{$oAdsPurchase->currency}">
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Méthode de paiement (*)</label>
                                     <select class="form-control" name="payment_method" id="payment_method">
                                         <option value="">Sélection...</option>
-                                        <option value="1">Cash</option>
-                                        <option value="2">Par chèque</option>
-                                        <option value="3">Paypal</option>
-                                        <option value="4">Par mobile</option>
+                                        {foreach $toPaymentMethod as $paymentMethod}
+                                            <option value="{$paymentMethod[0]}" {if ($paymentMethod[0] == $oAdsPurchase->payment_method)}selected{/if}>{$paymentMethod[1]}</option>
+                                        {/foreach}
                                     </select>
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Statut de paiement (*)</label>
                                     <select class="form-control" name="payment_status" id="payment_status">
                                         <option value="">Sélection...</option>
-                                        <option value="1">Payé</option>
-                                        <option value="2">Non payé</option>
-                                        <option value="3">Invalide</option>
+                                        {foreach $toPaymentStatus as $paymentStatus}
+                                            <option value="{$paymentStatus[0]}" {if ($paymentStatus[0] == $oAdsPurchase->payment_status)}selected{/if}>{$paymentStatus[1]}</option>
+                                        {/foreach}
                                     </select>
                                 </div>
                             </div>
@@ -113,11 +111,11 @@
                                     <label class="control-label">Inscription</label>
                                     <div class="input-group">
                                         <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="radioinscription1" value="1" name="inscription">
+                                            <input type="radio" id="radioinscription1" value="1" name="inscription" {if ($oAdsPurchase->subscription) == 1}checked{/if}>
                                             <label for="radioinscription1"> oui </label>
                                         </div>
                                         <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="radioinscription2"  checked value="0" name="inscription">
+                                            <input type="radio" id="radioinscription2"  checked value="0" name="inscription" {if ($oAdsPurchase->subscription) == 0}checked{/if}>
                                             <label for="radioinscription2"> non </label>
                                         </div>
                                     </div>
@@ -126,24 +124,29 @@
                                     <label>Modèle de prix (*)</label>
                                     <select class="form-control" name="cost_model" id="cost_model">
                                         <option value="">Selection...</option>
-                                        <option value="1">Coût journalier</option>
-                                        <option value="2">Coût par clic</option>
-                                        <option value="3">Coût par impression</option>
+                                        {foreach $toCostModel as $toCostModel}
+                                            <option value="{$toCostModel[0]}" {if ($toCostModel[0] == $oAdsPurchase->charging_model)}selected{/if}>{$toCostModel[1]}</option>
+                                        {/foreach}
                                     </select>
                                 </div>
                                 <div class="form-group" id="data_1">
                                     <label>Début publication (*)</label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" id="publication_start" name="publication_start" value="">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" id="publication_start" name="publication_start" value="{$oAdsPurchase->getPublicationStart()}">
                                     </div>
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Durée de publication (*)</label>
-                                    <input type="text" id="publication_day" name="publication_day" class="form-control">
+                                    <input type="text" id="publication_day" name="publication_day" class="form-control" value="{$oAdsPurchase->publication_day}">
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Upload banner (*)</label>
                                     <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <div class="fileupload-new thumbnail lightBoxGallery">   
+                                            <div class="item">
+                                                <a href="{$j_basepath}publicites/big/{$oAdsPurchase->banner}" title="{$oAdsPurchase->banner}" data-gallery=""><img src="{$j_basepath}publicites/thumbnail/{$oAdsPurchase->banner}" style="max-width: 300px; max-height: 400px; line-height: 20px;" alt=""></a>
+                                            </div>                                            
+                                        </div>
                                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 300px; max-height: 400px; line-height: 20px;"></div>
                                         <div>
                                             <span class="btn btn-white btn-file">
@@ -157,11 +160,11 @@
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Url site</label>
-                                    <input type="text" id="website_url" name="website_url" class="form-control">
+                                    <input type="text" id="website_url" name="website_url" class="form-control" value="{$oAdsPurchase->website_url}">
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Alt texte</label> 
-                                    <textarea class="form-control" name="alt_text" id="alt_text"></textarea>
+                                    <textarea class="form-control" name="alt_text" id="alt_text">{$oAdsPurchase->alt_text}</textarea>
                                 </div>
                                 <div class="form-group r-form">
                                     <div>
@@ -169,9 +172,9 @@
                                         <select class="form-control m-b chosen-select" tabindex="2" name="categorie_filtre">
                                             <option value="">Selection :</option>
                                             {foreach ($oListCategorie as $rowCategorie)}
-                                            <option value="categorie,{$rowCategorie['categorie']->id}" style="font-weight: bold;">{$rowCategorie['categorie']->name}</option>
+                                            <option value="categorie,{$rowCategorie['categorie']->id}" style="font-weight: bold;" {if ($rowCategorie['categorie']->id == $oAdsPurchase->categorie_id)}selected{/if}>{$rowCategorie['categorie']->name}</option>
                                                 {foreach ($rowCategorie['souscategorie'] as $souscategorie)} 
-                                                <option style="padding-left: 10px" value='souscategorie,{$souscategorie->id}'>{$souscategorie->name} </option>
+                                                <option style="padding-left: 10px" value='souscategorie,{$souscategorie->id}' {if ($souscategorie->id == $oAdsPurchase->souscategorie_id)}selected{/if}>{$souscategorie->name} </option>
                                                 {/foreach}
                                             {/foreach}
                                         </select>
@@ -179,7 +182,7 @@
                                 </div>
                                 <div class="form-group r-form">
                                     <label>SubID</label>
-                                    <input type="text" id="sub_id" name="sub_id" class="form-control">
+                                    <input type="text" id="sub_id" name="sub_id" class="form-control" value="{$oAdsPurchase->subscription_id}">
                                 </div>
                             </div>
                         </div>
@@ -195,6 +198,16 @@
             </div>
         </div>
     </div>
+</div>
+<!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+<div id="blueimp-gallery" class="blueimp-gallery">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
 </div>
 {$SCRIPT}
 {literal}
@@ -238,9 +251,6 @@ $(document).ready(function()
                 required: true,
                 number: true
             },
-            image: {
-                required: true
-            },
             website_url: {
                 url: true
             }
@@ -280,9 +290,6 @@ $(document).ready(function()
             publication_day: {
                 required: "Veuillez renseigner ce champ",
                 number: "Veuillez renseigner un nombre"
-            },
-            image: {
-                required: "Veuillez renseigner ce champ"
             },
             website_url: {
                 url: "Veuillez renseigner un url valide"
@@ -330,7 +337,7 @@ $(document).ready(function()
         forceParse: true,
         calendarWeeks: true,
         autoclose: true,
-        format: 'dd-mm-yyyy',
+        format: 'dd/mm/yyyy',
         language: 'fr'
     });
 });

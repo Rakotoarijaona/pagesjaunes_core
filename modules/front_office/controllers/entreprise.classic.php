@@ -536,7 +536,7 @@ class entrepriseCtrl extends jController {
         }
 
         $resp->action = "front_office~default:pages";
-        $resp->params = array('p' =>'remerciement_edition');
+        $resp->params = array('p' =>'remerciement-edition');
         return $resp;
     }
 }

@@ -22,7 +22,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 m-b">
                             <div class="btn-group">
                                 <a href="{jurl 'ads~ads_zone:index', array('status'=>'all')}" class="btn btn-white {if $status == 'all'}active{/if}" type="button">Tous ({$nbAll})</a>
                                 <a href="{jurl 'ads~ads_zone:index', array('status'=>'publie')}" class="btn btn-white {if $status == 'publie'}active{/if}" type="button">Publié ({$nbPublie})</a>

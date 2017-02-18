@@ -100,9 +100,9 @@
                                                     <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 250px; max-height: 150px; line-height: 20px;"></div>
                                                     <div>
                                                         <span class="btn btn-default btn-file">
-                                                        <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Parcourir</span>
-                                                        <span class="fileupload-exists"><i class="fa fa-undo"></i>Changer</span>
-                                                        <input type="file" class="default" name="logo" id="logo"/>
+                                                            <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Parcourir</span>
+                                                            <span class="fileupload-exists"><i class="fa fa-undo"></i>Changer</span>
+                                                            <input type="file" class="default" name="logo" id="logo" accept="image/*"/>
                                                         </span>&nbsp;
                                                         <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i>Supprimer</a>
                                                     </div>
@@ -139,14 +139,14 @@
                                                     {foreach $oEntreprise->telephones as $telephone}
                                                     <div class="telephone removable-input">
                                                         <button onclick="remove_phone(this)" type="button" class="btn btn-default btn-remove btn-remove-telephone"><i class="fa fa-trash"></i></button>
-                                                        <input type="text" class="input-telephone form-control" name="telephones{$telephone->id}" value="{$telephone->numero}" size="40" maxlength="15"/>
+                                                        <input type="text" class="input-telephone form-control" name="telephones{$telephone->id}" value="{$telephone->numero}" size="40"/>
                                                         <input type="hidden" value="{$telephone->id}">
                                                     </div>
                                                     {/foreach}
                                                     {else}
                                                     <div class="telephone removable-input">
                                                         <button onclick="remove_phone(this)" type="button" class="btn btn-default btn-remove btn-remove-telephone"><i class="fa fa-trash"></i></button>
-                                                        <input type="text" class="form-control" name="telephones[]" value="" size="40" maxlength="15"/>
+                                                        <input type="text" class="form-control" name="telephones[]" value="" size="40"/>
                                                     </div>
                                                     {/if}
                                                 </div>
