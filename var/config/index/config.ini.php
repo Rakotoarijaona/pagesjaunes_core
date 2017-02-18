@@ -31,6 +31,7 @@ pages.access=2
 search.access=2
 ads.access=2
 abonnement.access=2
+setting.access=2
 [coordplugins]
 auth="index/auth.coord.ini.php"
 jacl2=1
@@ -41,6 +42,7 @@ on_error_action="jelix~error:badright"
 
 [acl2]
 driver=db
+
 
 
 

@@ -15,13 +15,7 @@ class searchheaderZone extends jZone
     protected function _prepareTpl()
     {
         $params = jApp::coord()->request->params;
-
-        $search_one = (isset($params["search_one"])) ? $params["search_one"] : "";
-        $search_two = (isset($params["search_two"])) ? $params["search_two"] : "";
-        $search_three = (isset($params["search_three"])) ? $params["search_three"] : "";
-
-        $this->_tpl->assign('search_one', $search_one);
-        $this->_tpl->assign('search_two', $search_two);
-        $this->_tpl->assign('search_three', $search_three);
+        $search = (isset($params["s"])) ? explode(",", $params["s"]) : array();
+        $this->_tpl->assign('search', $search);
     }
 }

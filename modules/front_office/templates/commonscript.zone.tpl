@@ -18,42 +18,71 @@
 <script src="{$j_basepath}frontlibraries/javascripts/bootstrap-select.min.js"></script>
 <script src="{$j_basepath}frontlibraries/javascripts/sweetalert/sweetalert.min.js"></script> 
 
+<!-- select2 -->
+<script src="{$j_basepath}frontlibraries/javascripts/select2/dist/js/select2.full.min.js"></script>
+<script src="{$j_basepath}frontlibraries/javascripts/select2/dist/js/i18n/fr.js"></script>
+
 <script type="text/javascript">
 {literal}
 $(document).ready(function()
 {
-    
-        $('.owl-carousel', '#carouselAds1').owlCarousel({
-            loop:true,
-            margin:0,
-            nav:false,
-            mouseDrag: false,
-            touchDrag: false,
-            pullDrag: false,
-            freeDrag: false,
-            items:1,
-            dots:false,
-            navText : false,
-            autoplay:true,
-            autoplayTimeout:2500,
-            autoplayHoverPause:true
-        });
-        $('.owl-carousel', '#carouselAds2').owlCarousel({
-            loop:true,
-            margin:0,
-            nav:false,
-            mouseDrag: false,
-            touchDrag: false,
-            pullDrag: false,
-            freeDrag: false,
-            items:1,
-            dots:false,
-            navText : false,
-            autoplay:true,
-            autoplayTimeout:2500,
-            autoplayHoverPause:true
-        });
+    $('.owl-carousel', '#carouselAds1').owlCarousel({
+        loop:true,
+        margin:0,
+        nav:false,
+        mouseDrag: false,
+        touchDrag: false,
+        pullDrag: false,
+        freeDrag: false,
+        items:1,
+        dots:false,
+        navText : false,
+        autoplay:true,
+        autoplayTimeout:2500,
+        autoplayHoverPause:true
+    });
+    $('.owl-carousel', '#carouselAds2').owlCarousel({
+        loop:true,
+        margin:0,
+        nav:false,
+        mouseDrag: false,
+        touchDrag: false,
+        pullDrag: false,
+        freeDrag: false,
+        items:1,
+        dots:false,
+        navText : false,
+        autoplay:true,
+        autoplayTimeout:2500,
+        autoplayHoverPause:true
+    });
+
+    $("#s").select2({
+        tags: true,
+        placeholder: "Entreprise, produit, marque, service, region ...",
+        tokenSeparators: [',']
+    });
+
+    $('#s').select2({
+        placeholder: 'Entreprise, produit, marque, région, adresse, téléphone',
+        tags: true,
+        tokenSeparators: [','],
+        minimumInputLength: 3,
+        ajax: {
+            dataType: 'json',
+            url: {/literal}{urljsstring 'front_office~default:autoComplSearch'}{literal},
+            delay:250,
+            data: function (params) {
+                return {q: params.term, selected: $('#s').val()}
+            },
+            processResults: function (data) {
+                return {results: data}
+            }
+        },
+    });
+
 });
+
 {/literal}
 </script>
 <script src="{$j_basepath}frontlibraries/javascripts/common.js"></script>

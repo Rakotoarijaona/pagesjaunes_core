@@ -60,6 +60,7 @@ pages.access=2
 search.access=2
 ads.access=2
 abonnement.access=2
+setting.access=2
 [coordplugins]
 ;name = file_ini_name or 1
 
@@ -241,6 +242,7 @@ name=
 
 [datepickers]
 ;default = jelix/js/jforms/datepickers/default/init.js
+
 
 
 

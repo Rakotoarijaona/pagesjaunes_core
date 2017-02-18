@@ -84,6 +84,8 @@ ads.installed=1
 ads.version=0.1pre
 abonnement.installed=1
 abonnement.version=0.1pre
+setting.installed=1
+setting.version=0.1pre
 [__modules_data]
 jelix.contexts="db:default"
 
@@ -231,3 +233,6 @@ ads.version=0.1pre
 
 abonnement.installed=1
 abonnement.version=0.1pre
+
+setting.installed=1
+setting.version=0.1pre

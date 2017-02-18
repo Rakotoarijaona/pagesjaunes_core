@@ -1727,5 +1727,69 @@ class Entreprise
 
         return $results;
     }
+
+    //auto complete front
+    public static function frontAutoComplet($term = "", $selected = array())
+    {
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query_raisonsociale = "SELECT raisonsociale FROM " . $cnx->prefixTable("entreprise") . " WHERE raisonsociale LIKE '%" . $term . "%'";
+        $query_produits = "SELECT name FROM " . $cnx->prefixTable("produit") . " WHERE name LIKE '%" . $term . "%'";
+        $query_marques = "SELECT name FROM " . $cnx->prefixTable("marque") . " WHERE name LIKE '%" . $term . "%'";
+        $query_region = "SELECT region FROM " . $cnx->prefixTable("entreprise") . " WHERE region LIKE '%" . $term . "%'";
+        $query_adresse = "SELECT adresse FROM " . $cnx->prefixTable("entreprise") . " WHERE adresse LIKE '%" . $term . "%'";
+        $query_telephones = "SELECT numero FROM " . $cnx->prefixTable("telephone") . " WHERE numero LIKE '%" . $term . "%'";
+
+        // libellés
+        $libelles = array();
+
+        $res_raisonsociale = $cnx->query($query_raisonsociale);
+        foreach ($res_raisonsociale as $raisonsociale_row) {
+            $libelles[] = $raisonsociale_row->raisonsociale;
+        }
+
+        $res_produits = $cnx->query($query_produits);
+        foreach ($res_produits as $produit_row) {
+            $libelles[] = $produit_row->name;
+        }
+
+        $res_marques = $cnx->query($query_marques);
+        foreach ($res_marques as $marque_row) {
+            $libelles[] = $marque_row->name;
+        }
+
+        $res_region = $cnx->query($query_region);
+        foreach ($res_region as $region_row) {
+            $libelles[] = $region_row->region;
+        }
+
+        $res_adresse = $cnx->query($query_adresse);
+        foreach ($res_adresse as $adresse_row) {
+            $libelles[] = $adresse_row->adresse;
+        }
+
+        $res_telephones = $cnx->query($query_telephones);
+        foreach ($res_telephones as $telephone_row) {
+            $libelles[] = $telephone_row->numero;
+        }
+
+        if (!empty($libelles)) {
+            $libelles = array_unique($libelles);
+        }
+
+        foreach ($libelles as $libelle) {
+            if (!empty($selected)) {
+                if (!in_array($libelle, $selected)) {
+                    $results[] = array("id" => $libelle, "text" => $libelle);
+                }
+            } else {
+                $results[] = array("id" => $libelle, "text" => $libelle);
+            }
+        }
+
+        return $results;
+    }
 }
 ?>

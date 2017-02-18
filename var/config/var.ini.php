@@ -25,3 +25,6 @@ define("DELAY_TYPE_DAY", 1);
 define("DELAY_TYPE_WEEK", 2);
 define("DELAY_TYPE_MONTH", 3);
 define("DELAY_TYPE_YEAR", 4);
+
+define("EMAIL_CONTACT_ADMIN", "contact@pagesjaunes.mg");
+define("EMAIL_ADMIN_ADMIN", "admin@pagesjaunes.mg");

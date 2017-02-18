@@ -43,6 +43,9 @@ class myHtmlResponse extends jResponseHtml {
         //$this->addCssLink(jApp::config()->urlengine['basePath'].'frontlibraries/stylesheets/fileinput.css');
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'frontlibraries/stylesheets/sweetalert/sweetalert.css');
         $this->body->bodyTagAttributes = array('class'=>'skin-2');
+
+        // select2
+        $this->addCSSLink(jApp::config()->urlengine['basePath'].'frontlibraries/javascripts/select2/dist/css/select2.min.css');
     }
 
     protected function doAfterActions() {
