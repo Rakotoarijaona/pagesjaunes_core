@@ -29,11 +29,11 @@
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Nom annonceur (*)</label>
-                                    <input type="text" id="advertiser_name" name="advertiser_name" class="form-control" value="{$oAdsPurchase->advertiser_name}">
-                                </div>
-                                <div class="form-group r-form">
-                                    <label>E-mail annonceur (*)</label>
-                                    <input type="text" id="advertiser_mail" name="advertiser_mail" class="form-control" value="{$oAdsPurchase->advertiser_mail}">
+                                    <select name="advertiser_id" id="advertiser_id" class="form-control required" data-msg-required="Veuillez choisir une entreprise">
+                                        {if !empty($oAdsPurchase->advertiser_id)}
+                                            <option value="{$oAdsPurchase->getEntreprise()->id}" selected>{$oAdsPurchase->getEntreprise()->raisonsociale}</option>
+                                        {/if}
+                                    </select>
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Type zone (*)</label>
@@ -216,10 +216,7 @@ $(document).ready(function()
 {
     var validator = $('#adform').validate({
         rules: {
-            advertiser_name: {
-                required: true
-            },
-            advertiser_mail: {
+            advertiser_id: {
                 required: true
             },
             type_zone: {
@@ -256,10 +253,7 @@ $(document).ready(function()
             }
         },
         messages: {
-            advertiser_name: {
-                required: "Veuillez renseigner ce champ"
-            },
-            advertiser_mail: {
+            advertiser_id: {
                 required: "Veuillez renseigner ce champ"
             },
             type_zone: {
@@ -317,6 +311,27 @@ $(document).ready(function()
             no_results_text:'Aucun résultat!'
         });
     }
+ 
+    // entreprise list
+    $("#advertiser_id").select2({
+        allowClear: true,
+        placeholder: "Veuillez taper içi le nom d'une entreprise",
+        ajax: {
+            url: {/literal}{urljsstring 'ads~ads:autoCompletEntreprise'}{literal},
+            minimumInputLength: 3,
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {q: params.term};
+            },
+            processResults: function (data) {
+            return {
+              results: data
+            };
+        },
+        cache: true
+      }
+    });
 
     $('input[name=inscription]').change(function(){
         if ($('input[name=inscription]:checked').val() == 1)

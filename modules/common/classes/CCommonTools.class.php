@@ -2198,12 +2198,28 @@ final class CCommonTools
         return $dt->toString(jDateTime::DB_DTFORMAT);
     }
 
+    // Get date now in SQL Format
+    public static function RgetDateOnlyNowSQL()
+    {
+        $dt = new jDateTime();
+        $dt->now();
+        return $dt->toString(jDateTime::DB_DFORMAT);
+    }
+
     // Get date now in LANG Format
     public static function RgetDateNowLANG()
     {
         $dt = new jDateTime();
         $dt->now();
         return $dt->toString(jDateTime::LANG_DTFORMAT);
+    }
+
+    // Get date now in LANG Format
+    public static function RgetDateOnlyNowLANG()
+    {
+        $dt = new jDateTime();
+        $dt->now();
+        return $dt->toString(jDateTime::LANG_DFORMAT);
     }
 
     // Change LANG Format to SQL Format
@@ -2214,12 +2230,28 @@ final class CCommonTools
         return $dt->toString(jDateTime::DB_DTFORMAT);
     }
 
+    // Change LANG Format to SQL Format
+    public static function RDateOnlyLANGtoSQL($date)
+    {
+        $dt = new jDateTime();
+        $dt->setFromString($date, jDateTime::LANG_DFORMAT);
+        return $dt->toString(jDateTime::DB_DFORMAT);
+    }
+
     // Change SQL Format to LANG Format
     public static function RDateSQLtoLANG($date)
     {
         $dt = new jDateTime();
         $dt->setFromString($date, jDateTime::DB_DTFORMAT);
         return $dt->toString(jDateTime::LANG_DTFORMAT);
+    }
+
+    // Change SQL Format to LANG Format
+    public static function RDateOnlySQLtoLANG($date)
+    {
+        $dt = new jDateTime();
+        $dt->setFromString($date, jDateTime::DB_DFORMAT);
+        return $dt->toString(jDateTime::LANG_DFORMAT);
     }
 
     // Get User Session Name

@@ -70,6 +70,7 @@ defaultJformsBuilder=html
 [responses]
 html=myHtmlResponse
 noheader=noheaderHtmlResponse
+print=printResponse
 
 [error_handling]
 ;errorMessage="A technical error has occured (code: %code%). Sorry for this inconvenience."

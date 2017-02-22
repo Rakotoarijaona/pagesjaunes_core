@@ -42,9 +42,7 @@
 </div>
 <div class="form-group r-form" id="ad_html">
     <label class="control-label">Html</label> 
-    <textarea class="form-control ckeditor" name="html" id="html">
-        {$oAdsZoneDefault->html}
-    </textarea>
+    <textarea class="form-control ckeditor" name="html_type" id="html_type">{$oAdsZoneDefault->html}</textarea>
 </div>
 <div class="form-group r-form">
     <label>Lien ad</label>

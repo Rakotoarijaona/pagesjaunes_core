@@ -6,8 +6,7 @@
     <record>
         <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
         <property name="reference" fieldname="reference" datatype="varchar" required="true" maxlength="50"/>
-        <property name="advertiser_name" fieldname="advertiser_name" datatype="varchar" required="true" maxlength="50"/>
-        <property name="advertiser_mail" fieldname="advertiser_mail" datatype="varchar" required="true" maxlength="255"/>
+        <property name="advertiser_id" fieldname="advertiser_id" datatype="int" required="true"/>
         <property name="zone_type" fieldname="zone_type" datatype="int" required="true"/>
         <property name="status" fieldname="status" datatype="tinyint" required="true"/>
         <property name="no_follow" fieldname="no_follow" datatype="tinyint" required="true"/>

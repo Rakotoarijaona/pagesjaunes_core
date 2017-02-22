@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Sam 18 Février 2017 à 06:21
+-- Généré le :  Mer 22 Février 2017 à 12:58
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_abonnement` (
   `abonnement_montant` decimal(19,2) DEFAULT NULL,
   `abonnement_removalstatus` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`abonnement_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Contenu de la table `pagesjaunes_abonnement`
@@ -123,8 +123,7 @@ INSERT INTO `pagesjaunes_ads_config` (`id`, `website_name`, `contact_mail`, `pay
 CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_purchase` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `reference` varchar(50) NOT NULL,
-  `advertiser_name` varchar(50) NOT NULL,
-  `advertiser_mail` varchar(255) NOT NULL,
+  `advertiser_id` int(11) NOT NULL,
   `zone_type` int(5) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `no_follow` tinyint(1) NOT NULL,
@@ -147,20 +146,21 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_purchase` (
   `date_update` datetime DEFAULT NULL,
   `creator` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Contenu de la table `pagesjaunes_ads_purchase`
 --
 
-INSERT INTO `pagesjaunes_ads_purchase` (`id`, `reference`, `advertiser_name`, `advertiser_mail`, `zone_type`, `status`, `no_follow`, `stats_tracking`, `price`, `currency`, `payment_method`, `payment_status`, `subscription`, `subscription_id`, `charging_model`, `publication_start`, `publication_day`, `banner`, `website_url`, `alt_text`, `categorie_id`, `souscategorie_id`, `date_creation`, `date_update`, `creator`) VALUES
-(1, 'fL37GXJp', 'RAKOTO', 'rakoto@gmail.com', 3, 4, 0, 0, 1000, 'Ar', 1, 1, 0, NULL, 1, '0000-00-00', 12, 'ambohipo-13.jpg', NULL, NULL, 11, NULL, '2017-02-17 00:00:00', '2017-02-17 13:03:23', 'RAKOTOARIJAONA'),
-(2, 'iJowW3Xp', 'RAKOTO', 'rakoto@gmail.com', 4, 4, 0, 0, 255000, 'Ar', 1, 1, 0, NULL, 2, '2017-02-14', 12, 'ambohipo-14.jpg', NULL, NULL, NULL, 1, '2017-02-17 00:00:00', '2017-02-17 17:28:04', 'RAKOTOARIJAONA'),
-(3, 'jsUrf6ak', 'MALM', 'malm@gmail.com', 3, 4, 1, 1, 12000, 'Ar', 1, 1, 1, 121, 2, '2009-02-17', 32, 'PENSION+COMPLETE.JPG-3.jpg', 'http://www.url.com', NULL, 13, NULL, '2017-02-17 13:06:40', '2017-02-17 14:40:05', 'RAKOTOARIJAONA'),
-(4, '2P5KIoOR', 'SAID', 'said@rec.com', 3, 4, 1, 0, 23000, 'Ar', 2, 1, 0, NULL, 1, '2017-02-17', 32, 'ambohipo-8.jpg', NULL, NULL, NULL, NULL, '2017-02-17 13:24:39', '2017-02-17 17:40:22', 'RAKOTOARIJAONA'),
-(5, 'BLoToMho', 'GASY', 'pl@gmail.mg', 3, 4, 0, 0, 2000, 'Ar', 1, 1, 0, NULL, 2, '2017-02-16', 12, 'ambohipo-7.jpg', NULL, NULL, NULL, NULL, '2017-02-17 00:00:00', '2017-02-17 17:27:32', 'RAKOTOARIJAONA'),
-(7, 'YfQdmhtm', 'FARANY', 'farany@gmail.com', 3, 5, 1, 0, 100, 'Ar', 2, 2, 0, NULL, 2, '2017-02-07', 10, 'PENSION+COMPLETE.JPG-5.jpg', NULL, NULL, NULL, NULL, '2017-02-17 00:00:00', '2017-02-17 17:25:13', 'RAKOTOARIJAONA'),
-(8, '2P5KIoOR', 'SAID', 'said@rec.com', 3, 4, 1, 0, 23000, 'Ar', 2, 1, 0, NULL, 1, '2017-02-17', 32, 'ambohipo-8.jpg', NULL, NULL, NULL, NULL, '2017-02-17 17:57:53', '2017-02-17 17:40:22', 'RAKOTOARIJAONA');
+INSERT INTO `pagesjaunes_ads_purchase` (`id`, `reference`, `advertiser_id`, `zone_type`, `status`, `no_follow`, `stats_tracking`, `price`, `currency`, `payment_method`, `payment_status`, `subscription`, `subscription_id`, `charging_model`, `publication_start`, `publication_day`, `banner`, `website_url`, `alt_text`, `categorie_id`, `souscategorie_id`, `date_creation`, `date_update`, `creator`) VALUES
+(1, 'fL37GXJp', 17, 1, 2, 0, 0, 1000, 'Ar', 1, 1, 0, NULL, 1, '2017-02-17', 12, 'kubo_and_the_two_strings_ver14.jpg', NULL, NULL, NULL, 1, '2017-02-17 00:00:00', '2017-02-20 14:13:05', 'RAKOTOARIJAONA'),
+(2, 'iJowW3Xp', 18, 2, 2, 0, 0, 255000, 'Ar', 1, 1, 0, NULL, 2, '2017-02-14', 12, 'objet-de-pub-300x300-1.jpg', NULL, NULL, NULL, 1, '2017-02-17 00:00:00', '2017-02-20 14:18:42', 'RAKOTOARIJAONA'),
+(3, 'jsUrf6ak', 19, 1, 2, 1, 1, 12000, 'Ar', 1, 1, 1, 121, 2, '2017-02-17', 3, 'PENSION+COMPLETE.JPG-3.jpg', 'http://www.url.com', NULL, NULL, 1, '2017-02-17 13:06:40', '2017-02-17 14:40:05', 'RAKOTOARIJAONA'),
+(5, 'BLoToMho', 21, 1, 2, 0, 0, 2000, 'Ar', 1, 1, 0, NULL, 2, '2017-02-16', 12, 'Pub-Adidas-Soldes-2015-300x.jpg', NULL, NULL, NULL, 1, '2017-02-17 00:00:00', '2017-02-20 14:19:28', 'RAKOTOARIJAONA'),
+(7, 'YfQdmhtm', 22, 1, 2, 1, 0, 100, 'Ar', 2, 2, 0, NULL, 2, '2017-02-07', 10, 'PENSION+COMPLETE.JPG-5.jpg', NULL, NULL, NULL, NULL, '2017-02-17 00:00:00', '2017-02-17 17:25:13', 'RAKOTOARIJAONA'),
+(8, '2P5KIoOR', 24, 1, 2, 1, 0, 23000, 'Ar', 2, 1, 0, NULL, 1, '2017-02-17', 32, 'brotherly love.jpg', NULL, NULL, NULL, NULL, '2017-02-17 17:57:53', '2017-02-20 14:28:03', 'RAKOTOARIJAONA'),
+(10, '2P5KIoOR', 25, 1, 2, 1, 0, 23000, 'Ar', 2, 1, 0, NULL, 1, '2017-02-17', 32, 'peter dragon.jpg', NULL, NULL, NULL, NULL, '2017-02-18 07:18:02', '2017-02-20 14:27:35', 'RAKOTOARIJAONA'),
+(11, 'DT457imY', 27, 2, 2, 1, 0, 12000, 'Ar', 2, 2, 0, 32, 1, '2017-02-19', 12, 'tracks_2.jpg', NULL, NULL, NULL, 3, '2017-02-20 07:45:58', '2017-02-20 14:32:24', 'RAKOTOARIJAONA');
 
 -- --------------------------------------------------------
 
@@ -200,15 +200,244 @@ INSERT INTO `pagesjaunes_ads_souscategorie` (`id`, `ads_id`, `souscategorie_id`,
 -- --------------------------------------------------------
 
 --
--- Structure de la table `pagesjaunes_ads_stats`
+-- Structure de la table `pagesjaunes_ads_tracker`
 --
 
-CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_stats` (
+CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_tracker` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ads_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `time` bigint(20) NOT NULL,
+  `ip` varchar(255) NOT NULL,
+  `is_default` tinyint(1) NOT NULL,
+  `type` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=192 ;
+
+--
+-- Contenu de la table `pagesjaunes_ads_tracker`
+--
+
+INSERT INTO `pagesjaunes_ads_tracker` (`id`, `ads_id`, `date`, `time`, `ip`, `is_default`, `type`) VALUES
+(1, 2, '2017-02-21', 1487694327, '0', 0, 3),
+(2, 1, '2017-02-21', 1487694327, '0', 0, 3),
+(3, 5, '2017-02-21', 1487694330, '0', 0, 3),
+(4, 1, '2017-02-21', 1487694357, '0', 0, 3),
+(5, 5, '2017-02-21', 1487694366, '0', 0, 3),
+(6, 2, '2017-02-21', 1487694972, '0', 0, 3),
+(7, 1, '2017-02-21', 1487694972, '0', 0, 3),
+(8, 5, '2017-02-21', 1487694975, '0', 0, 3),
+(9, 1, '2017-02-21', 1487694979, '0', 0, 3),
+(10, 5, '2017-02-21', 1487694981, '0', 0, 3),
+(11, 1, '2017-02-21', 1487694985, '0', 0, 3),
+(12, 1, '2017-02-21', 1487695227, '0', 0, 3),
+(13, 2, '2017-02-21', 1487695227, '0', 0, 3),
+(14, 5, '2017-02-21', 1487695230, '0', 0, 3),
+(15, 1, '2017-02-21', 1487695232, '0', 0, 3),
+(16, 1, '2017-02-21', 1487695234, '0', 0, 3),
+(17, 2, '2017-02-21', 1487695235, '0', 0, 3),
+(18, 5, '2017-02-21', 1487695238, '0', 0, 3),
+(19, 1, '2017-02-21', 1487695241, '0', 0, 3),
+(20, 5, '2017-02-21', 1487695244, '0', 0, 3),
+(21, 1, '2017-02-21', 1487695246, '0', 0, 3),
+(22, 5, '2017-02-21', 1487695249, '0', 0, 3),
+(23, 1, '2017-02-21', 1487695253, '0', 0, 3),
+(24, 5, '2017-02-21', 1487695256, '0', 0, 3),
+(25, 1, '2017-02-21', 1487695259, '0', 0, 3),
+(26, 5, '2017-02-21', 1487695262, '0', 0, 3),
+(27, 1, '2017-02-21', 1487695265, '0', 0, 3),
+(28, 5, '2017-02-21', 1487695268, '0', 0, 3),
+(29, 1, '2017-02-21', 1487695271, '0', 0, 3),
+(30, 5, '2017-02-21', 1487695274, '0', 0, 3),
+(31, 1, '2017-02-21', 1487695277, '0', 0, 3),
+(32, 5, '2017-02-21', 1487695280, '0', 0, 3),
+(33, 1, '2017-02-21', 1487695283, '0', 0, 3),
+(34, 5, '2017-02-21', 1487695286, '0', 0, 3),
+(35, 1, '2017-02-21', 1487695289, '0', 0, 3),
+(36, 5, '2017-02-21', 1487695292, '0', 0, 3),
+(37, 1, '2017-02-21', 1487695295, '0', 0, 3),
+(38, 5, '2017-02-21', 1487695298, '0', 0, 3),
+(39, 1, '2017-02-21', 1487695301, '0', 0, 3),
+(40, 5, '2017-02-21', 1487695304, '0', 0, 3),
+(41, 1, '2017-02-21', 1487695307, '0', 0, 3),
+(42, 5, '2017-02-21', 1487695310, '0', 0, 3),
+(43, 1, '2017-02-21', 1487695313, '0', 0, 3),
+(44, 5, '2017-02-21', 1487695316, '0', 0, 3),
+(45, 1, '2017-02-21', 1487695319, '0', 0, 3),
+(46, 5, '2017-02-21', 1487695322, '0', 0, 3),
+(47, 1, '2017-02-21', 1487695325, '0', 0, 3),
+(48, 5, '2017-02-21', 1487695328, '0', 0, 3),
+(49, 1, '2017-02-21', 1487695331, '0', 0, 3),
+(50, 5, '2017-02-21', 1487695334, '0', 0, 3),
+(51, 1, '2017-02-21', 1487695337, '0', 0, 3),
+(52, 5, '2017-02-21', 1487695340, '0', 0, 3),
+(53, 1, '2017-02-21', 1487695343, '0', 0, 3),
+(54, 5, '2017-02-21', 1487695346, '0', 0, 3),
+(55, 1, '2017-02-21', 1487695349, '0', 0, 3),
+(56, 5, '2017-02-21', 1487695352, '0', 0, 3),
+(57, 1, '2017-02-21', 1487695355, '0', 0, 3),
+(58, 5, '2017-02-21', 1487695358, '0', 0, 3),
+(59, 1, '2017-02-21', 1487695361, '0', 0, 3),
+(60, 5, '2017-02-21', 1487695364, '0', 0, 3),
+(61, 1, '2017-02-21', 1487695367, '0', 0, 3),
+(62, 5, '2017-02-21', 1487695370, '0', 0, 3),
+(63, 1, '2017-02-21', 1487695373, '0', 0, 3),
+(64, 5, '2017-02-21', 1487695376, '0', 0, 3),
+(65, 1, '2017-02-21', 1487695379, '0', 0, 3),
+(66, 5, '2017-02-21', 1487695382, '0', 0, 3),
+(67, 1, '2017-02-21', 1487695385, '0', 0, 3),
+(68, 5, '2017-02-21', 1487695388, '0', 0, 3),
+(69, 1, '2017-02-21', 1487695519, '0', 0, 3),
+(70, 2, '2017-02-21', 1487695520, '0', 0, 3),
+(71, 5, '2017-02-21', 1487695523, '0', 0, 3),
+(72, 1, '2017-02-21', 1487695526, '0', 0, 3),
+(73, 5, '2017-02-21', 1487695529, '0', 0, 3),
+(74, 1, '2017-02-21', 1487695532, '0', 0, 3),
+(75, 5, '2017-02-21', 1487695535, '0', 0, 3),
+(76, 1, '2017-02-21', 1487695537, '0', 0, 3),
+(77, 5, '2017-02-21', 1487695541, '0', 0, 3),
+(78, 1, '2017-02-21', 1487695544, '0', 0, 3),
+(79, 5, '2017-02-21', 1487695547, '0', 0, 3),
+(80, 1, '2017-02-21', 1487695550, '0', 0, 3),
+(81, 5, '2017-02-21', 1487695552, '0', 0, 3),
+(82, 1, '2017-02-21', 1487695556, '0', 0, 3),
+(83, 5, '2017-02-21', 1487695559, '0', 0, 3),
+(84, 1, '2017-02-21', 1487695562, '0', 0, 3),
+(85, 5, '2017-02-21', 1487695565, '0', 0, 3),
+(86, 2, '2017-02-21', 1487695568, '0', 0, 3),
+(87, 1, '2017-02-21', 1487695568, '0', 0, 3),
+(88, 5, '2017-02-21', 1487695571, '0', 0, 3),
+(89, 1, '2017-02-21', 1487695574, '0', 0, 3),
+(90, 5, '2017-02-21', 1487695577, '0', 0, 3),
+(91, 1, '2017-02-21', 1487695580, '0', 0, 3),
+(92, 5, '2017-02-21', 1487695583, '0', 0, 3),
+(93, 1, '2017-02-21', 1487695586, '0', 0, 3),
+(94, 5, '2017-02-21', 1487695589, '0', 0, 3),
+(95, 1, '2017-02-21', 1487695592, '0', 0, 3),
+(96, 5, '2017-02-21', 1487695595, '0', 0, 3),
+(97, 1, '2017-02-21', 1487695599, '0', 0, 3),
+(98, 5, '2017-02-21', 1487695601, '0', 0, 3),
+(99, 1, '2017-02-21', 1487695604, '0', 0, 3),
+(100, 5, '2017-02-21', 1487695607, '0', 0, 3),
+(101, 1, '2017-02-21', 1487695610, '0', 0, 3),
+(102, 5, '2017-02-21', 1487695614, '0', 0, 3),
+(103, 1, '2017-02-21', 1487695618, '0', 0, 3),
+(104, 2, '2017-02-21', 1487695618, '0', 0, 3),
+(105, 5, '2017-02-21', 1487695621, '0', 0, 3),
+(106, 1, '2017-02-21', 1487695624, '0', 0, 3),
+(107, 5, '2017-02-21', 1487695627, '0', 0, 3),
+(108, 1, '2017-02-21', 1487695630, '0', 0, 3),
+(109, 5, '2017-02-21', 1487695633, '0', 0, 3),
+(110, 1, '2017-02-21', 1487695636, '0', 0, 3),
+(111, 5, '2017-02-21', 1487695639, '0', 0, 3),
+(112, 1, '2017-02-21', 1487695642, '0', 0, 3),
+(113, 5, '2017-02-21', 1487695645, '0', 0, 3),
+(114, 1, '2017-02-21', 1487695648, '0', 0, 3),
+(115, 5, '2017-02-21', 1487695651, '0', 0, 3),
+(116, 1, '2017-02-21', 1487695654, '0', 0, 3),
+(117, 5, '2017-02-21', 1487695657, '0', 0, 3),
+(118, 1, '2017-02-21', 1487695660, '0', 0, 3),
+(119, 5, '2017-02-21', 1487695663, '0', 0, 3),
+(120, 1, '2017-02-21', 1487695666, '0', 0, 3),
+(121, 5, '2017-02-21', 1487695669, '0', 0, 3),
+(122, 1, '2017-02-21', 1487695672, '0', 0, 3),
+(123, 5, '2017-02-21', 1487695675, '0', 0, 3),
+(124, 1, '2017-02-21', 1487695678, '0', 0, 3),
+(125, 5, '2017-02-21', 1487695681, '0', 0, 3),
+(126, 1, '2017-02-21', 1487695684, '0', 0, 3),
+(127, 5, '2017-02-21', 1487695687, '0', 0, 3),
+(128, 1, '2017-02-21', 1487695690, '0', 0, 3),
+(129, 5, '2017-02-21', 1487695693, '0', 0, 3),
+(130, 1, '2017-02-21', 1487695696, '0', 0, 3),
+(131, 5, '2017-02-21', 1487695699, '0', 0, 3),
+(132, 1, '2017-02-21', 1487695702, '0', 0, 3),
+(133, 5, '2017-02-21', 1487695705, '0', 0, 3),
+(134, 1, '2017-02-21', 1487695708, '0', 0, 3),
+(135, 5, '2017-02-21', 1487695711, '0', 0, 3),
+(136, 1, '2017-02-21', 1487695714, '0', 0, 3),
+(137, 5, '2017-02-21', 1487695717, '0', 0, 3),
+(138, 1, '2017-02-21', 1487695721, '0', 0, 3),
+(139, 5, '2017-02-21', 1487695723, '0', 0, 3),
+(140, 1, '2017-02-21', 1487695727, '0', 0, 3),
+(141, 2, '2017-02-21', 1487695727, '0', 0, 3),
+(142, 5, '2017-02-21', 1487695730, '0', 0, 3),
+(143, 1, '2017-02-21', 1487695733, '0', 0, 3),
+(144, 5, '2017-02-21', 1487695736, '0', 0, 3),
+(145, 1, '2017-02-21', 1487695739, '0', 0, 3),
+(146, 5, '2017-02-21', 1487695742, '0', 0, 3),
+(147, 1, '2017-02-21', 1487695745, '0', 0, 3),
+(148, 5, '2017-02-21', 1487695748, '0', 0, 3),
+(149, 2, '2017-02-21', 1487696969, '0', 0, 3),
+(150, 1, '2017-02-21', 1487696969, '0', 0, 3),
+(151, 5, '2017-02-21', 1487696972, '0', 0, 3),
+(152, 1, '2017-02-21', 1487696976, '0', 0, 3),
+(153, 5, '2017-02-21', 1487696978, '0', 0, 3),
+(154, 1, '2017-02-21', 1487696981, '0', 0, 3),
+(155, 5, '2017-02-21', 1487696985, '0', 0, 3),
+(156, 1, '2017-02-21', 1487696989, '0', 0, 3),
+(157, 5, '2017-02-21', 1487696991, '0', 0, 3),
+(158, 1, '2017-02-21', 1487696993, '0', 0, 3),
+(159, 5, '2017-02-21', 1487696996, '0', 0, 3),
+(160, 1, '2017-02-21', 1487696999, '0', 0, 3),
+(161, 5, '2017-02-21', 1487697002, '0', 0, 3),
+(162, 1, '2017-02-21', 1487697005, '0', 0, 3),
+(163, 5, '2017-02-21', 1487697008, '0', 0, 3),
+(164, 1, '2017-02-21', 1487697012, '0', 0, 3),
+(165, 5, '2017-02-21', 1487697014, '0', 0, 3),
+(166, 1, '2017-02-21', 1487697017, '0', 0, 3),
+(167, 5, '2017-02-21', 1487697020, '0', 0, 3),
+(168, 1, '2017-02-21', 1487697023, '0', 0, 3),
+(169, 5, '2017-02-21', 1487697026, '0', 0, 3),
+(170, 1, '2017-02-21', 1487697029, '0', 0, 3),
+(171, 5, '2017-02-21', 1487697033, '0', 0, 3),
+(172, 1, '2017-02-21', 1487697035, '0', 0, 3),
+(173, 1, '2017-02-21', 1487697391, '::1', 0, 3),
+(174, 2, '2017-02-21', 1487697392, '::1', 0, 3),
+(175, 5, '2017-02-21', 1487697394, '::1', 0, 3),
+(176, 1, '2017-02-21', 1487697397, '::1', 0, 3),
+(177, 5, '2017-02-21', 1487697400, '::1', 0, 3),
+(178, 1, '2017-02-21', 1487697403, '::1', 0, 3),
+(179, 5, '2017-02-21', 1487697406, '::1', 0, 3),
+(180, 1, '2017-02-21', 1487699398, '::1', 0, 3),
+(181, 2, '2017-02-21', 1487699399, '::1', 0, 3),
+(182, 5, '2017-02-21', 1487699401, '::1', 0, 3),
+(183, 5, '2017-02-21', 1487699405, '', 0, 1),
+(184, 2, '2017-02-21', 1487699412, '', 0, 1),
+(185, 1, '2017-02-21', 1487699416, '::1', 0, 3),
+(186, 2, '2017-02-22', 1487764533, '::1', 0, 3),
+(187, 1, '2017-02-22', 1487764534, '::1', 0, 3),
+(188, 5, '2017-02-22', 1487764539, '::1', 0, 3),
+(189, 1, '2017-02-22', 1487764545, '::1', 0, 3),
+(190, 5, '2017-02-22', 1487764551, '::1', 0, 3),
+(191, 1, '2017-02-22', 1487764557, '::1', 0, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `pagesjaunes_ads_tracker_print`
+--
+
+CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_tracker_print` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ads_id` int(11) NOT NULL,
   `date` datetime NOT NULL,
-  `ip` varchar(50) NOT NULL,
-  `type` tinyint(1) NOT NULL,
+  `ip` varchar(255) NOT NULL,
+  `is_default` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `pagesjaunes_ads_tracker_show`
+--
+
+CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_tracker_show` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ads_id` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `ip` varchar(255) NOT NULL,
+  `is_default` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -270,15 +499,15 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_zone` (
   `creator` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Contenu de la table `pagesjaunes_ads_zone`
 --
 
 INSERT INTO `pagesjaunes_ads_zone` (`id`, `name`, `cost_model`, `width`, `height`, `slots_columns`, `slots_row`, `number_rotation`, `number_client`, `line_height`, `number_ads_default`, `ads_display_method`, `is_publie`, `date_creation`, `date_update`, `date_publication`, `creator`) VALUES
-(3, 'Zone1', 'jour', 300, 600, 1, 1, 10, 100, 10, 4, 1, 1, '2017-02-14 12:53:45', '2017-02-16 18:26:34', '2017-02-14 17:20:06', 'RAKOTOARIJAONA'),
-(4, 'zone2', 'clic', 100, 100, 1, 1, 10, 110, 10, 5, 1, 1, '2017-02-14 13:18:49', '2017-02-16 16:42:01', '2017-02-14 13:18:49', 'RAKOTOARIJAONA');
+(1, 'Skyscraper ', 'jour', 300, 600, 1, 1, 10, 100, 10, 2, 1, 1, '2017-02-14 12:53:45', '2017-02-21 19:19:35', '2017-02-14 17:20:06', 'RAKOTOARIJAONA'),
+(2, 'Ad carré', 'clic', 300, 300, 1, 1, 10, 110, 10, 3, 1, 1, '2017-02-14 13:18:49', '2017-02-20 12:59:49', '2017-02-14 13:18:49', 'RAKOTOARIJAONA');
 
 -- --------------------------------------------------------
 
@@ -302,22 +531,23 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_ads_zone_default` (
   `date_update` datetime DEFAULT NULL,
   `creator` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=82 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=89 ;
 
 --
 -- Contenu de la table `pagesjaunes_ads_zone_default`
 --
 
 INSERT INTO `pagesjaunes_ads_zone_default` (`id`, `zone_id`, `rang`, `type`, `categorie_id`, `souscategorie_id`, `image`, `html`, `link`, `is_publie`, `date_creation`, `date_publication`, `date_update`, `creator`) VALUES
-(12, 4, 1, 2, 11, NULL, NULL, '                        ', NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-17 06:56:06', 'RAKOTOARIJAONA'),
+(12, 0, 1, 2, 11, NULL, NULL, '                        ', NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-17 06:56:06', 'RAKOTOARIJAONA'),
 (18, 4, 2, 1, NULL, 15, 'silence.jpg', NULL, NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-16 16:17:51', 'RAKOTOARIJAONA'),
 (23, 4, 3, 2, NULL, NULL, NULL, '            ', NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-16 16:19:19', 'RAKOTOARIJAONA'),
 (24, 4, 4, 2, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-16 15:03:06', '2017-02-16 15:03:06', NULL, 'RAKOTOARIJAONA'),
 (25, 4, 5, 1, NULL, NULL, 'brahman-3.jpg', NULL, NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-16 16:21:11', 'RAKOTOARIJAONA'),
-(77, 3, 1, 2, NULL, 1, NULL, '            ', NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-16 18:37:02', 'RAKOTOARIJAONA'),
-(78, 3, 2, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-16 17:00:47', '2017-02-16 17:00:47', NULL, 'RAKOTOARIJAONA'),
-(79, 3, 3, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-16 17:00:47', '2017-02-16 17:00:47', NULL, 'RAKOTOARIJAONA'),
-(80, 3, 4, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2017-02-16 17:00:47', '2017-02-16 17:00:47', NULL, 'RAKOTOARIJAONA');
+(77, 1, 1, 1, NULL, 1, 'tracks_2-1.jpg', '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>\r\n', NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-20 16:12:13', 'RAKOTOARIJAONA'),
+(78, 1, 2, 1, NULL, NULL, 'oralb_300x600_juill14.gif', NULL, NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-20 13:02:41', 'RAKOTOARIJAONA'),
+(86, 2, 1, 1, NULL, NULL, 'objet-de-pub-300x300.jpg', NULL, NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-20 12:57:04', 'RAKOTOARIJAONA'),
+(87, 2, 2, 1, NULL, NULL, 'pub3003001.jpeg', NULL, NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-20 12:57:21', 'RAKOTOARIJAONA'),
+(88, 2, 3, 1, NULL, NULL, 'Il_était_une_pub-1.jpg', NULL, NULL, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2017-02-20 12:57:36', 'RAKOTOARIJAONA');
 
 -- --------------------------------------------------------
 
@@ -414,6 +644,9 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_categorie` (
 --
 
 INSERT INTO `pagesjaunes_categorie` (`categorie_id`, `categorie_name`, `categorie_namealias`, `categorie_vignette`, `categorie_ispublie`, `categorie_datepublication`, `categorie_datecreation`, `categorie_datemodification`) VALUES
+(1, 'Restauration', 'restauration', 'download.png', 1, '2017-02-19 00:00:00', '2017-02-19 00:00:00', NULL),
+(5, 'Electronique', 'electronique', 'ambohipo.jpg', 1, '2017-02-19 00:00:00', '2017-02-19 00:00:00', NULL),
+(7, 'taxi-be', 'taxi-be', 'silence.jpg', 1, '2017-02-20 00:00:00', '2017-02-20 00:00:00', NULL),
 (11, 'Restauration, hotelerie et voyages', 'restauration-hotelerie-et-voyages', 'conseil-et-services-aux-entreprises,-éducation.png', 1, '2017-01-11 00:00:00', '2017-02-01 00:00:00', '2017-02-01 00:00:00'),
 (12, 'communication', 'communication', 'communication-publicité-édition.png', 0, NULL, '2017-02-01 00:00:00', '2017-02-01 00:00:00'),
 (13, 'Electricité-électronique', 'electricite-electronique', 'Electricité-Electronique.png', 1, '2016-12-18 00:00:00', '2017-02-01 00:00:00', '2017-02-01 00:00:00'),
@@ -543,11 +776,11 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_entreprise` (
 --
 
 INSERT INTO `pagesjaunes_entreprise` (`id`, `raisonsociale`, `activite`, `adresse`, `region`, `logo`, `contact_interne`, `fonction_contact`, `url_website`, `video_presentation_active`, `video_presentation`, `qui_sommes_nous_active`, `qui_sommes_nous`, `nos_services_active`, `nos_services`, `nos_references_active`, `nos_references`, `videos_active`, `galerie_image_active`, `latitude`, `longitude`, `position_recherche`, `nombre_visite`, `is_publie`, `date_creation`, `date_update`, `catalogue_active`, `editer_front_active`, `weight`, `login`, `password`, `clear_password`) VALUES
-(17, 'Eleven design', 'Une Agence de conception graphique', 'Lot VT A', '', 'Elevendesignlogo.jpg', 'personne', 'fonction', 'elevendesign.mg', 1, 'entreprisepresentation2017-01-1313940.mp4', 1, '<p>Les designers de Eleven proposent la cr&eacute;ation d&rsquo;un concept de communication fort, d&eacute;clin&eacute; au sein d&rsquo;un univers graphique et applicable &agrave; l&rsquo;ensemble des supports de communication :<br />\r\n&bull; Cr&eacute;ation de logo<br />\r\n&bull; Cr&eacute;ation de charte graphique<br />\r\n&bull; Concepts campagnes publicitaires<br />\r\n&bull; Cr&eacute;ation d&rsquo;annonces presse<br />\r\n&bull; Plaquettes / Flyers / Catalogues &hellip;<br />\r\n&bull; Journaux et magazines<br />\r\n&bull; Rapports d&rsquo;activit&eacute;s<br />\r\n&bull; Pochettes et fiches produits<br />\r\n&bull; Conception r&eacute;daction<br />\r\n&bull; packaging<br />\r\n&bull; Design 3D</p>\r\n\r\n<p><strong>Motion design :</strong></p>\r\n\r\n<p>Films d&rsquo;entreprises, campagnes publicitaires TV, &eacute;v&eacute;nementiel, nos &eacute;quipes assurent la conception, la cr&eacute;ation du territoire sonore, les voix et le montage de tout support audiovisuels 2D et 3D.<br />\r\n&bull; Films Campagnes publicitaires<br />\r\n&bull; Films institutionnels<br />\r\n&bull; Films de promotion produits<br />\r\n&bull; Films d&rsquo;animation</p>\r\n\r\n<p>Communiquons autrement !</p>\r\n', 1, '<p>Les designers de Eleven proposent la cr&eacute;ation d&rsquo;un concept de communication fort, d&eacute;clin&eacute; au sein d&rsquo;un univers graphique et applicable &agrave; l&rsquo;ensemble des supports de communication :<br />\r\n&bull; Cr&eacute;ation de logo<br />\r\n&bull; Cr&eacute;ation de charte graphique<br />\r\n&bull; Concepts campagnes publicitaires<br />\r\n&bull; Cr&eacute;ation d&rsquo;annonces presse<br />\r\n&bull; Plaquettes / Flyers / Catalogues &hellip;<br />\r\n&bull; Journaux et magazines<br />\r\n&bull; Rapports d&rsquo;activit&eacute;s<br />\r\n&bull; Pochettes et fiches produits<br />\r\n&bull; Conception r&eacute;daction<br />\r\n&bull; packaging<br />\r\n&bull; Design 3D</p>\r\n\r\n<p><strong>Motion design :</strong></p>\r\n\r\n<p>Films d&rsquo;entreprises, campagnes publicitaires TV, &eacute;v&eacute;nementiel, nos &eacute;quipes assurent la conception, la cr&eacute;ation du territoire sonore, les voix et le montage de tout support audiovisuels 2D et 3D.<br />\r\n&bull; Films Campagnes publicitaires<br />\r\n&bull; Films institutionnels<br />\r\n&bull; Films de promotion produits<br />\r\n&bull; Films d&rsquo;animation</p>\r\n\r\n<p>Communiquons autrement !</p>\r\n', 1, NULL, 1, 1, '-18.898308395210417', '47.52641424536705', 0, 15, 1, '2017-01-13 00:00:00', '2017-02-10 18:24:47', 1, 1, 20, 'OmCd90Zg', 'b14a94391a2a8e0700471ac4c80ef48556bae60a', '!QoC6h6hU!'),
-(18, 'Entreprise1', 'essai', 'aaaaaaaaaaaa', '', 'Entreprise1logo.jpg', 'aera', 'aere', 'aeraer', 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 19, 1, '2017-01-18 00:00:00', '2017-02-11 03:44:57', 0, 0, 1, 'ig9QSJ5c', '34c89a7d7db1056718d98c64687778b8a76fd6e3', '3%1DhSf!Hd'),
-(19, 'Entreprise2', 'essai2', 'qdfdsf', '', NULL, 'qdf', 'fqdfq', 'qdsfqdsfqd', 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 2, 1, '2017-01-18 00:00:00', '2017-02-11 03:51:39', 0, 0, 0, 'bcaSmlRk', '9e1ef2f300116a6151a3f2a53b6cc7c2d0ea5a42', 'zPY9Z?_dw0'),
+(17, 'Eleven design', 'Une Agence de conception graphique', 'Lot VT A', '', 'Elevendesignlogo.jpg', 'personne', 'fonction', 'elevendesign.mg', 1, 'entreprisepresentation2017-01-1313940.mp4', 1, '<p>Les designers de Eleven proposent la cr&eacute;ation d&rsquo;un concept de communication fort, d&eacute;clin&eacute; au sein d&rsquo;un univers graphique et applicable &agrave; l&rsquo;ensemble des supports de communication :<br />\r\n&bull; Cr&eacute;ation de logo<br />\r\n&bull; Cr&eacute;ation de charte graphique<br />\r\n&bull; Concepts campagnes publicitaires<br />\r\n&bull; Cr&eacute;ation d&rsquo;annonces presse<br />\r\n&bull; Plaquettes / Flyers / Catalogues &hellip;<br />\r\n&bull; Journaux et magazines<br />\r\n&bull; Rapports d&rsquo;activit&eacute;s<br />\r\n&bull; Pochettes et fiches produits<br />\r\n&bull; Conception r&eacute;daction<br />\r\n&bull; packaging<br />\r\n&bull; Design 3D</p>\r\n\r\n<p><strong>Motion design :</strong></p>\r\n\r\n<p>Films d&rsquo;entreprises, campagnes publicitaires TV, &eacute;v&eacute;nementiel, nos &eacute;quipes assurent la conception, la cr&eacute;ation du territoire sonore, les voix et le montage de tout support audiovisuels 2D et 3D.<br />\r\n&bull; Films Campagnes publicitaires<br />\r\n&bull; Films institutionnels<br />\r\n&bull; Films de promotion produits<br />\r\n&bull; Films d&rsquo;animation</p>\r\n\r\n<p>Communiquons autrement !</p>\r\n', 1, '<p>Les designers de Eleven proposent la cr&eacute;ation d&rsquo;un concept de communication fort, d&eacute;clin&eacute; au sein d&rsquo;un univers graphique et applicable &agrave; l&rsquo;ensemble des supports de communication :<br />\r\n&bull; Cr&eacute;ation de logo<br />\r\n&bull; Cr&eacute;ation de charte graphique<br />\r\n&bull; Concepts campagnes publicitaires<br />\r\n&bull; Cr&eacute;ation d&rsquo;annonces presse<br />\r\n&bull; Plaquettes / Flyers / Catalogues &hellip;<br />\r\n&bull; Journaux et magazines<br />\r\n&bull; Rapports d&rsquo;activit&eacute;s<br />\r\n&bull; Pochettes et fiches produits<br />\r\n&bull; Conception r&eacute;daction<br />\r\n&bull; packaging<br />\r\n&bull; Design 3D</p>\r\n\r\n<p><strong>Motion design :</strong></p>\r\n\r\n<p>Films d&rsquo;entreprises, campagnes publicitaires TV, &eacute;v&eacute;nementiel, nos &eacute;quipes assurent la conception, la cr&eacute;ation du territoire sonore, les voix et le montage de tout support audiovisuels 2D et 3D.<br />\r\n&bull; Films Campagnes publicitaires<br />\r\n&bull; Films institutionnels<br />\r\n&bull; Films de promotion produits<br />\r\n&bull; Films d&rsquo;animation</p>\r\n\r\n<p>Communiquons autrement !</p>\r\n', 1, NULL, 1, 1, '-18.898308395210417', '47.52641424536705', 0, 17, 1, '2016-10-04 04:17:29', '2017-02-10 18:24:47', 1, 1, 20, 'OmCd90Zg', 'b14a94391a2a8e0700471ac4c80ef48556bae60a', '!QoC6h6hU!'),
+(18, 'Entreprise1', 'essai', 'aaaaaaaaaaaa', '', 'Entreprise1logo.jpg', 'aera', 'aere', 'aeraer', 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 20, 1, '2017-01-18 00:00:00', '2017-02-11 03:44:57', 0, 0, 1, 'ig9QSJ5c', '34c89a7d7db1056718d98c64687778b8a76fd6e3', '3%1DhSf!Hd'),
+(19, 'Entreprise2', 'essai2', 'qdfdsf', '', NULL, 'qdf', 'fqdfq', 'qdsfqdsfqd', 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 4, 1, '2017-01-18 00:00:00', '2017-02-11 03:51:39', 0, 0, 0, 'bcaSmlRk', '9e1ef2f300116a6151a3f2a53b6cc7c2d0ea5a42', 'zPY9Z?_dw0'),
 (20, 'entreprise3', 'aera', 'raeraer', '', NULL, 'areraezr', 'rzaerzer', 'aezraezr', 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 56, 1, '2017-01-18 00:00:00', '2017-02-11 03:45:50', 0, 0, 0, 'MN5fqKLf', '2f3a96b9f83f204fc957c441e8fc22b8f0e6686c', '2Pqd,^9BcA'),
-(21, 'Entreprise4', 'pertinente', 'adresse14', '', 'Entreprise4logo.png', 'personne', 'personne', 'Entreprise4.com', 1, 'entreprisepresentation2017-01-1916934.mp4', 1, '<p>qsdfqsdfqsf</p>\r\n', 1, '<p>qsdfqdsfqsdf</p>\r\n', 1, '<p>qsdffffzzfzfzf</p>\r\n', 1, 1, NULL, NULL, 0, 3, 1, '2017-01-19 00:00:00', '2017-02-11 03:43:05', 0, 0, 19, 'BkGPS9dX', 'f799a7ae2296d042982ec811a7612215ebfecf06', 'C$2hIqs,P8'),
+(21, 'Entreprise4', 'pertinente', 'adresse14', '', 'Entreprise4logo.png', 'personne', 'personne', 'Entreprise4.com', 1, 'entreprisepresentation2017-01-1916934.mp4', 1, '<p>qsdfqsdfqsf</p>\r\n', 1, '<p>qsdfqdsfqsdf</p>\r\n', 1, '<p>qsdffffzzfzfzf</p>\r\n', 1, 1, NULL, NULL, 0, 4, 1, '2017-01-19 00:00:00', '2017-02-11 03:43:05', 0, 0, 19, 'BkGPS9dX', 'f799a7ae2296d042982ec811a7612215ebfecf06', 'C$2hIqs,P8'),
 (22, 'entreprise5', 'aezraerzaer', 'sdfqdf', '', 'entreprise5logo.png', 'aaar', 'raerae', 'qsdfqsdfq', 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 2, 1, '2017-01-19 00:00:00', '2017-02-11 03:43:38', 0, 0, 1, 'EIsODdtt', '704032d0d48bb3b0c40e032ff256f3a0b28dc542', 'bTz4^2b~MK'),
 (23, 'enttreprise6', 'aerare', 'raera', '', NULL, 'arerar', 'arar', 'areaer', 0, NULL, 0, NULL, 1, '<p>qdfqdfqsdfq</p>\r\n', 0, NULL, 0, 0, NULL, NULL, 0, 2, 1, '2017-01-19 00:00:00', '2017-02-11 03:40:16', 0, 0, 4, '5CBAyOMQ', '7cf518f15cba49a025eaf30a04befe4531d0dd5f', 'p4l4%BiK'),
 (24, 'Entreprise12', 'Dynamisation ds entrp', 'aa', 'Antananarivo', 'Entreprise12logo.png', 'persone', 'perso', 'adf.com', 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 3, 1, '2017-01-24 00:00:00', '2017-02-11 03:45:20', 0, 1, 1, 'logiun', '1c1fdb27849a277674a71fdc8e0cc24c07135699', '7bf3@LjF*Y'),
@@ -557,7 +790,7 @@ INSERT INTO `pagesjaunes_entreprise` (`id`, `raisonsociale`, `activite`, `adress
 (28, 'Our team', 'Lorem ipsum dolor sit amet,', 'Lorem ipsum dolor sit amet,', 'Lorem ipsum dolor sit amet,', NULL, '', '', NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 0, 0, '2017-02-04 01:37:24', '2017-02-11 03:46:30', 0, 0, 0, 'OQQJ2IGQ', '659295be5352a436eb05d3ddfb0ae1922d6a4e16', 'BR5b?L1^kt'),
 (29, 'nouvelle Entreprise', 'gestion des utilisateurs ', 'adresse sdfsdsf', 'regoin', NULL, '', '', NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 0, 0, '2017-02-04 01:41:40', '2017-02-11 03:46:44', 0, 0, 0, 'rojo', 'cc8b0c09cf40e00f05a694671e1a8d6f78946005', 'rojobe'),
 (30, 'Starcraft', 'jeu mondiale', 'adresse sdfsdsfs', 'regoin', NULL, '', '', NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 0, 0, '2017-02-04 01:45:33', '2017-02-11 03:45:35', 0, 0, 0, 'mlkj', '5db8927ab9d47fbf134c00c12e7419beb9971eb8', 'rojobeezraer'),
-(31, 'great feautres now', 'workflow Donec sed em lori', 'Conference on the sales results for the previous year', 'Tana', 'greatfeautresnowlogo.jpg', 'peron', '', NULL, 0, 'entreprisepresentation2017-02-184311.mp4', 0, NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, 0, 0, 2, '2017-02-04 06:14:18', '2017-02-18 06:20:20', 0, 1, 3, 'bru9LkzT', 'd151d609a0b91c352d1fae97b41b26be3bafb41e', '5M2dcH%%Kn');
+(31, 'great feautres now', 'workflow Donec sed em lori', 'Conference on the sales results for the previous year', 'Tana', 'greatfeautresnowlogo.jpg', 'peron', '', NULL, 0, 'entreprisepresentation2017-02-184311.mp4', 0, NULL, 0, NULL, 0, NULL, 0, 0, '-18.91875024787322', '47.52159833908081', 0, 1, 1, '2017-02-04 06:14:18', '2017-02-18 07:11:54', 0, 1, 4, 'bru9LkzT', 'd151d609a0b91c352d1fae97b41b26be3bafb41e', '5M2dcH%%Kn');
 
 -- --------------------------------------------------------
 
@@ -593,7 +826,7 @@ CREATE TABLE IF NOT EXISTS `pagesjaunes_entreprise_search` (
 
 INSERT INTO `pagesjaunes_entreprise_search` (`id`, `entreprise_id`, `raisonsociale`, `activite`, `adresse`, `region`, `services`, `produits`, `marques`, `catalogues`, `souscategories`, `motscles`, `telephones`, `is_publie`) VALUES
 (1, 27, 'raison322', 'Description courte de votre activité', 'Description courte de votre activité', 'Antananarivo', 'Services1 Services6', 'Produits4 ici le produit', ' Marques48484 ici la marque', ' prod22365 prod333 prod15', ' Restauration Electronique textile', '', ' 030303030 032654987', 1),
-(2, 31, 'great feautres now', 'workflow Donec sed em lori', 'Conference on the sales results for the previous year', 'Tana', 'serb131 serb..', 'ptof33', ' maq', ' Produit321 b', '', '', ' +261 33 45 987 63 0332456978 0335648978', 2),
+(2, 31, 'great feautres now', 'workflow Donec sed em lori', 'Conference on the sales results for the previous year', 'Tana', 'serb131 serb..', 'ptof33', ' maq', ' Produit321 b', '', '', ' +261 33 45 987 63 0332456978 0335648978', 1),
 (3, 17, 'Eleven design', 'Une Agence de conception graphique', 'Lot VT A', '', ' print design web design motion design packaging', ' videos flyers', '', ' prod ReProd Connexion Séries Produit23', ' publicités', 'eleven design', '', 1),
 (4, 23, 'enttreprise6', 'aerare', 'raera', '', '', '', '', '', ' voyage hotelerie publicités', 'qsdf', ' 033 54 656 99', 1),
 (5, 25, 'Raison', 'sociale laeraemzrzeja', 'azeraeraraeraer', '', '', '', '', '', '', '', ' 0320320320', 2),
@@ -1486,7 +1719,6 @@ INSERT INTO `pagesjaunes_souscategorie` (`souscategorie_id`, `souscategorie_cate
 (4, 13, 'Eléctricité', '', 1, '2016-12-18 00:00:00', NULL, '2016-12-18 00:00:00'),
 (5, 13, 'Electronique', '', 1, '2016-12-18 00:00:00', NULL, '2016-12-18 00:00:00'),
 (6, 17, 'textile', '', 1, '2016-12-18 00:00:00', NULL, '2016-12-18 00:00:00'),
-(7, 16, 'taxi-be', '', 1, '2016-12-18 00:00:00', NULL, '2016-12-18 00:00:00'),
 (8, 11, 'hotelerie', 'hotelerie', 1, '2017-02-01 00:00:00', '2017-02-01 00:00:00', '2017-02-01 00:00:00'),
 (9, 13, 'Electricité-électronique', '', 1, '2016-12-19 00:00:00', NULL, '2016-12-19 00:00:00'),
 (10, 15, 'immobilier', '', 1, '2017-01-03 00:00:00', NULL, '2017-01-03 00:00:00'),

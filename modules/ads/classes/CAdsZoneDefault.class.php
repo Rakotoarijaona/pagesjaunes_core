@@ -198,7 +198,7 @@ class CAdsZoneDefault
         return $res;
     }
 
-    // Récupération d'une zone par id
+    // Récupération d'un pub par id
     public static function getById($id)
     {
         $daoFactory = jDao::get('ads~ads_zone_default');
@@ -210,7 +210,7 @@ class CAdsZoneDefault
         return $oAdsZoneDefault;
     }
 
-    // Récupération d'une zone par zone
+    // Récupération des pubs par zone
     public static function getByZoneId($id)
     {
         $toRes      = array () ;
@@ -226,6 +226,42 @@ class CAdsZoneDefault
         }
 
         return $toResult ;
+    }
+
+    // Récupération des pubs par zone (filtré)
+    public static function getByZoneFiltered($zoneId, $souscategorieId = null)
+    {
+        $results = array();
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT * FROM " . $cnx->prefixTable("ads_zone_default") . " 
+                        WHERE 1
+                    ";
+
+        $filters = array();
+        $filters[] = "type <> ''";
+        $filters[] = "zone_id = ".$zoneId;
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" AND ", $filters) . ")";
+
+        // tri
+        $query .= " ORDER BY date_creation DESC";
+
+        $res = $cnx->query($query);
+
+        foreach ($res as $row) {
+            if (!empty($row))
+            {
+                $oAdsZoneDefault = new CAdsZoneDefault();
+                $oAdsZoneDefault->fetchFromRecord($row);
+                $results[] = $oAdsZoneDefault;
+            }
+        }
+
+        return $results;
     }
 
 

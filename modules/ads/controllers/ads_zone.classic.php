@@ -376,7 +376,7 @@ class ads_zoneCtrl extends jController {
                 $oAdsZoneDefault->uploadImage('image');
             }
         } elseif ($ad_type != '' && $ad_type == 2) {
-            $oAdsZoneDefault->html = $this->param('html','');
+            $oAdsZoneDefault->html = $this->param('html_type','');
         }
         $oAdsZoneDefault->zone_id  = $zone_id;
         $oAdsZoneDefault->type     = $ad_type;
@@ -389,7 +389,6 @@ class ads_zoneCtrl extends jController {
         if ($this->param('souscategorie','') != '') {
             $oAdsZoneDefault->souscategorie_id  = $this->param('souscategorie');
         }
-
         $oAdsZoneDefault->link = $lien_ad;
 
         $oAdsZoneDefault->update();

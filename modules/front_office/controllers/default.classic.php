@@ -22,6 +22,9 @@ jClasses::inc("pages~CPages");
 jClasses::inc("common~CPhotosUpload");
 jClasses::inc("common~ImageWorkshop");
 jClasses::inc("common~CCommonTools");
+jClasses::inc("ads~CAdsTracker");
+jClasses::inc("ads~CAdsZoneDefault");
+jClasses::inc("ads~CAdsPurchase");
 
 class defaultCtrl extends jControllerRSR
 {
@@ -177,6 +180,7 @@ class defaultCtrl extends jControllerRSR
 
         // build query params
         $to_find = "";
+
         if (!empty($search)) {
             $to_find = implode(",", $search);
         }
@@ -226,7 +230,7 @@ class defaultCtrl extends jControllerRSR
         $tpl->assign('pagination', $pagination);
 
         //publicité
-        $tpl->assignZone('ADS_ZONE','front_office~rightads', array('listType'=>'defaut'));
+        $tpl->assignZone('ADS_ZONE','front_office~rightads', array('listType'=>'search', 'toResult'=>$toEntreprise));
 
         // common script
         $tpl->assign("COMMONSCRIPT", jZone::get('front_office~commonscript'));
@@ -898,7 +902,6 @@ class defaultCtrl extends jControllerRSR
             $page = CPages::getByLabel($label);
 
             if (!empty($page->id)) {
-
                 $resp->body->assign('listType','default');
                 if ($page->has_pub == YES) {
                     $tpl->assign("RIGHTPANEL", jZone::get('front_office~rightads'));
@@ -939,6 +942,157 @@ class defaultCtrl extends jControllerRSR
         $tpl = new jTpl();
         $tpl->assign("COMMONSCRIPT", jZone::get('front_office~commonscript'));
         $resp->body->assign('MAIN', $tpl->fetch('front_office~404'));
+
+        return $resp;
+    }
+
+    // pub tracker
+    public function tracker()
+    {        
+        $resp = $this->getResponse('redirect');
+        $adId = $this->param('click', '');
+        $isdefault = $this->param('default', '');
+        $error = 0;
+        $url = '';
+        if ($adId != '' && $isdefault != '')
+        {
+            $ip = ip2long($_SERVER['REMOTE_ADDR']);
+            $type = 1;
+            $tracker = new CAdsTracker();
+            $tracker->ads_id = $adId;
+            $tracker->ip = $ip;
+            $tracker->type = 1;
+            if ($isdefault == 0)
+            {
+                $oAds = CAdsPurchase::getById($adId);
+                if (!empty($oAds))
+                {
+                    $url = $oAds->website_url;
+                    if ($url == '')
+                    {
+                        $resp = $this->getResponse('redirect');
+                        $resp->action = 'front_office~default:fiche_details';
+                        $resp->params = array('entreprise' => $oAds->advertiser_id);
+                    } else {
+                        $resp = $this->getResponse('redirectUrl');
+                        $resp->action = 'about:blank';
+                    }
+                    $tracker->is_default = $isdefault;
+                    $tracker->insert();
+                } else {
+                    $error = 1;
+                }
+            } elseif ($isdefault == 1) {
+                $oAds = CAdsZoneDefault::getById($adId);
+                if (!empty($oAds))
+                {
+                    $url = $oAds->link;
+                    if ($url == '')
+                    {
+                        $resp = $this->getResponse('redirect');
+                        $resp->action = 'front_office~default:index';
+                    } else {
+                        $resp = $this->getResponse('redirectUrl');
+                        $resp->action = $url;
+                    }
+                    $tracker->is_default = $isdefault;
+                    $tracker->insert();
+                } else {
+                    $error = 1;
+                }
+            } else {
+                $error = 1;
+            }
+        }
+        else {
+            $error = 1;
+        }
+
+        if ($error == 1)
+        {
+            $resp = $this->getResponse('redirect');
+            $resp->action = 'front_office~default:index';
+        }
+        return $resp;
+    }
+
+    // pub print action
+    /*public function adsprint()
+    {
+        $resp = $this->getResponse('print');
+        $adsId = $this->param('print', '');
+        $isdefault = $this->param('default', '');
+        $error = 0;
+        $content;
+        $tpl = new jTpl();
+        if ($adsId != '' && $isdefault != '') {
+            $ip = '';
+            if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+            }
+            elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+            else{
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
+            $tracker = new CAdsTracker();
+            $tracker->ads_id = $adsId;
+            $tracker->ip = $ip;
+            $tracker->type = 2;
+            if ($isdefault == 0) {
+                $oAds = CAdsPurchase::getById($adsId);
+                if (!empty($oAds))
+                {
+                    $content = '<img src="{$j_basepath}publicites/big/'.$oAds->banner.'"/>';
+                    $tracker->is_default = $isdefault;
+                    $tracker->insert();
+                } else {
+                    $error = 1;
+                }
+            } elseif ($isdefault == 1) {
+                $oAds = CAdsZoneDefault::getById($adsId);
+                if (!empty($oAds)) {
+                    $url = $oAds->link;
+                    if ($oAds->type == 2) {
+                        $content = $oAds->html;
+                        $tracker->is_default = $isdefault;
+                        $tracker->insert();
+                    } else {
+                        $content = '<img src="{$j_basepath}publicites/big/'.$oAds->image.'"/>';
+                        $tracker->is_default = $isdefault;
+                        $tracker->insert();
+                    }
+                } else {
+                    $error = 1;
+                }
+            } else {
+                $error = 1;
+            }
+        } else {
+            $error = 1;
+        }
+        if ($error == 0) {
+            $resp->body->assign('CONTENT', $tpl->fetchFromString($content));
+        }
+        return $resp;
+    }*/
+
+    // View tracker
+    public function track_view()
+    {
+        $resp = $this->getResponse('htmlfragment');
+        $id = $this->param('id','');
+        $isdefault = $this->param('default','');
+        if ($id != '' && $isdefault != '') {
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $tracker = new CAdsTracker();
+            $tracker->ads_id = $id;
+            $tracker->ip = $ip;
+            $tracker->type = 3;
+            $tracker->is_default = $isdefault;
+            $tracker->insert();
+        }  
 
         return $resp;
     }

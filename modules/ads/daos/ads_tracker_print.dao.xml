@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="ads_tracker_print" realname="ads_tracker_print" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="ads_id" fieldname="ads_id" datatype="int" required="true"/>
+        <property name="date" fieldname="date" datatype="datetime" required="true"/>
+        <property name="ip" fieldname="ip" datatype="varchar" required="true" maxlength="255"/>
+        <property name="is_default" fieldname="is_default" datatype="tinyint" required="true"/>
+    </record>
+    <factory>
+    </factory>
+</dao>

@@ -206,6 +206,7 @@ $(document).ready(function(){
     });
     $(".active").css('font-weight','bold');
     $('.categ-tree-item.active').parents('.collapse').addClass('in');
+    $('.collapse.in').siblings('.categ-tree-handle').find('.bt-collapse i').toggleClass('fa-caret-down fa-caret-up');
     $('#nestable-menu').on('click', function (e) {
          var target = $(e.target),
                  action = target.data('action');

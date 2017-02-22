@@ -10,8 +10,9 @@
 
 require_once(jApp::appPath().'response/jResponseNoheader.php');
 
-class noheaderHtmlResponse extends jResponseNoheader
+class printResponse extends jResponseNoheader
 {
+	public $bodyTpl = 'front_office~print';
     function __construct ()
     {
         parent::__construct();
@@ -19,5 +20,6 @@ class noheaderHtmlResponse extends jResponseNoheader
 
     protected function doAfterActions()
     {
+        $this->body->assignIfNone('CONTENT','<p>no content</p>');
     }
 }

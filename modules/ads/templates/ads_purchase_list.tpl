@@ -55,6 +55,7 @@
                                     <th>ID</th>
                                     <th>Client</th>
                                     <th>Type zone</th>
+                                    <th>Catégorie / sous catégorie</th>
                                     <th>Durée</th>
                                     <th>Coût</th>
                                     <th>Banner</th>
@@ -70,14 +71,20 @@
                                                 {$oAds->id}
                                             </td>
                                             <td>
-                                                {$oAds->advertiser_name}
-                                                {if $oAds->advertiser_mail != ''}
-                                                    <br/><small>{$oAds->advertiser_mail}</small>
-                                                {/if}
+                                                {$oAds->getEntreprise()->raisonsociale}
+                                                {foreach $oAds->getEntreprise()->getEmails() as $email}
+                                                    <br/><small>{$email}</small>
+                                                {/foreach}
                                             </td>
                                             <td>
                                                 {$oAds->getZone()->name}
                                                 <br/><small>{$oAds->getZone()->width} x {$oAds->getZone()->height}</small>
+                                            </td>
+                                            <td>
+                                                {if (null != $oAds->souscategorie_id)}
+                                                <strong>Sous catégorie:</strong><br/>
+                                                {$oAds->getSouscategorie()->name}
+                                                {/if}
                                             </td>
                                             <td>
                                                 <strong>Début:</strong> {$oAds->getPublicationStart()} <br/>

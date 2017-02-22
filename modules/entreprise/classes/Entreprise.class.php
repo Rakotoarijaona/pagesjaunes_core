@@ -1403,6 +1403,7 @@ class Entreprise
         $cnx->exec('DELETE FROM '.$cnx->prefixTable ("entreprise").' WHERE id ='.$id);
     }
 
+    // Filtre par catégorie
     public static function filterByCategorie($categorieId)
     {
         $cnx = jDb::getConnection();
@@ -1416,6 +1417,7 @@ class Entreprise
         return $toEntreprise;        
     }
 
+    // Filtre par sous catégorie
     public static function filterBySouscategorie($souscategorieId)
     {
         $cnx = jDb::getConnection();
@@ -1426,8 +1428,9 @@ class Entreprise
            $oEntreprise = Entreprise::getById($record->entreprise_id);
            $toEntreprise[] = $oEntreprise;
         }
-        return $toEntreprise;        
+        return $toEntreprise;
     }
+
     public static function filterBySouscategorieNameDesc($souscategorieId)
     {
         $cnx = jDb::getConnection();
@@ -1787,6 +1790,299 @@ class Entreprise
             } else {
                 $results[] = array("id" => $libelle, "text" => $libelle);
             }
+        }
+
+        return $results;
+    }
+
+    // Récupération de nombre des entreprises ayant au moin des infos payant
+    public static function countNbAvecInfoPayant()
+    {
+        // Nombre des entreprises ayant au moins un info payant
+        // Visu pres, nos services, qsmns, nos réferences, gallery videos, galerie image, catalogue
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT count(id) as nb FROM " . $cnx->prefixTable("entreprise") . " 
+                        WHERE 1
+                    ";
+
+        $filters = array();
+        $filters[] = "video_presentation_active = 1";
+        $filters[] = "qui_sommes_nous_active = 1";
+        $filters[] = "nos_services_active = 1";
+        $filters[] = "nos_references_active = 1";
+        $filters[] = "videos_active = 1";
+        $filters[] = "galerie_image_active = 1";
+        $filters[] = "catalogue_active = 1";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" OR ", $filters) . ")";
+
+        $res = $cnx->query($query);
+
+        foreach ($res as $row) {
+            $nbResult = $row->nb;
+        }
+
+        return $nbResult;
+    }
+
+    // Récupération des entreprises ayant au moin des infos payants
+    public static function getAvecInfoPayant()
+    {
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT DISTINCT * FROM " . $cnx->prefixTable("entreprise") . " 
+                        WHERE 1
+                    ";
+
+        $filters = array();
+        $filters[] = "video_presentation_active = 1";
+        $filters[] = "qui_sommes_nous_active = 1";
+        $filters[] = "nos_services_active = 1";
+        $filters[] = "nos_references_active = 1";
+        $filters[] = "videos_active = 1";
+        $filters[] = "galerie_image_active = 1";
+        $filters[] = "catalogue_active = 1";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" OR ", $filters) . ")";
+
+        $res = $cnx->query($query);
+        $toEntreprise = array();
+        foreach ($res as $row) {
+            $oEntreprise = new Entreprise();
+            $oEntreprise->fetchFromRecord($row);
+            $toEntreprise[] = $oEntreprise;
+        }
+
+        return $toEntreprise;
+    }
+
+    // Récupération de nombre des entreprises ayant au moin des infos complementaires
+    public static function countNbAvecInfoComp()
+    {
+        // Nombre des entreprises ayant au moins un info complémentaire
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT DISTINCT count(id) as nb FROM " . $cnx->prefixTable("entreprise") . " as e
+                        WHERE 1
+                    ";
+
+        $filtersInfoPayant  = array();
+        $filtersInfoPayant[] = "video_presentation_active = 0";
+        $filtersInfoPayant[] = "qui_sommes_nous_active = 0";
+        $filtersInfoPayant[] = "nos_services_active = 0";
+        $filtersInfoPayant[] = "nos_references_active = 0";
+        $filtersInfoPayant[] = "videos_active = 0";
+        $filtersInfoPayant[] = "galerie_image_active = 0";
+        $filtersInfoPayant[] = "catalogue_active = 0";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" AND ", $filtersInfoPayant) . ")";
+
+        $filtersInfoComp  = array();
+        $filtersInfoComp[] = "e.id IN (SELECT entreprise_id FROM " . $cnx->prefixTable("service") . " WHERE entreprise_id = e.id)";
+        $filtersInfoComp[] = "e.id IN (SELECT entreprise_id FROM " . $cnx->prefixTable("marque") . " WHERE entreprise_id = e.id)";
+        $filtersInfoComp[] = "e.id IN (SELECT entreprise_id FROM " . $cnx->prefixTable("produit") . " WHERE entreprise_id = e.id)";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" OR ", $filtersInfoComp) . ")";
+
+        $res = $cnx->query($query);
+
+        foreach ($res as $row) {
+            $nbResult = $row->nb;
+        }
+
+        return $nbResult;
+    }
+
+    // Récupération des entreprises ayant au moins des infos complémentaires
+    public static function getAvecInfoComp()
+    {
+        // Nombre des entreprises ayant au moins un info payant
+        // Visu pres, nos services, qsmns, nos réferences, gallery videos, galerie image, catalogue
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT DISTINCT * FROM " . $cnx->prefixTable("entreprise") . " as e
+                        WHERE 1
+                    ";
+
+        $filtersInfoPayant  = array();
+        $filtersInfoPayant[] = "video_presentation_active = 0";
+        $filtersInfoPayant[] = "qui_sommes_nous_active = 0";
+        $filtersInfoPayant[] = "nos_services_active = 0";
+        $filtersInfoPayant[] = "nos_references_active = 0";
+        $filtersInfoPayant[] = "videos_active = 0";
+        $filtersInfoPayant[] = "galerie_image_active = 0";
+        $filtersInfoPayant[] = "catalogue_active = 0";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" AND ", $filtersInfoPayant) . ")";
+
+        $filtersInfoComp  = array();
+        $filtersInfoComp[] = "e.id IN (SELECT entreprise_id FROM " . $cnx->prefixTable("service") . " WHERE entreprise_id = e.id)";
+        $filtersInfoComp[] = "e.id IN (SELECT entreprise_id FROM " . $cnx->prefixTable("marque") . " WHERE entreprise_id = e.id)";
+        $filtersInfoComp[] = "e.id IN (SELECT entreprise_id FROM " . $cnx->prefixTable("produit") . " WHERE entreprise_id = e.id)";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" OR ", $filtersInfoComp) . ")";
+
+        $res = $cnx->query($query);
+        $toEntreprise = array();
+        foreach ($res as $row) {
+            $oEntreprise = new Entreprise();
+            $oEntreprise->fetchFromRecord($row);
+            $toEntreprise[] = $oEntreprise;
+        }
+
+        return $toEntreprise;
+    }
+
+    // Récupération de nombre des entreprises ayant au moin des infos simple
+    public static function countNbAvecInfoSimple()
+    {
+        // Nombre des entreprises ayant au moins un info simple
+        // not info payant && info complementaire
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT DISTINCT count(id) as nb FROM " . $cnx->prefixTable("entreprise") . " as e
+                        WHERE 1
+                    ";
+
+        $filtersInfoPayant  = array();
+        $filtersInfoPayant[] = "video_presentation_active = 0";
+        $filtersInfoPayant[] = "qui_sommes_nous_active = 0";
+        $filtersInfoPayant[] = "nos_services_active = 0";
+        $filtersInfoPayant[] = "nos_references_active = 0";
+        $filtersInfoPayant[] = "videos_active = 0";
+        $filtersInfoPayant[] = "galerie_image_active = 0";
+        $filtersInfoPayant[] = "catalogue_active = 0";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" AND ", $filtersInfoPayant) . ")";
+
+        $filtersInfoComp  = array();
+        $filtersInfoComp[] = "id NOT IN (SELECT entreprise_id FROM " . $cnx->prefixTable("service") . " WHERE entreprise_id = e.id)";
+        $filtersInfoComp[] = "id NOT IN (SELECT entreprise_id FROM " . $cnx->prefixTable("marque") . " WHERE entreprise_id = e.id)";
+        $filtersInfoComp[] = "id NOT IN (SELECT entreprise_id FROM " . $cnx->prefixTable("produit") . " WHERE entreprise_id = e.id)";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" AND ", $filtersInfoComp) . ")";
+
+        $res = $cnx->query($query);
+
+        foreach ($res as $row) {
+            $nbResult = $row->nb;
+        }
+
+        return $nbResult;
+    }
+    // Récupération de nombre des entreprises
+    public static function countNbTotal()
+    {
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT count(id) as nb FROM " . $cnx->prefixTable("entreprise") . " as e
+                        WHERE 1
+                    ";
+
+        $res = $cnx->query($query);
+
+        foreach ($res as $row) {
+            $nbResult = $row->nb;
+        }
+
+        return $nbResult;
+    }
+
+    public static function getAvecInfoSimple()
+    {
+        // not info payant && info complementaire
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT DISTINCT * FROM " . $cnx->prefixTable("entreprise") . " as e
+                        WHERE 1
+                    ";
+
+        $filtersInfoPayant  = array();
+        $filtersInfoPayant[] = "video_presentation_active = 0";
+        $filtersInfoPayant[] = "qui_sommes_nous_active = 0";
+        $filtersInfoPayant[] = "nos_services_active = 0";
+        $filtersInfoPayant[] = "nos_references_active = 0";
+        $filtersInfoPayant[] = "videos_active = 0";
+        $filtersInfoPayant[] = "galerie_image_active = 0";
+        $filtersInfoPayant[] = "catalogue_active = 0";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" AND ", $filtersInfoPayant) . ")";
+
+        $filtersInfoComp  = array();
+        $filtersInfoComp[] = "id NOT IN (SELECT entreprise_id FROM " . $cnx->prefixTable("service") . " WHERE entreprise_id = e.id)";
+        $filtersInfoComp[] = "id NOT IN (SELECT entreprise_id FROM " . $cnx->prefixTable("marque") . " WHERE entreprise_id = e.id)";
+        $filtersInfoComp[] = "id NOT IN (SELECT entreprise_id FROM " . $cnx->prefixTable("produit") . " WHERE entreprise_id = e.id)";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" AND ", $filtersInfoComp) . ")";
+
+        $res = $cnx->query($query);
+        $toEntreprise = array();
+        foreach ($res as $row) {
+            $oEntreprise = new Entreprise();
+            $oEntreprise->fetchFromRecord($row);
+            $toEntreprise[] = $oEntreprise;
+        }
+
+        return $toEntreprise;
+    }
+
+    public static function entrepriseInscriptionReport()
+    {
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT COUNT(id) as value, EXTRACT(YEAR FROM date_creation) AS year, EXTRACT(MONTH FROM date_creation) AS month, EXTRACT(DAY FROM date_creation) AS day FROM " . $cnx->prefixTable("entreprise") . " as e
+                        WHERE 1 AND EXTRACT(YEAR FROM date_creation) = EXTRACT(YEAR FROM CURDATE()) GROUP BY year, month, day
+                    ";
+
+        $res = $cnx->query($query);
+
+        foreach ($res as $row) {
+            $results[] = $row;
         }
 
         return $results;

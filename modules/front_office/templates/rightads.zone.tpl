@@ -1,45 +1,60 @@
-	{if (isset($toAds) && (isset ($toAds['300x600'])))}
-	<div id="carouselAds1">
-	    <div class="owl-carousel" style="width: 300px; height:600px">
-			{foreach ($toAds['300x600'] as $oAds)}
-	        <div class="item" style="width: 300px; height:600px">
-	        	<img src="{$j_basepath}publicites/big/{$oAds->images}" style="width: 300px; height:600px">
-	        </div>
-	        {/foreach}
-	    </div>
+    {*<!--<a class="owl-print" target="_blank" href="{jurl 'front_office~default:adsprint',array('print'=>$oAds->id,'default' => 0, $oAds->banner)}"><i class="fa fa-print"></i>imprimer</a>-->*}
+    {if (!empty($bottom_target))}
+    <div class="ads" id="carouselAds1">
+        <div class="owl-carousel" style="width: 300px; height:600px">
+            {foreach ($bottom_target as $oAds)}
+                <div class="item" style="width: 300px; height:600px">
+                    {if isset($oAds->banner)}
+                        <a target="_blank"  class="item_link" id="{$oAds->id},0"  href="{jurl 'front_office~default:tracker',array('click' => $oAds->id, 'default' => 0)}">
+                            <img src="{$j_basepath}publicites/big/{$oAds->banner}" style="width: 300px; height:600px">
+                        </a>
+                    {else}
+                        {if ($oAds->type==1)}
+                            <a target="_blank"  class="item_link" id="{$oAds->id},1"  href="{jurl 'front_office~default:tracker',array('click' => $oAds->id, 'default' => 1)}">
+                                <img src="{$j_basepath}publicites/big/{$oAds->image}" style="width: 300px; height:600px">
+                            </a>
+                        {else}
+                            <a target="_blank"  class="item_link" id="{$oAds->id},1"  href="{jurl 'front_office~default:tracker',array('click' => $oAds->id, 'default' => 1)}">
+                            </a>
+                        {/if}
+                    {/if}
+                </div>
+            {/foreach}
+        </div>
     </div>
-	{elseif (!empty($toAdsDefault))}
-		{if null != $toAdsDefault['300x600']}
-		<figure>
-			<img src="{$j_basepath}publicites/big/{$toAdsDefault['300x600']->images}">
-		</figure>
-		{/if}
     {/if}
-	<br/>	
-	{if (isset($toAds) && (isset($toAds['300x300'])))}
-	<div id="carouselAds2">
-	    <div class="owl-carousel" style="width: 300px; height:600px">
-			{foreach ($toAds['300x300'] as $oAds)}
-	        <div class="item" style="width: 300px; height:300px" >
-	        	<img src="{$j_basepath}publicites/big/{$oAds->images}" style="width: 300px; height:300px">
-	        </div>
-	        {/foreach}
-	    </div>
+    <br/>
+    {if (!empty($bottom_standard))}
+    <div class="ads" id="carouselAds2">
+        <div class="owl-carousel" style="width: 300px; height:300px">
+            {foreach ($bottom_standard as $oAds)}
+                <div class="item" style="width: 300px; height:300px">
+                    {if isset($oAds->banner)}
+                        <a target="_blank"  class="item_link" id="{$oAds->id},0"  href="{jurl 'front_office~default:tracker',array('click' => $oAds->id, 'default' => 0)}">
+                            <img src="{$j_basepath}publicites/big/{$oAds->banner}" style="width: 300px; height:300px">
+                        </a>
+                    {else}
+                        {if ($oAds->type==1)}
+                            <a target="_blank" class="item_link" id="{$oAds->id},1"  href="{jurl 'front_office~default:tracker',array('click' => $oAds->id, 'default' => 1)}">
+                                <img src="{$j_basepath}publicites/big/{$oAds->image}" style="width: 300px; height:300px">
+                            </a>
+                        {else}
+                            <a target="_blank"  class="item_link" id="{$oAds->id},1"  href="{jurl 'front_office~default:tracker',array('click' => $oAds->id, 'default' => 1)}">
+                            </a>
+                        {/if}
+                    {/if}
+                </div>
+            {/foreach}
+        </div>
     </div>
-	{elseif (!empty($toAdsDefault))}
-		{if null != $toAdsDefault['300x300']}
-		<figure>
-			<img src="{$j_basepath}publicites/big/{$toAdsDefault['300x300']->images}">
-		</figure>
-		{/if}
     {/if}
 
-<br/>
-<script type="text/javascript">
-{literal}
-$(document).ready(function()
-{
-    
+    <br/>
+    <script type="text/javascript">
+    {literal}
+    $(document).ready(function()
+    {
+
         $('.owl-carousel', '#carouselAds1').owlCarousel({
             loop:true,
             margin:0,
@@ -70,6 +85,6 @@ $(document).ready(function()
             autoplayTimeout:2500,
             autoplayHoverPause:true
         });
-});
-{/literal}
-</script>
+    });
+    {/literal}
+    </script>

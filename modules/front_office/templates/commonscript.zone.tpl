@@ -16,7 +16,7 @@
 <script src="{$j_basepath}frontlibraries/javascripts/pjm_tinyMce.js"></script>
 <script src="{$j_basepath}frontlibraries/javascripts/bootstrap.js"></script>
 <script src="{$j_basepath}frontlibraries/javascripts/bootstrap-select.min.js"></script>
-<script src="{$j_basepath}frontlibraries/javascripts/sweetalert/sweetalert.min.js"></script> 
+<script src="{$j_basepath}frontlibraries/javascripts/sweetalert/sweetalert.min.js"></script>
 
 <!-- select2 -->
 <script src="{$j_basepath}frontlibraries/javascripts/select2/dist/js/select2.full.min.js"></script>
@@ -30,6 +30,7 @@ $(document).ready(function()
         loop:true,
         margin:0,
         nav:false,
+        center: true,
         mouseDrag: false,
         touchDrag: false,
         pullDrag: false,
@@ -38,13 +39,14 @@ $(document).ready(function()
         dots:false,
         navText : false,
         autoplay:true,
-        autoplayTimeout:2500,
+        autoplayTimeout:6000,
         autoplayHoverPause:true
     });
     $('.owl-carousel', '#carouselAds2').owlCarousel({
         loop:true,
         margin:0,
         nav:false,
+        center: true,
         mouseDrag: false,
         touchDrag: false,
         pullDrag: false,
@@ -53,7 +55,7 @@ $(document).ready(function()
         dots:false,
         navText : false,
         autoplay:true,
-        autoplayTimeout:2500,
+        autoplayTimeout:6000,
         autoplayHoverPause:true
     });
 
@@ -85,4 +87,5 @@ $(document).ready(function()
 
 {/literal}
 </script>
+<script src="{$j_basepath}frontlibraries/javascripts/ads/tracker.js"></script>
 <script src="{$j_basepath}frontlibraries/javascripts/common.js"></script>

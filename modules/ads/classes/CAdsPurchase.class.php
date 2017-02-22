@@ -14,8 +14,7 @@ class CAdsPurchase
 {
     public $id;
 	public $reference;
-	public $advertiser_name;
-	public $advertiser_mail;
+    public $advertiser_id;
 	public $zone_type;
 	public $status;
 	public $no_follow;
@@ -38,13 +37,14 @@ class CAdsPurchase
 	public $date_update;
 	public $creator;
 
+    // payment method
+
     // constructor
     public function __construct()
     {
         $this->id 					= null;
 		$this->reference 			= null;
-		$this->advertiser_name 		= null;
-		$this->advertiser_mail 		= null;
+		$this->advertiser_id 		= null;
 		$this->zone_type 			= null;
 		$this->status 				= null;
 		$this->no_follow 			= null;
@@ -74,8 +74,7 @@ class CAdsPurchase
         if (!empty($record)) {
             $this->id 					= $record->id;
 			$this->reference 			= $record->reference;
-			$this->advertiser_name 		= $record->advertiser_name;
-			$this->advertiser_mail 		= $record->advertiser_mail;
+			$this->advertiser_id 		= $record->advertiser_id;
 			$this->zone_type 			= $record->zone_type;
 			$this->status 				= $record->status;
 			$this->no_follow 			= $record->no_follow;
@@ -109,11 +108,8 @@ class CAdsPurchase
         if (!empty($this->reference)) {
             $record->reference            		= $this->reference;
         }
-        if (!empty($this->advertiser_name)) {
-            $record->advertiser_name            = $this->advertiser_name;
-        }
-        if (!empty($this->advertiser_mail)) {
-            $record->advertiser_mail            = $this->advertiser_mail;
+        if (!empty($this->advertiser_id)) {
+            $record->advertiser_id              = $this->advertiser_id;
         }
         if (!empty($this->zone_type)) {
             $record->zone_type            		= $this->zone_type;
@@ -190,6 +186,126 @@ class CAdsPurchase
             $oAdsPurchase->fetchFromRecord($res);
         }
         return $oAdsPurchase;
+    }
+
+    // Récupération par id annonceur (filtrés)
+    public static function getByIdAdvertiserFiltered($id, $zoneId)
+    {
+        $results = array();
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT * FROM " . $cnx->prefixTable("ads_purchase") . " 
+                        WHERE 1
+                    ";
+
+        $filters = array();
+        $filters[] = "status = 2";
+        $filters[] = "advertiser_id = ".$id;
+        $filters[] = "publication_start <= CURDATE()";
+        $filters[] = "DATE_ADD(publication_start,INTERVAL publication_day DAY) >= CURDATE()";
+        $filters[] = "zone_type = ".$zoneId;
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" AND ", $filters) . ")";
+
+        // tri
+        $query .= " ORDER BY publication_start DESC";
+        $res = $cnx->query($query);
+
+        foreach ($res as $row) {
+            if (!empty($row))
+            {
+                $oAdsPurchase = new CAdsPurchase();
+                $oAdsPurchase->fetchFromRecord($row);
+                $results[] = $oAdsPurchase;
+            }
+        }
+
+        return $results;
+    }
+
+    // Récupération par sous catégories et id annonceur
+    public static function getBySouscategorieFiltered($souscategorieId, $zoneId)
+    {
+        $cnx = jDb::getConnection();
+        $resEntreprise = $cnx->query('
+            SELECT DISTINCT advertiser_id FROM '.$cnx->prefixTable ("ads_purchase").' 
+            WHERE souscategorie_id ='.$souscategorieId);
+
+        $toEntreprise = array();
+        $toAdsPurchase = array();
+        // Si l'entreprise est dans le top recherche        
+        $resToprecherche = $cnx->query('
+            SELECT * FROM '.$cnx->prefixTable ("toprecherche").' 
+            WHERE souscategorie_id ='.$souscategorieId);
+
+        while($toprecherche = $resToprecherche->fetch()){
+            $entreprise_id_top1 = $toprecherche->entreprise_id_top1;
+            $entreprise_id_top2 = $toprecherche->entreprise_id_top2;
+            $entreprise_id_top3 = $toprecherche->entreprise_id_top3;
+        }
+        $toAdsPurchaseTop1;
+        $toAdsPurchaseTop2;
+        $toAdsPurchaseTop3;
+        foreach ($resEntreprise as $record)
+        {
+            if ($entreprise_id_top1 == $record->advertiser_id) {
+                // Si dans top 1
+                $results = CAdsPurchase::getByIdAdvertiserFiltered($record->advertiser_id, $zoneId);
+
+                if (!empty ($results))
+                {
+                    $toAdsPurchaseTop1 = $results;
+                }
+
+            } elseif ($entreprise_id_top2 == $record->advertiser_id) {
+                // Si dans top 2
+                $results = CAdsPurchase::getByIdAdvertiserFiltered($record->advertiser_id, $zoneId);
+
+                if (!empty ($results))
+                {
+                    $toAdsPurchaseTop2 = $results;
+                }
+
+            } elseif ($entreprise_id_top3 == $record->advertiser_id) {
+                // Si dans top 3
+                $results = CAdsPurchase::getByIdAdvertiserFiltered($record->advertiser_id, $zoneId);
+
+                if (!empty ($results))
+                {
+                    $toAdsPurchaseTop3 = $results;
+                }
+
+            } else {
+                $results = CAdsPurchase::getByIdAdvertiserFiltered($record->advertiser_id, $zoneId);
+
+                if (!empty ($results))
+                {
+                    $toAdsPurchase = array_merge($toAdsPurchase, $results);
+                }
+
+            }
+        }
+        $toAdsTop = array();
+        if (!empty($toAdsPurchaseTop1)) {
+            $toAdsTop = array_merge($toAdsTop, $toAdsPurchaseTop1);
+        }
+
+        if (!empty($toAdsPurchaseTop2)) {
+            $toAdsTop = array_merge($toAdsTop, $toAdsPurchaseTop2);
+        }
+
+        if (!empty($toAdsPurchaseTop3)) {
+            $toAdsTop = array_merge($toAdsTop, $toAdsPurchaseTop3);
+        }
+
+        if (!empty($toAdsTop)){
+            $toAdsPurchase = array_merge($toAdsTop, $toAdsPurchase);
+        }
+
+        return $toAdsPurchase;
     }
 
     // Récupération de tous les enregistrements
@@ -346,6 +462,12 @@ class CAdsPurchase
     public function getZone()
     {
         return CAdsZone::getById($this->zone_type);
+    }
+
+    // Récupération de la sous catégorie
+    public function getSouscategorie()
+    {
+        return Souscategorie::getById($this->souscategorie_id);
     }
 
     // Récupération de la date de début
@@ -523,6 +645,28 @@ class CAdsPurchase
             $this->banner = $zFileName;
         }
     }
+
+    // Get Entreprise
+    public function getEntreprise()
+    {
+        $oEntreprise = Entreprise::getById($this->advertiser_id);
+        return $oEntreprise;
+    }
+
+    // get last inserted
+    public static function getLastInserted($n)
+    {
+        $cnx = jDb::getConnection();
+        $res = $cnx->query('SELECT * FROM '.$cnx->prefixTable ("ads_purchase").' ORDER BY date_creation DESC LIMIT 1,'.$n);
+        $toAds = array();
+        foreach ($res as $record)
+        {
+            $oAds = CAdsPurchase::getById($record->id);
+            $toAds[] = $oAds;
+        }
+        return $toAds; 
+    }
+
     //auto complete
     public static function autoComplet($term = "")
     {
@@ -551,6 +695,55 @@ class CAdsPurchase
 
         foreach ($res as $row) {
             $results[] = array("id" => $row->id, "text"=>$row->id);
+        }
+
+        return $results;
+    }
+
+    // récupération coût
+    public function getClickCost()
+    {
+        if ($this->charging_model == 2)
+        {
+
+        }
+    }
+
+    // récupération coût
+    public function getImpressionCost()
+    {
+        
+    }
+
+    //Entreprise auto complete
+    public static function autoCompletEntreprise($term = "")
+    {
+        $results = array();
+
+        $cnx = jDb::getConnection();
+
+        $query =   "
+                        SELECT id,raisonsociale FROM " . $cnx->prefixTable("entreprise") . " 
+                        WHERE 1
+                    ";
+
+        $filters = array();
+        $filters[] = "raisonsociale LIKE '%" . $term . "%'";
+
+        // build filter query
+        $query .= " AND ";
+        $query .= "(" . implode(" OR ", $filters) . ")";
+
+        // tri
+        if (!empty($sortField) && !empty($sortSens)) {
+            $query .= " ORDER BY raisonsociale ASC";
+        }
+
+        $res = $cnx->query($query);
+
+        foreach ($res as $row) {
+            $libelle = $row->raisonsociale;
+            $results[] = array("id" => $row->id, "text" => $libelle);
         }
 
         return $results;

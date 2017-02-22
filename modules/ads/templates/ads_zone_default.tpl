@@ -140,9 +140,9 @@ $(document).ready(function()
 // Initialisation de la form
 function newAdFormInit()
 {
-    if ($('#html').length > 0)
+    if ($('#html_type').length > 0)
     {
-        CKEDITOR.replace('html');
+        CKEDITOR.replace('html_type');
     }
     if ($('.chosen-select').length > 0)
     {
@@ -305,13 +305,13 @@ function saveEditAd(id)
         {
             formdata.append("souscategorie",filtre[1]);
         }
-        var html                = $('#html').val();
+        var html_type                = CKEDITOR.instances['html_type'].getData();
         var lien_ad             = $('#lien_ad').val();
         var zone_id             = $('#zone_id').val();
         formdata.append("id",id);
         formdata.append("image",image);
         formdata.append("ad_type",ad_type);
-        formdata.append("html",html);
+        formdata.append("html_type",html_type);
         formdata.append("lien_ad",lien_ad);
         formdata.append("zone_id",zone_id);
 

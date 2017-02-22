@@ -9,6 +9,8 @@
 */
 
 jClasses::inc("ads~CAds");
+jClasses::inc("ads~CAdsZoneDefault");
+jClasses::inc("ads~CAdsPurchase");
 jClasses::inc("ads~CAds_type");
 
 class rightadsZone extends jZone
@@ -17,26 +19,85 @@ class rightadsZone extends jZone
 
     protected function _prepareTpl()
     {
-        if (($this->param('listType','') == 'souscategorie') && (!empty ($this->param('souscategorie',''))))
+        // Recherche par sous catégorie 
+        if (($this->param('listType','') == 'souscategorie') && ($this->param('souscategorie','') != ''))
         {
-            $toListAds = CAds::getListBySouscategorie($this->param('souscategorie',''));
-            $toAds = array();
-            foreach ($toListAds as $oAds) {
-                $type = CAds_type::getByid($oAds->type);
-                $toAds[$type->format][] = $oAds;
+            $souscategorieId = $this->param('souscategorie');
+
+            $toListAds = array();
+
+            // liste ads skyscraper
+            $toRes = CAdsPurchase::getBySouscategorieFiltered($souscategorieId, 1);
+            $bottom_target      = array();
+            $bottom_standard    = array();
+
+            if (!empty($toRes)) {
+                $bottom_target      = $toRes;
+            } else {
+                $bottom_target      = CAdsZoneDefault::getByZoneFiltered(1);
             }
-            $this->_tpl->assign('toAds', $toAds);  
-            $toAdsDefault = array();
-            $toAdsDefault['300x600'] = CAds::getDefault('300x600');
-            $toAdsDefault['300x300'] = CAds::getDefault('300x300');
-            $this->_tpl->assign('toAdsDefault', $toAdsDefault);    		
-        }
-        else
-        {
-            $toAdsDefault = array();
-            $toAdsDefault['300x600'] = CAds::getDefault('300x600');
-            $toAdsDefault['300x300'] = CAds::getDefault('300x300');
-            $this->_tpl->assign('toAdsDefault', $toAdsDefault);
+
+            // Liste ads carré
+            $toRes = CAdsPurchase::getBySouscategorieFiltered($souscategorieId, 2);
+            if (!empty($toRes)) {
+                $bottom_standard    = $toRes;
+            } else {
+                $bottom_standard    = CAdsZoneDefault::getByZoneFiltered(2);
+            }
+
+            $this->_tpl->assign('bottom_target', $bottom_target);
+
+            $this->_tpl->assign('bottom_standard', $bottom_standard);
+
+        // Recherche simple      
+        } elseif (($this->param('listType','') == 'search') && (!empty($this->param('toResult','')))) {
+            
+            $toResult = $this->param('toResult','');
+            $bottom_target      = array();
+            $bottom_standard    = array();
+
+            foreach ($toResult as $res) {
+                // liste ads skyscraper
+                $toRes =  CAdsPurchase::getByIdAdvertiserFiltered($res->id, 1);
+                if (!empty($toRes))
+                {
+                    $bottom_target = $toRes;
+                }
+
+                // Liste ads carré
+                $toRes =  CAdsPurchase::getByIdAdvertiserFiltered($res->id, 2);
+                if (!empty($toRes))
+                {
+                    $bottom_standard = $toRes;
+                }
+            }
+
+            if (empty($bottom_target)) {
+                $bottom_target      = CAdsZoneDefault::getByZoneFiltered(1);
+            }
+
+            if (empty($bottom_standard)) {
+                $bottom_standard    = CAdsZoneDefault::getByZoneFiltered(2);
+            }
+
+            $this->_tpl->assign('bottom_target', $bottom_target);
+
+            $this->_tpl->assign('bottom_standard', $bottom_standard);
+
+        } else {
+
+            $bottom_target      = array();
+            $bottom_standard    = array();
+
+            // liste ads skyscraper par défaut
+            $bottom_target      = CAdsZoneDefault::getByZoneFiltered(1);
+
+            // Liste ads carré par défaut
+            $bottom_standard    = CAdsZoneDefault::getByZoneFiltered(2);
+
+            $this->_tpl->assign('bottom_target', $bottom_target);
+
+            $this->_tpl->assign('bottom_standard', $bottom_standard);
         }
     }
 }

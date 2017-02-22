@@ -15,6 +15,7 @@ jClasses::inc("common~CPhotosUpload");
 jClasses::inc("ads~CAds");
 jClasses::inc("ads~CAdsZone");
 jClasses::inc("ads~CAdsPurchase");
+jClasses::inc("ads~CAdsStat");
 
 class adsCtrl extends jController {
     /**
@@ -163,8 +164,7 @@ class adsCtrl extends jController {
     public function save_add_annonceur()
     {
         if (!jAcl2::check("ads.restrictall")) { //Test droit restrict all
-            $advertiser_name    = $this->param('advertiser_name','');
-            $advertiser_mail    = $this->param('advertiser_mail','');
+            $advertiser_id      = $this->param('advertiser_id','');
             $type_zone          = $this->param('type_zone','');
             $status             = $this->param('status','');
             $no_follow          = $this->param('no_follow','');
@@ -184,7 +184,7 @@ class adsCtrl extends jController {
             $sub_id             = $this->param('sub_id','');
 
         
-            if (($advertiser_name != '') && ($advertiser_mail != '') && ($type_zone != '') && 
+            if (($advertiser_id != '') && ($type_zone != '') && 
                 ($status != '') && ($price != '') && ($currency != '') && 
                 ($payment_method != '') && ($payment_status != '') && 
                 (($inscription == 1 && $sub_id != '') || $inscription == 0) && ($cost_model != '') && 
@@ -195,8 +195,7 @@ class adsCtrl extends jController {
                 if ($_FILES['image']['name'] != '')
                 {          	
                     $oAdsPurchase->reference            = CCommonTools::randomString(8);
-                    $oAdsPurchase->advertiser_name      = $advertiser_name;
-                    $oAdsPurchase->advertiser_mail      = $advertiser_mail;
+                    $oAdsPurchase->advertiser_id        = $advertiser_id;
                     $oAdsPurchase->zone_type            = $type_zone;
                     $oAdsPurchase->status               = $status;
                     $oAdsPurchase->no_follow            = $no_follow;
@@ -364,8 +363,7 @@ class adsCtrl extends jController {
     {
         if (!jAcl2::check("ads.restrictall")) { //Test droit restrict all
             $id                 = $this->param('annonce_id','');
-            $advertiser_name    = $this->param('advertiser_name','');
-            $advertiser_mail    = $this->param('advertiser_mail','');
+            $advertiser_id      = $this->param('advertiser_id','');
             $type_zone          = $this->param('type_zone','');
             $status             = $this->param('status','');
             $no_follow          = $this->param('no_follow','');
@@ -385,7 +383,7 @@ class adsCtrl extends jController {
             $sub_id             = $this->param('sub_id','');
 
         
-            if (($id != '') && ($advertiser_name != '') && ($advertiser_mail != '') && ($type_zone != '') && 
+            if (($id != '') && ($advertiser_id != '') && ($type_zone != '') && 
                 ($status != '') && ($price != '') && ($currency != '') && 
                 ($payment_method != '') && ($payment_status != '') && 
                 (($inscription == 1 && $sub_id != '') || $inscription == 0) && ($cost_model != '') && 
@@ -393,8 +391,7 @@ class adsCtrl extends jController {
             {
 
                 $oAdsPurchase = CAdsPurchase::getById($id);
-                $oAdsPurchase->advertiser_name      = $advertiser_name;
-                $oAdsPurchase->advertiser_mail      = $advertiser_mail;
+                $oAdsPurchase->advertiser_id        = $advertiser_id;
                 $oAdsPurchase->zone_type            = $type_zone;
                 $oAdsPurchase->status               = $status;
                 $oAdsPurchase->no_follow            = $no_follow;
@@ -642,6 +639,8 @@ class adsCtrl extends jController {
             $tpl->assign("nbReserve", $nbReserve);
 
             $tpl->assign("toListAds", $toListAds);*/
+            CAdsStat::getTotalClic('20-02-2017 23:59:59', '21-02-2017 23:59:59');
+            CAdsStat::getTotalImpression('20-02-2017 23:59:59', '21-02-2017 23:59:59');
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $resp->body->assign('MAIN', $tpl->fetch('ads~ads_stats'));
             $resp->body->assign('selectedMenuItem','ads');
@@ -731,6 +730,23 @@ class adsCtrl extends jController {
             $valid = "false";
         }
         $resp->content = $valid;
+        return $resp;
+    }
+
+    // auto complet entreprise
+    public function autoCompletEntreprise()
+    {
+        $resp = $this->getResponse('json');
+
+        // datas
+        $datas = array();
+
+        $term = $this->param("q");
+        if (!empty($term)) {
+            $datas = CAdsPurchase::autoCompletEntreprise($term);
+        }
+        $resp->data = $datas;
+
         return $resp;
     }
 }

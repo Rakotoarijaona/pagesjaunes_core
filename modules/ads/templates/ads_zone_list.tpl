@@ -50,7 +50,8 @@
                         <table class="footable table table-hover" data-page-size="25" data-filter="#table-filter">
                             <thead>
                                 <tr>
-                                    <th data-sort-ignore="true"></th>
+                                    <th data-sort-ignore="true" width="50px"></th>
+                                    <th>Id</th>
                                     <th>Zones</th>
                                     <th>Statut</th>
                                     <th>Date création</th>
@@ -67,6 +68,9 @@
                                                     {ifacl2 "ads.delete"} id="check{$oAdsZone->id}" name="check[]" value="{$oAdsZone->id}"{else} disabled {/ifacl2} >
                                                     <label for="check{$oAdsZone->id}"></label>
                                                 </div>
+                                            </td>
+                                            <td>
+                                                {$oAdsZone->id}
                                             </td>
                                             <td>
                                                 {$oAdsZone->name}
