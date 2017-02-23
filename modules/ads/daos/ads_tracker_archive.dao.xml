@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="ads_tracker_archive" realname="ads_tracker_archive" primarykey="id" />
+    </datasources>
+    <record>
+        <property name="id" fieldname="id" datatype="int" autoincrement="true"/>
+        <property name="ads_id" fieldname="ads_id" datatype="int" required="true"/>
+        <property name="is_default" fieldname="is_default" datatype="tinyint" required="true"/>
+        <property name="date" fieldname="date" datatype="date" required="true"/>
+        <property name="total_clicks" fieldname="total_clicks" datatype="int" required="true"/>
+        <property name="total_visits" fieldname="total_visits" datatype="int" required="true"/>
+    </record>
+    <factory>
+    </factory>
+</dao>

@@ -595,57 +595,19 @@ class adsCtrl extends jController {
     public function statistiques()
     {        
         $resp = $this->getResponse('html');
-        if (!jAcl2::check("ads.restrictall")) { //Test droit restrict all
+        if (!jAcl2::check("ads.restrictall")) 
+        { //Test droit restrict all
             $tpl = new jTpl();
-            /*$filtre_status = $this->param('status','');
-            $tpl->assign("status", $filtre_status);
-
-            if ($filtre_status == 'en_attente')
-            {
-                $toListAds = CAdsPurchase::getListEnAttente();
-            }
-            elseif ($filtre_status == 'approuve')
-            {
-                $toListAds = CAdsPurchase::getListApprove();
-            }
-            elseif ($filtre_status == 'rejete')
-            {
-                $toListAds = CAdsPurchase::getListRejete();
-            }
-            elseif ($filtre_status == 'expire')
-            {
-                $toListAds = CAdsPurchase::getListExpire();
-            }
-            elseif ($filtre_status == 'reserve')
-            {
-                $toListAds = CAdsPurchase::getListReserve();
-            }
-            else
-            {
-                $toListAds = CAdsPurchase::getList();
-            }
-
-            $nbAll          = CAdsPurchase::getNbAll();
-            $nbEnAttente    = CAdsPurchase::getNbEnAttente();
-            $nbApprouve     = CAdsPurchase::getNbApprove();
-            $nbRejete       = CAdsPurchase::getNbRejete();
-            $nbExpire       = CAdsPurchase::getNbExpire();
-            $nbReserve      = CAdsPurchase::getNbReserve();
-            $tpl->assign("nbAll", $nbAll);
-            $tpl->assign("nbEnAttente", $nbEnAttente);
-            $tpl->assign("nbApprouve", $nbApprouve);
-            $tpl->assign("nbRejete", $nbRejete);
-            $tpl->assign("nbExpire", $nbExpire);
-            $tpl->assign("nbReserve", $nbReserve);
-
-            $tpl->assign("toListAds", $toListAds);*/
-            CAdsStat::getTotalClic('20-02-2017 23:59:59', '21-02-2017 23:59:59');
-            CAdsStat::getTotalImpression('20-02-2017 23:59:59', '21-02-2017 23:59:59');
+            $oAdsStat = new CAdsStat();
+            print_r($oAdsStat->getStatOverview());
+            die;
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $resp->body->assign('MAIN', $tpl->fetch('ads~ads_stats'));
             $resp->body->assign('selectedMenuItem','ads');
             $resp->body->assign('selectedMenuChildItem','ads_stat');
-        } else {
+        } 
+        else 
+        {
             $resp = $this->getResponse('html');
             $tpl = new jTpl();
             $tpl->assign("SCRIPT", jZone::get('common~script'));

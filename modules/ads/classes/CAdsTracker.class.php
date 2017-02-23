@@ -90,7 +90,55 @@ class CAdsTracker
         $record->is_default = $this->is_default;
         $record->type       = $this->type;
         $maFactory->insert($record);
+        CAdsTracker::update_archive ($this->type, $this->ads_id, $this->is_default);
 
         return $record->id;
     }
+
+    public static function update_archive ($type, $ads_id, $is_default)
+    {
+        $cnx = jDb::getConnection();
+        $date_now = CCommonTools::RgetDateOnlyNowSQL();
+        $sql = "
+                    SELECT * FROM ".$cnx->prefixTable ('ads_tracker_archive')." 
+                    WHERE date ='".$date_now."' AND ads_id = ".$ads_id." AND is_default = ".$is_default."
+                ";
+        $res = $cnx->query($sql);
+        $row = $res->fetch();
+        if (!empty($row))
+        {
+            $maFactory  = jDao::get('ads~ads_tracker_archive');
+            $record     = $maFactory->get($row->id);
+            if ($type == CLICK)
+            {
+                $record->total_clicks   = $record->total_clicks + 1;
+            }
+            else
+            {
+                $record->total_visits   = $record->total_visits + 1;
+            }
+
+            $maFactory->update($record);
+        }
+        else
+        {
+            $maFactory  = jDao::get('ads~ads_tracker_archive');
+            $record     = jDao::createRecord('ads~ads_tracker_archive');
+            $record->ads_id         = $ads_id;
+            $record->date           = $date_now;
+            $record->is_default     = $is_default;
+            if ($type==CLICK)
+            {
+                $record->total_clicks   = 1;
+                $record->total_visits   = 0;
+            }
+            else
+            {
+                $record->total_clicks   = 0;
+                $record->total_visits   = 1;
+            }
+            
+            $maFactory->insert($record);
+        }
+    } 
 }

@@ -98,3 +98,5 @@ define ("CASH", "cash");
 define ("CHEQUE", "cheque");
 define ("MOBILE", "mobile");
 define ("PAYPAL", "paypal");
+define ("CLICK", 1);
+define ("VISIT", 3);

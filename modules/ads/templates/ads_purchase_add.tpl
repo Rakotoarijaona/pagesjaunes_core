@@ -135,7 +135,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group r-form">
-                                    <label>Durée de publication (*)</label>
+                                    <label>Nombre (*)</label>
                                     <input type="text" id="publication_day" name="publication_day" class="form-control">
                                 </div>
                                 <div class="form-group r-form">

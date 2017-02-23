@@ -49,7 +49,10 @@ class Motscles
     // insertion
     public static function insert($mot) {
         $cnx = jDb::getConnection();
-        $res = $cnx->query("SELECT * FROM ".$cnx->prefixTable ('motscles')." WHERE mot ='".$mot."'");
+        $sql = "
+                    SELECT * FROM ".$cnx->prefixTable ('motscles')." WHERE mot ='".$mot."'
+                ";
+        $res = $cnx->query($sql);
         $toRes = $res->fetchAll();
         if (sizeof($toRes) > 0)
         {
