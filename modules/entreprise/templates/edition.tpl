@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Adresse *</label>
-                                    <input id="adresse" name="adresse" type="text" class="form-control" value="{$oEntreprise->adresse}" required>
+                                    <textarea id="adresse" name="adresse" class="form-control" required>{$oEntreprise->adresse}</textarea>
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Région</label>
@@ -422,7 +422,7 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="control-label">Activation visuel de présentation</label>
                                     <div class="input-group">
@@ -459,7 +459,7 @@
                                     {/if}
                                 </div>
                             </div>
-                            <div class="col-lg-6">                                        
+                            <div class="col-lg-12">                                        
                                 <div class="form-group">
                                     <label class="control-label">Activation rubrique nos services</label>
                                     <div class="input-group">
@@ -479,7 +479,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="control-label">Activation rubrique Qui sommes nous</label>
                                     <div class="input-group">
@@ -497,7 +497,7 @@
                                     <textarea class="form-control ckeditor" name="quiSommesNous">{$oEntreprise->qui_sommes_nous}</textarea>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="control-label">Activation rubrique nos références</label>
                                     <div class="input-group">
@@ -877,6 +877,7 @@ $(document).ready(function(){
                 $('#emailList').html(data);     
                 swal("Ajouté!", "L'email a été ajouté", "success");
                 $('#email-add-form .input-text').val('');
+                $('#email-add-form .input-text').focus();
             });
         }
     });    
@@ -888,6 +889,7 @@ $(document).ready(function(){
             $('#telephoneList').html(data);
             swal("Ajouté!", "Le téléphone a été ajouté", "success");
             $('#num-add-form .input-text').val('');
+            $('#num-add-form .input-text').focus();
         });
     });
     $('#btn-add-service').click(function(){
@@ -898,6 +900,7 @@ $(document).ready(function(){
             $('#serviceList').html(data);
             swal("Ajouté!", "Le service a été ajouté", "success");
             $('#service-add-form .input-text').val('');
+            $('#service-add-form .input-text').focus();
         });
     });
     $('#btn-add-produit').click(function(){
@@ -908,6 +911,7 @@ $(document).ready(function(){
             $('#produitList').html(data);
             swal("Ajouté!", "Le produit a été ajouté", "success");
             $('#produit-add-form .input-text').val('');
+            $('#produit-add-form .input-text').focus();
         });
     });
     $('#btn-add-marque').click(function(){
@@ -918,6 +922,7 @@ $(document).ready(function(){
             $('#marqueList').html(data);
             swal("Ajouté!", "La marque a été ajouté", "success");
             $('#marque-add-form .input-text').val('');
+            $('#marque-add-form .input-text').focus();
         });
     });
 
@@ -983,6 +988,7 @@ $(document).ready(function(){
     
     CKEDITOR.replace( 'quiSommesNous');
     CKEDITOR.replace( 'nosRef');
+    CKEDITOR.config.contentsCss = '{/literal}{$j_basepath}{literal}frontlibraries/stylesheets/styles_pagesjaunes.css' ; 
     var souscategoriesJSON = {/literal}{$souscategoriesJSON}{literal};
     $("#souscategorie option").each(function(){
         for (i=0; i<souscategoriesJSON.length; i++)

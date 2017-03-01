@@ -16,33 +16,34 @@
             <div class="col-md-8">
                 <div class="form-wrapper">
                     <p>
-                        <p><br/>Vous avez des questions, ou des demandes? N'hésitez pas à nous contacter. Nous vous répondrons dans les meilleurs délais</p>						
+                        <p><br/>Vous avez des questions, ou des demandes? N'hésitez pas à nous contacter. Nous vous répondrons dans les meilleurs délais</p>
                         <div role="form" lang="fr-FR" dir="ltr">
                             <div class="screen-reader-response" style="display:none;"></div>
-                            <form name="contactForm" id="contactForm" action="" method="post" class="form">
+                            {jmessage}
+                            <form name="contactForm" id="contactForm" action="{jurl 'front_office~default:sendEmailContact'}" method="post" class="form">
                                 <p>Votre nom (*)<br />
                                     <span class="your-name">
-                                        <input type="text" name="your-name" value="" size="40" maxlength="200"/>
+                                        <input autocomplete="off" type="text" name="name" id="name" value="" size="40" maxlength="200" required data-msg-required="Veuillez renseigner le nom" />
                                     </span> 
                                 </p>
                                 <p>Votre email (*)<br />
                                     <span class="your-email">
-                                        <input type="email" name="your-email" value="" size="40" maxlength="255"/>
+                                        <input autocomplete="off" type="email" name="email" id="email" value="" size="40" maxlength="255" required data-msg-required="Veuillez renseigner l'adresse email" data-rule-email="true" data-msg-email="Veuillez renseigner une email valide" />
                                     </span> 
                                 </p>
                                 <p>Votre téléphone (*)<br />
                                     <span class="your-phone">
-                                        <input type="tel" name="your-phone" value="" size="40" maxlength="12"/>
+                                        <input autocomplete="off" type="tel" name="phone" id="phone" value="" size="40" maxlength="12" required data-msg-required="Veuillez renseigner le numéro de téléphone" data-rule-phone="true" data-msg-phone="Veuillez renseigner un numéro de téléphone valide" />
                                     </span>
                                 </p>
                                 <p>Sujet (*)<br />
                                     <span class="your-subject">
-                                        <input type="text" name="your-subject" value="" size="40" maxlength="200"/>
+                                        <input autocomplete="off" type="text" name="subject" id="subject" value="" size="40" maxlength="200" required data-msg-required="Veuillez renseigner le sujet" />
                                     </span> 
                                 </p>
                                 <p>Votre message (*)<br />
                                     <span class="your-message">
-                                        <textarea name="your-message" cols="40" rows="10" maxlength="500" minlength="10"></textarea>
+                                        <textarea name="message" id="message" cols="40" rows="10" maxlength="500" minlength="10" required data-msg-required="Veuillez renseigner le message"></textarea>
                                     </span> 
                                 </p>
                                 <br/>
@@ -55,7 +56,7 @@
                                                         <img src="{jurl 'common~common:generateCaptcha'}" id="captcha" style="margin-top:6px;" />
                                                     </div>
                                                     <span class="input-group-addon">
-                                                        <a href="javascript:;" onclick="reGenerateCaptcha();" class="btn btn-primary btn-sm text-complete"><i class="fs-14 fa fa-repeat"></i></a>
+                                                        <a href="javascript:;" onclick="reGenerateCaptcha();" class="btn btn-default text-complete"><i class="fs-14 fa fa-repeat"></i></a>
                                                     </span>
                                                 </div>
 

@@ -26,8 +26,7 @@
                                     <input type="text" placeholder="Filtre" id="s" name="s" class="form-control">
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-white"> <i class="fa fa-search"></i></button>
-                                    </s
-                                    pan>
+                                    </span>
                                 </div>
                             </form>
                         </div>

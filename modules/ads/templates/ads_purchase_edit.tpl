@@ -240,16 +240,6 @@ $(document).ready(function()
             },
             cost_model: {
                 required: true
-            },
-            publication_start: {
-                required: true
-            },
-            publication_day: {
-                required: true,
-                number: true
-            },
-            website_url: {
-                url: true
             }
         },
         messages: {
@@ -277,13 +267,6 @@ $(document).ready(function()
             },
             cost_model: {
                 required: "Veuillez renseigner ce champ"
-            },
-            publication_start: {
-                required: "Veuillez renseigner ce champ"
-            },
-            publication_day: {
-                required: "Veuillez renseigner ce champ",
-                number: "Veuillez renseigner un nombre"
             },
             website_url: {
                 url: "Veuillez renseigner un url valide"
@@ -334,7 +317,7 @@ $(document).ready(function()
     });
 
     $('input[name=inscription]').change(function(){
-        if ($('input[name=inscription]:checked').val() == 1)
+        /*if ($('input[name=inscription]:checked').val() == 1)
         {
             $('#sub_id').rules('add',{
                 required: true
@@ -343,7 +326,7 @@ $(document).ready(function()
         else
         {
            $('#sub_id').rules('remove');
-        }
+        }*/
     });
 
     $('#publication_start').datepicker({

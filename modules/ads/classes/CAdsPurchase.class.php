@@ -9,6 +9,8 @@
 jClasses::inc("common~CCommonTools");
 jClasses::inc("ads~CAdsZone");
 jClasses::inc("ads~CAdsZoneDefault");
+jClasses::inc("entreprise~CEntreprise");
+jClasses::inc("categorie~CSouscategorie");
 
 class CAdsPurchase
 {
@@ -86,9 +88,16 @@ class CAdsPurchase
 			$this->subscription 		= $record->subscription;
             $this->subscription_id      = $record->subscription_id;
 			$this->charging_model 		= $record->charging_model;
-			$this->publication_start 	= $record->publication_start;
+            if (!empty($record->publication_start) && $record->publication_start != '0000-00-00')
+            {
+                $this->publication_start 	= $record->publication_start;
+            }
+            else
+            {
+                $this->publication_start    = '';
+            }
 			$this->publication_day 		= $record->publication_day;
-			$this->banner 				= $record->banner;
+			$this->banner 				= utf8_encode($record->banner);
 			$this->website_url 			= $record->website_url;
 			$this->alt_text 			= $record->alt_text;
 			$this->categorie_id 		= $record->categorie_id;
@@ -203,7 +212,7 @@ class CAdsPurchase
         $filters[] = "status = 2";
         $filters[] = "advertiser_id = ".$id;
         $filters[] = "publication_start <= CURDATE()";
-        $filters[] = "DATE_ADD(publication_start,INTERVAL publication_day DAY) >= CURDATE()";
+        $filters[] = "(publication_start = '0000-00-00' OR publication_start = NULL OR DATE_ADD(publication_start,INTERVAL publication_day DAY) >= CURDATE()) ";
         $filters[] = "zone_type = ".$zoneId;
 
         // build filter query
@@ -240,11 +249,25 @@ class CAdsPurchase
         $resToprecherche = $cnx->query('
             SELECT * FROM '.$cnx->prefixTable ("toprecherche").' 
             WHERE souscategorie_id ='.$souscategorieId);
+        $entreprise_id_top1 = '';
+        $entreprise_id_top2 = '';
+        $entreprise_id_top3 = '';
 
         while($toprecherche = $resToprecherche->fetch()){
-            $entreprise_id_top1 = $toprecherche->entreprise_id_top1;
-            $entreprise_id_top2 = $toprecherche->entreprise_id_top2;
-            $entreprise_id_top3 = $toprecherche->entreprise_id_top3;
+            if (isset($toprecherche->entreprise_id_top1) && !empty($toprecherche->entreprise_id_top1))
+            {
+                $entreprise_id_top1 = $toprecherche->entreprise_id_top1;
+            }
+
+            if (isset($toprecherche->entreprise_id_top2) && !empty($toprecherche->entreprise_id_top2))
+            {
+                $entreprise_id_top2 = $toprecherche->entreprise_id_top2;
+            }
+
+            if (isset($toprecherche->entreprise_id_top3) && !empty($toprecherche->entreprise_id_top3))
+            {
+                $entreprise_id_top3 = $toprecherche->entreprise_id_top3;
+            }
         }
         $toAdsPurchaseTop1;
         $toAdsPurchaseTop2;
@@ -467,15 +490,19 @@ class CAdsPurchase
     // Récupération de la sous catégorie
     public function getSouscategorie()
     {
-        return Souscategorie::getById($this->souscategorie_id);
+        return CSouscategorie::getById($this->souscategorie_id);
     }
 
     // Récupération de la date de début
     public function getPublicationStart()
     {
         $dt = new jDateTime();
-        $dt->setFromString($this->publication_start, jDateTime::DB_DFORMAT);
-        return $dt->toString(jDateTime::LANG_DFORMAT);
+        if(!empty($this->publication_start))
+        {
+            $dt->setFromString($this->publication_start, jDateTime::DB_DFORMAT);
+            return $dt->toString(jDateTime::LANG_DFORMAT);
+        }
+        return '';
     }
 
     // Récupération de la date de fin
@@ -649,7 +676,7 @@ class CAdsPurchase
     // Get Entreprise
     public function getEntreprise()
     {
-        $oEntreprise = Entreprise::getById($this->advertiser_id);
+        $oEntreprise = CEntreprise::getById($this->advertiser_id);
         return $oEntreprise;
     }
 

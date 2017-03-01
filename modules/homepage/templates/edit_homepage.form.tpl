@@ -215,6 +215,7 @@ $(document).ready(function(){
     CKEDITOR.replace( 'description_reference');
 
     CKEDITOR.replace( 'description_marketing');
+    CKEDITOR.config.contentsCss = '{/literal}{$j_basepath}{literal}frontlibraries/stylesheets/styles_pagesjaunes.css' ; 
 });
 </script>
 {/literal}

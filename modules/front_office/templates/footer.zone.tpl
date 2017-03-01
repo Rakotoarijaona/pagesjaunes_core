@@ -20,13 +20,13 @@
                     <div class="textwidget">
                         <ul>
                             <li>
-                                <a href="{jurl 'front_office~default:pages',array('p'=>'a-propos')}">A Propos</a>
+                                <a href="{jurl 'front_office~default:pages',array('p'=>'a-propos')}" title="A Propos">A Propos</a>
                             </li>
                             <li>
-                                <a href="{jurl 'front_office~default:pages',array('p'=>'plan-du-site')}">Plan du site</a>
+                                <a href="{jurl 'front_office~default:pages',array('p'=>'plan-du-site')}" title="Plan du site">Plan du site</a>
                             </li>
                             <li>
-                                <a href="{jurl 'front_office~default:pages',array('p'=>'condition-d-utilisation')}">Conditions d'utilisations</a>
+                                <a href="{jurl 'front_office~default:pages',array('p'=>'condition-d-utilisation')}" title="Conditions d'utilisations">Conditions d'utilisations</a>
                             </li>
                         </ul>
                     </div>
@@ -36,13 +36,13 @@
                     <div class="textwidget">
                         <ul>
                             <li>
-                                <a href="{jurl 'front_office~default:inscription'}">Souscription pagesjaunes.mg</a>
+                                <a href="{jurl 'front_office~default:inscription'}" title="Souscription pagesjaunes.mg">Souscription pagesjaunes.mg</a>
                             </li>
                             <li>
-                                <a href="{jurl 'front_office~default:pages',array('p'=>'annonces-et-publicites')}">Annonces et publicités</a>
+                                <a href="{jurl 'front_office~default:pages',array('p'=>'annonces-et-publicites')}" title="Annonces et publicités">Annonces et publicités</a>
                             </li>
                             <li>
-                                <a href="{jurl 'front_office~default:pages',array('p'=>'espace-pro')}">Espace Pro</a>
+                                <a href="{jurl 'front_office~default:pages',array('p'=>'espace-pro')}" title="Espace Pro">Espace Pro</a>
                             </li>
                         </ul>
                     </div>
@@ -57,7 +57,7 @@
                                 <i class="fa fa-home"></i>IVJ 96 Ankadifotsy, <br>Antananarivo 101
                             </li>
                             <li>
-                                <i class="fa fa-envelope"></i><a href="mailto:contact@pagesjaunes.mg">contact.pagesjaunes.mg@gmail.com</a>
+                                <i class="fa fa-envelope"></i><a href="mailto:contact@pagesjaunes.mg" title="contact.pagesjaunes.mg@gmail.com">contact.pagesjaunes.mg@gmail.com</a>
                             </li>
                         </ul>
                     </div>
@@ -83,7 +83,7 @@
     </div>
 </div>
 <div class="container super-footer">
-    <p class="nav-footer"><a href="{jurl 'front_office~default:conditions_utilisations'}" title="Conditions d'utilisations">Conditions d'utilisations</a></p>
+    <p class="nav-footer"><a href="{jurl 'front_office~default:conditions_utilisations'}" title="Conditions d'utilisations" title="Conditions d'utilisations">Conditions d'utilisations</a></p>
     <p class="copyright">© PAGESJAUNES.MG - 2016</p>
 </div>
 {literal}

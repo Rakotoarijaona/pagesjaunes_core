@@ -6,7 +6,7 @@
  * @contributor YSTA
  */
 
-jClasses::inc("entreprise~Entreprise");
+jClasses::inc("entreprise~CEntreprise");
 
 class CAbonnement
 {
@@ -33,7 +33,7 @@ class CAbonnement
         $this->abonnement_dureetype = null;
         $this->abonnement_montant = null;
         $this->abonnement_removalstatus = null;
-        $this->entreprise = new Entreprise();
+        $this->entreprise = new CEntreprise();
     }
 
     // Récupération des données à partir de record vers un object (mapping)
@@ -43,7 +43,7 @@ class CAbonnement
             $this->abonnement_id = $record->abonnement_id;
             $this->abonnement_entrepriseid = $record->abonnement_entrepriseid;
             if (!empty($this->abonnement_entrepriseid)) {
-                $this->entreprise = Entreprise::getById($this->abonnement_entrepriseid);
+                $this->entreprise = CEntreprise::getById($this->abonnement_entrepriseid);
             }
             $this->abonnement_nomoffre = $record->abonnement_nomoffre;
             $this->abonnement_datedebut = $record->abonnement_datedebut;

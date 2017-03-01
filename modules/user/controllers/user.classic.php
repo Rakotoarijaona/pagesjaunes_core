@@ -18,7 +18,7 @@ class userCtrl extends jController {
         $resp = $this->getResponse('html');
         $tpl = new jTpl();
         if (jAcl2::check("user.list") && jAcl2::check("user.menu") && !jAcl2::check("user.restrictall")){
-            $toList = User::getList();
+            $toList = CUser::getList();
             $tpl->assign('toList', $toList);
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
@@ -59,7 +59,7 @@ class userCtrl extends jController {
     {
         if (jAcl2::check("user.create") && !jAcl2::check("user.restrictall")) {
             $resp = $this->getResponse ('redirect') ;
-            $oUser = new User ();
+            $oUser = new CUser ();
             //upload des fichiers
             /*$uploaddir = '/var/www/uploads/';
             $uploadTDRfile = $uploaddir . basename($_FILES['userfile']['name']);*/
@@ -73,7 +73,7 @@ class userCtrl extends jController {
                 $oUser->usr_email               = $this->param ('usr_email') ;
                 $loginalias = CCommonTools::generateAlias ($oUser->usr_login);
                 $oUser->usr_loginalias = $loginalias;
-                if ((User::ifEmailExist($oUser->usr_email) == 0) && (User::ifLoginExist($loginalias) == 0))
+                if ((CUser::ifEmailExist($oUser->usr_email) == 0) && (CUser::ifLoginExist($loginalias) == 0))
                 {
                     $oUploader = new CPhotosUpload ('usr_photo') ;
                     $uploadResults = $oUploader->doUpload () ;
@@ -117,7 +117,7 @@ class userCtrl extends jController {
             if (sizeof($this->param('checked'))>0 && $action=='delete') {
                 foreach ($this->param('checked') as $user)
                 {
-                    User::delete($user);
+                    CUser::delete($user);
                     jMessage::add(jLocale::get("user~user.delete.success"), "success");
                 }
             }
@@ -142,9 +142,9 @@ class userCtrl extends jController {
             $tpl->assign("SCRIPT", jZone::get('common~script'));
 
             $usr_login = $this->param ('usr_login');
-            $oUser = User::getUserByLogin($usr_login);
+            $oUser = CUser::getUserByLogin($usr_login);
             $tpl->assign ('oUser',$oUser);
-            $oUserProfile = User::get_User_Group($usr_login);
+            $oUserProfile = CUser::get_User_Group($usr_login);
             $tpl->assign('oUserProfile', $oUserProfile);
             $toListProfile = CJacl2Group::getList();
             $tpl->assign('toListProfile', $toListProfile);
@@ -170,7 +170,7 @@ class userCtrl extends jController {
         $resp = $this->getResponse('redirect') ;
 
         if (jAcl2::check("user.update") && !jAcl2::check("user.restrictall")) {
-            $oUser = User::getUserByLogin($this->param('usr_login'));
+            $oUser = CUser::getUserByLogin($this->param('usr_login'));
             if ($oUser != null) {
                 if (($this->param('new_usr_login')!='')&&($this->param('usr_email'))&&($this->param('usr_typeLabel')!=''))
                 {
@@ -180,7 +180,7 @@ class userCtrl extends jController {
                     $oUser->usr_email = $this->param('usr_email');
                     $loginalias = CCommonTools::generateAlias($oUser->usr_login);
                     $oUser->usr_loginalias = $loginalias;
-                    if ((User::ifUpdateLoginExist($oUser->usr_id, $loginalias) == 0) && (User::ifUpdateEmailExist($oUser->usr_id, $oUser->usr_email) == 0))
+                    if ((CUser::ifUpdateLoginExist($oUser->usr_id, $loginalias) == 0) && (CUser::ifUpdateEmailExist($oUser->usr_id, $oUser->usr_email) == 0))
                     {
                         $oUploader = new CPhotosUpload ('usr_photo') ;
                         if ($_FILES['usr_photo'])
@@ -219,7 +219,7 @@ class userCtrl extends jController {
     {
         if (jAcl2::check("user.delete") && !jAcl2::check("user.restrictall")) {
             $resp = $this->getResponse ('redirect') ;
-            $oUser = new User ();
+            $oUser = new CUser ();
             //upload des fichiers
             /*$uploaddir = '/var/www/uploads/';
             $uploadTDRfile = $uploaddir . basename($_FILES['userfile']['name']);*/
@@ -227,7 +227,7 @@ class userCtrl extends jController {
 
             if (($this->param('usr_login')!=''))
             {
-                User::delete($this->param('usr_login'));
+                CUser::delete($this->param('usr_login'));
                 jMessage::add(jLocale::get("user~user.delete.success"), "success");
             }
             $resp->action = "user~user:index";
@@ -246,14 +246,14 @@ class userCtrl extends jController {
     {
         if (jAcl2::check("user.delete") && !jAcl2::check("user.restrictall")) {
             $resp = $this->getResponse ('redirect') ;
-            $oUser = new User ();
+            $oUser = new CUser ();
             //upload des fichiers
             /*$uploaddir = '/var/www/uploads/';
             $uploadTDRfile = $uploaddir . basename($_FILES['userfile']['name']);*/
             $resp->params = array () ;
            
             foreach ($this->param('groupUser') as $usr_login) {
-                User::delete($usr_login);
+                CUser::delete($usr_login);
                 jMessage::add(jLocale::get("user~user.delete.success"), "success");
             }
             $resp->action = "user~user:index";
@@ -274,7 +274,7 @@ class userCtrl extends jController {
         $login = $this->param('login');
         $loginalias = CCommonTools::generateAlias ($login);
         $valid = "true";
-        if (User::ifLoginExist($loginalias) == 1)
+        if (CUser::ifLoginExist($loginalias) == 1)
         {
             $valid = "false";
         }
@@ -289,7 +289,7 @@ class userCtrl extends jController {
         $login = $this->param('login');
         $loginalias = CCommonTools::generateAlias($login);
         $valid = "true";
-        if (User::ifUpdateLoginExist($id, $loginalias) == 1)
+        if (CUser::ifUpdateLoginExist($id, $loginalias) == 1)
         {
             $valid = "false";
         }
@@ -302,7 +302,7 @@ class userCtrl extends jController {
         $resp = $this->getResponse('text');
         $email = $this->param('email');
         $valid = "true";
-        if (User::ifEmailExist($email) == 1)
+        if (CUser::ifEmailExist($email) == 1)
         {
             $valid = "false";
         }
@@ -317,7 +317,7 @@ class userCtrl extends jController {
         $id = $this->param('id');
         $email = $this->param('email');
         $valid = "true";
-        if (User::ifUpdateEmailExist($id, $email) == 1)
+        if (CUser::ifUpdateEmailExist($id, $email) == 1)
         {
             $valid = "false";
         }

@@ -79,7 +79,7 @@ class navZone extends jZone
         $action = $coord->request->action;
 
         $user = jAuth::getUserSession();
-        $oUser = User::getUserByLogin($user->login);
+        $oUser = CUser::getUserByLogin($user->login);
         $this->_tpl->assign('oUser', $oUser);
         $this->_tpl->assign ('PHOTOS_FOLDER',PHOTOS_FOLDER);
         $this->_tpl->assign ('PHOTOS_THUMBNAIL_FOLDER',PHOTOS_THUMBNAIL_FOLDER);

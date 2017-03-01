@@ -35,7 +35,9 @@ class CAdsStat
         $date_month1    = 0;
         $date_year1     = 0;
         $res_rows       = 0;
-        $toStat         = array(); 
+        $toStat         = array();
+        $toStat['item'] = array();
+        $toStat['total'] = array();
 
         //current date
         $date_now       = date('Y-m-d', time());
@@ -43,7 +45,7 @@ class CAdsStat
         //date from
         if ($this->dateFrom != '')
         {
-            $dateFrom       = date_parse_from_format('dd/mm/yyyy', $this->dateFrom);
+            $dateFrom       = date_parse_from_format('d/m/Y', $this->dateFrom);
             $date_day1      = $dateFrom['day'];
             $date_month1    = $dateFrom['month'];
             $date_year1     = $dateFrom['year'];
@@ -56,22 +58,22 @@ class CAdsStat
             $date_month1 = intval($exp[1]);
             $date_year1 = intval($exp[0]);
         }
-        
+
         //date to
         if ($this->dateTo != '')
         {
-            $dateTo         = date_parse_from_format('dd/mm/yyyy', $this->dateTo);
+            $dateTo         = date_parse_from_format('d/m/Y', $this->dateTo);
             $date_day2      = $dateTo['day'];
             $date_month2    = $dateTo['month'];
-            // $date_year2     = $dateTo['year'];
+            $date_year2     = $date_year1;
         }
         else
         {
             $dateTo         = date_parse_from_format('Y-m-d', $date_now);
             $date_day2      = $dateTo['day'];
             $date_month2    = $dateTo['month'];
+            $date_year2     = $dateTo['year'];
         }
-
         //process archive request
         if(!empty($this->pid))
         {
@@ -104,7 +106,7 @@ class CAdsStat
             {
                 $type           = "Date";
                 $select         = "a.date as id, a.total_clicks as tc, a.total_visits as tv, p.publication_day, p.price, p.currency";
-                $sql_purchase   = "a.pid='".$purchase_id."'";
+                $sql_purchase   = "a.ads_id='".$purchase_id."'";
                 $and1           = " AND ";
                 $group_by       = "GROUP BY a.date";
             } 
@@ -125,7 +127,7 @@ class CAdsStat
         {
             $type           = "Date";
             $select         = "a.date as id, a.total_clicks as tc, a.total_visits as tv, p.publication_day, p.price, p.currency";
-            $sql_purchase   = "a.pid='".$purchase_id."'";
+            $sql_purchase   = "a.ads_id='".$purchase_id."'";
             $order_by       = "ORDER BY a.date";
         }
 
@@ -134,13 +136,12 @@ class CAdsStat
         if(!empty($select)) 
         {
             $sql    = "
-                        SELECT $select FROM ". $cnx->prefixTable ('ads_tracker_archive') . " a 
-                        INNER JOIN " . $cnx->prefixTable ('ads_purchase') . " p 
+                        SELECT $select FROM ". $cnx->prefixTable ('ads_tracker_archive') . " as a 
+                        INNER JOIN " . $cnx->prefixTable ('ads_purchase') . " as p 
                         ON a.ads_id = p.id 
                         WHERE a.is_default = 0 AND $sql_purchase $and1 $sql_date $group_by $order_by";
-
             $query  = ($cnx->query($sql));
-            $archive_res = $query->fetchAll;
+            $archive_res = $query->fetchAll();
 
             $res_rows = sizeof($archive_res);
         }
@@ -151,7 +152,7 @@ class CAdsStat
 
             $sql_date       = str_replace("a.", "", $sql_date);
 
-            $query  = $cnx->exec("  SELECT date,total_visits 
+            $query  = $cnx->query(" SELECT date,total_visits 
                                     FROM " . $cnx->prefixTable ('ads_tracker_archive') . " 
                                     WHERE " . $sql_date . " AND ads_id='0' GROUP BY date");
             $daily = $query->fetchAll();
@@ -166,8 +167,6 @@ class CAdsStat
 
             $clicks = 0;
             $visits = 0;
-            $toStat['item'] = array();
-            $toStat['total'] = array();
             foreach($archive_res as $r)
             {
                 // CTR
@@ -191,38 +190,25 @@ class CAdsStat
                 }
 
                 // eCPC
-                if($r->item_duration > 0 && $r->tc > 0)
+                if($r->publication_day > 0 && $r->tc > 0)
                 {
-                    $cpc = ($r->payment_amount / $r->item_duration) / $r->tc;
+                    $cpc = ($r->price / $r->publication_day) / $r->tc;
                 }
                 else
                 {
                     $cpc = 0;
                 }
 
-                /*if($r->id > 0 && strpos($r->id, "-") === false) {
-                    $array = oiopub_adtype_info($r);
-                    $my_id = $array['type'] . "<br /><a href=\"" . $array['url'] . "\" target=\"_blank\">" . $array['url'] . "</a>";
-                } else {
-                    $my_id = "";
-                }*/
-
                 $toStat['item'][$r->id] = array();
 
                 $toStat['item'][$r->id]['tc']   = $r->tc;
                 $toStat['item'][$r->id]['tv']   = $r->tv;
-                $toStat['item'][$r->id]['ctr']  = $ctr;
-                $toStat['item'][$r->id]['cpm']  = $cpm;
-                $toStat['item'][$r->id]['cpc']  = $cpc;
+                $toStat['item'][$r->id]['ctr']  = number_format($ctr, 2, '.', ' ').' %';
+                $toStat['item'][$r->id]['cpm']  = number_format($cpm, 2, '.', ' ').' '.$r->currency;
+                $toStat['item'][$r->id]['cpc']  = number_format($cpc, 2, '.', ' ').' '.$r->currency;
 
                 $clicks += intval($r->tc);
                 $visits += intval($r->tv);
-
-                if($bgcolor == "#FFFFFF") {
-                    $bgcolor = "#E6E8FA";
-                } else {
-                    $bgcolor = "#FFFFFF";
-                }
             }
 
             $toStat['total']['tc']  = $clicks;
@@ -231,7 +217,7 @@ class CAdsStat
             //calculate totals
             if($visits > 0)
             {
-                $toStat['total']['ctr'] = ($clicks / $visits) * 100;
+                $toStat['total']['ctr'] = number_format((($clicks / $visits) * 100), 2, '.', ' ').' %';
             }
             else
             {
@@ -241,42 +227,3 @@ class CAdsStat
         return $toStat;
     }
 }
-/*
-    foreach($archive_res as $r) {
-        if($r->tv > 0) {
-            $ctr = ($r->tc / $r->tv) * 100;
-        } else {
-            $ctr = 0;
-        }
-        if($r->item_duration > 0 && $r->tv > 0) {
-            $cpm = ($r->payment_amount / $r->item_duration) / ($r->tv / 1000);
-        } else {
-            $cpm = 0;
-        }
-        if($r->item_duration > 0 && $r->tc > 0) {
-            $cpc = ($r->payment_amount / $r->item_duration) / $r->tc;
-        } else {
-            $cpc = 0;
-        }
-        if($r->id > 0 && strpos($r->id, "-") === false) {
-            $array = oiopub_adtype_info($r);
-            $my_id = $array['type'] . "<br /><a href=\"" . $array['url'] . "\" target=\"_blank\">" . $array['url'] . "</a>";
-        } else {
-            $my_id = "";
-        }
-        echo "<tr style=\"background:$bgcolor;\"><td>" . $r->id . "</td><td>" . $r->tc . "</td><td><a style='text-decoration:none;' href='javascript://' title='Ad impressions recorded over " . intval($daily_visits[$r->id]) . " separate page loads'>" . $r->tv . "</a></td><td>" . number_format($ctr, 2) . "%</td><td>" . number_format($cpm, 2) . "</td><td>" . number_format($cpc, 2) . "</td></tr>\n";
-        $clicks += intval($r->tc);
-        $visits += intval($r->tv);
-        if($bgcolor == "#FFFFFF") {
-            $bgcolor = "#E6E8FA";
-        } else {
-            $bgcolor = "#FFFFFF";
-        }
-    }
-    //calculate totals
-    if($visits > 0) {
-        $ctr = ($clicks / $visits) * 100;
-    } else {
-        $ctr = 0;
-    }
-    */

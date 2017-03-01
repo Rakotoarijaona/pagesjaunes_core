@@ -12,7 +12,7 @@ require(realpath(__DIR__.'/../jelix/lib_1_6_10_dev/jelix/').'/'.'init.php');
 require(realpath(__DIR__.'/var/config/').'/'.'var.ini.php');
 jApp::initPaths(
     __DIR__.'/',
-    __DIR__.'/../www/pagesjaunes/',
+    __DIR__.'/pagesjaunes/',
     __DIR__.'/var/',
     __DIR__.'/var/log/',
     __DIR__.'/var/config/',

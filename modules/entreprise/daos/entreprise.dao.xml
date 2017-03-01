@@ -9,7 +9,7 @@
         <property name="activite" fieldname="activite" datatype="varchar" required="true" maxlength="255"/>
         <property name="adresse" fieldname="adresse" datatype="mediumtext" required="true"/>
         <property name="region" fieldname="region" datatype="varchar" required="true" maxlength="50"/>
-        <property name="logo" fieldname="logo" datatype="varchar" default="" maxlength="100"/>
+        <property name="logo" fieldname="logo" datatype="varchar" default="" maxlength="255"/>
         <property name="contact_interne" fieldname="contact_interne" datatype="varchar" maxlength="150"/>
         <property name="fonction_contact" fieldname="fonction_contact" datatype="varchar" maxlength="150"/>
         <property name="url_website" fieldname="url_website" datatype="varchar" default="" maxlength="255"/>

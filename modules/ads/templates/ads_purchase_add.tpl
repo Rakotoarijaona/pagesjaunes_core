@@ -78,11 +78,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group r-form">
-                                    <label>Prix (*)</label>
-                                    <input type="text" id="price" name="price" class="form-control">
+                                    <label>Prix</label>
+                                    <input type="text" id="price" name="price" class="form-control" value="0">
                                 </div>
                                 <div class="form-group r-form">
-                                    <label>Devise (*)</label>
+                                    <label>Devise</label>
                                     <input type="text" id="currency" name="currency" class="form-control">
                                 </div>
                                 <div class="form-group r-form">
@@ -129,13 +129,13 @@
                                     </select>
                                 </div>
                                 <div class="form-group" id="data_1">
-                                    <label>Début publication (*)</label>
+                                    <label>Début publication</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" id="publication_start" name="publication_start" value="">
                                     </div>
                                 </div>
                                 <div class="form-group r-form">
-                                    <label>Nombre (*)</label>
+                                    <label>Nombre</label>
                                     <input type="text" id="publication_day" name="publication_day" class="form-control">
                                 </div>
                                 <div class="form-group r-form">
@@ -209,13 +209,6 @@ $(document).ready(function()
             status: {
                 required: true
             },
-            price: {
-                required: true,
-                number: true
-            },
-            currency: {
-                required: true
-            },
             payment_method: {
                 required: true
             },
@@ -225,18 +218,11 @@ $(document).ready(function()
             cost_model: {
                 required: true
             },
-            publication_start: {
-                required: true
-            },
-            publication_day: {
-                required: true,
-                number: true
-            },
             image: {
                 required: true
             },
             website_url: {
-                url: true
+                url: false
             }
         },
         messages: {
@@ -264,13 +250,6 @@ $(document).ready(function()
             },
             cost_model: {
                 required: "Veuillez renseigner ce champ"
-            },
-            publication_start: {
-                required: "Veuillez renseigner ce champ"
-            },
-            publication_day: {
-                required: "Veuillez renseigner ce champ",
-                number: "Veuillez renseigner un nombre"
             },
             image: {
                 required: "Veuillez renseigner ce champ"
@@ -324,7 +303,7 @@ $(document).ready(function()
     });
 
     $('input[name=inscription]').change(function(){
-        if ($('input[name=inscription]:checked').val() == 1)
+        /*if ($('input[name=inscription]:checked').val() == 1)
         {
             $('#sub_id').rules('add',{
                 required: true
@@ -333,7 +312,7 @@ $(document).ready(function()
         else
         {
            $('#sub_id').rules('remove');
-        }
+        }*/
     });
 
     $('#publication_start').datepicker({

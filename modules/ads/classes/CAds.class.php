@@ -8,9 +8,9 @@
 
 jClasses::inc ("common~ImageWorkshop") ;
 jClasses::inc("common~CCommonTools");
-jClasses::inc("entreprise~Entreprise");
-jClasses::inc("categorie~categorie");
-jClasses::inc("categorie~souscategorie");
+jClasses::inc("entreprise~CEntreprise");
+jClasses::inc("categorie~CCategorie");
+jClasses::inc("categorie~CSouscategorie");
 
 class CAds
 {
@@ -314,7 +314,7 @@ class CAds
     // Récupération de l'Annonceur
     public function getAnnonceur()
     {
-        $oAnnonceur = Entreprise::getById($this->annonceur);
+        $oAnnonceur = CEntreprise::getById($this->annonceur);
         return $oAnnonceur; 
     }
 
@@ -398,7 +398,7 @@ class CAds
         $newSousCategorie = $toSouscategories;
         $cnx = jDb::getConnection();
         foreach ($newSousCategorie as $new) {
-            $oNewSC = Souscategorie::getById($new);
+            $oNewSC = CSouscategorie::getById($new);
             $exist = 0;
             $position = 0;
             for ($i=0; $i < sizeof($oldSousCategorie); $i++) {

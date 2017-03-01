@@ -57,7 +57,7 @@ class profileCtrl extends jController {
         
         if (jAcl2::check("profile.create") && !jAcl2::check("profile.restrictall")) {
             $zProfileName = $this->param ('nom_profil');
-            $zProfileId = CJacl2Group::createGroup($zProfileName);        
+            $zProfileId = CJacl2Group::createGroup($zProfileName);
         }
 
         $toList = array ();

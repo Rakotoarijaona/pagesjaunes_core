@@ -10,8 +10,8 @@
 jClasses::inc("ads~CAdsZone");
 jClasses::inc("ads~CAdsZonePrice");
 jClasses::inc("ads~CAdsZoneDefault");
-jClasses::inc("categorie~categorie");
-jClasses::inc("categorie~souscategorie");
+jClasses::inc("categorie~CCategorie");
+jClasses::inc("categorie~CSouscategorie");
 
 class ads_zoneCtrl extends jController {
     /**

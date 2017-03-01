@@ -64,39 +64,43 @@
                                 </thead>
                                 <tbody>
                                     {if sizeof($list) > 0}
-                                    {foreach ($list as $row )}
-                                    <tr>
-                                        <td>                                            
-                                            <div class="checkbox" style="margin: 0px">
-                                                <input type="checkbox" name="actionGroup[]" id="actionGroup{$row->iSlideshow_id}" value="{$row->iSlideshow_id}">
-                                                <label for="actionGroup{$row->iSlideshow_id}"></label>
-                                            </div>
-                                        </td>
-                                        <td><img src="{$j_basepath}{$PHOTOS_FOLDER}/{$PHOTOS_THUMBNAIL_FOLDER}/{$row->zSlideshow_visuelbackground}" style="width: 45px;height: 45px;line-height: 45px; border: 2px solid #fff;" alt="image"></td>
-                                        <td>{$row->zSlideshow_identifiant}</td>
-                                        <td>
-                                            {if (($row->iSlideshow_publicationstatus) == 1)}
-                                            publié
-                                            {else}
-                                            non publié
-                                            {/if}
-                                        </td>
-                                        <td>{$row->getEntreprise()->raisonsociale}</td>
-                                        <td>{$row->dSlideshow_creationdate}</td>
-                                        <td>
-                                            {ifacl2 "slideshow.update"}
-                                            <a href="{jurl 'slideshow~slideshow:edit', array('slideshowId'=>$row->iSlideshow_id)}">
-                                                <button type="button" class="btn btn-success btn-xs">Editer</button>
-                                            </a>
-                                            {/ifacl2}
-                                            {ifacl2 "slideshow.delete"}
-                                            <a onclick="deleteSlideshow({$row->iSlideshow_id})">
-                                                <button type="button" class="btn btn-danger btn-xs">Supprimer</button>
-                                            </a>
-                                            {/ifacl2}
-                                        </td>
-                                    </tr>
-                                    {/foreach}
+                                        {foreach ($list as $row )}
+                                        <tr>
+                                            <td>                                            
+                                                <div class="checkbox" style="margin: 0px">
+                                                    <input type="checkbox" name="actionGroup[]" id="actionGroup{$row->iSlideshow_id}" value="{$row->iSlideshow_id}">
+                                                    <label for="actionGroup{$row->iSlideshow_id}"></label>
+                                                </div>
+                                            </td>
+                                            <td><img src="{$j_basepath}{$PHOTOS_FOLDER}/{$PHOTOS_THUMBNAIL_FOLDER}/{$row->zSlideshow_visuelbackground}" style="width: 45px;height: 45px;line-height: 45px; border: 2px solid #fff;" alt="image"></td>
+                                            <td>{$row->zSlideshow_identifiant}</td>
+                                            <td>
+                                                {if (($row->iSlideshow_publicationstatus) == 1)}
+                                                publié
+                                                {else}
+                                                non publié
+                                                {/if}
+                                            </td>
+                                            <td>{$row->getEntreprise()->raisonsociale}</td>
+                                            <td>{$row->dSlideshow_creationdate}</td>
+                                            <td>
+                                                {ifacl2 "slideshow.update"}
+                                                <a href="{jurl 'slideshow~slideshow:edit', array('slideshowId'=>$row->iSlideshow_id)}">
+                                                    <button type="button" class="btn btn-success btn-xs">Editer</button>
+                                                </a>
+                                                {/ifacl2}
+                                                {ifacl2 "slideshow.delete"}
+                                                <a onclick="deleteSlideshow({$row->iSlideshow_id})">
+                                                    <button type="button" class="btn btn-danger btn-xs">Supprimer</button>
+                                                </a>
+                                                {/ifacl2}
+                                            </td>
+                                        </tr>
+                                        {/foreach}
+                                    {else}
+                                        <tr>
+                                            <td colspan="7"><div class="alert alert-info text-center">Aucun résultat</div></td>
+                                        </tr>
                                     {/if}
                                 </tbody>
                                 <tfoot>
@@ -147,7 +151,7 @@ function deleteSlideshow(id)
         cancelButtonText: "Annuler",
         closeOnConfirm: true
     }, function () {
-        window.location.assign('{/literal}{jurl "slideshow~slideshow:delete", array("slideshowId"=>$row->iSlideshow_id)}{literal}')
+        window.location.assign('{/literal}{jurl "slideshow~slideshow:delete"}{literal}?slideshowId='+id);
     });
 }
 

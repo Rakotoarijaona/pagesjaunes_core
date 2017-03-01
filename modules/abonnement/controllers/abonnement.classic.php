@@ -10,7 +10,7 @@
 
 require_once(jApp::appPath().'modules/common/controllers/jControllerRSR.php');
 
-jClasses::inc("entreprise~Entreprise");
+jClasses::inc("entreprise~CEntreprise");
 jClasses::inc("abonnement~CAbonnement");
 
 class abonnementCtrl extends jControllerRSR
@@ -98,7 +98,6 @@ class abonnementCtrl extends jControllerRSR
                 $tpl->assign("SCRIPT", jZone::get('common~script'));
                 $resp->body->assign('MAIN', $tpl->fetch('abonnement~index'));
                 $resp->body->assign('selectedMenuItem','entreprise');
-
             }
 
         } else {
@@ -122,7 +121,7 @@ class abonnementCtrl extends jControllerRSR
         if (jAcl2::check("abonnement.create")) {
 
             // entreprise
-            $entreprises = Entreprise::getList();
+            $entreprises = CEntreprise::getList();
 
             // abonnement
             $abonnement = new CAbonnement();
@@ -161,7 +160,7 @@ class abonnementCtrl extends jControllerRSR
             $abonnement_id = $this->intParam("id", null, true);
 
             // entreprise
-            $entreprises = Entreprise::getList();
+            $entreprises = CEntreprise::getList();
 
             // abonnement
             $filter = array();

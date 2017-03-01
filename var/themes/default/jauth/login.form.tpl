@@ -11,6 +11,10 @@
             <div class="alert alert-danger">{@jauth~auth.failedToLogin@}</div>
         {/if}
         {if ! $isLogged}
+            <div class="m-t">
+            {jmessage 'success'}
+            {jmessage 'danger'}
+            </div>
             <form class="m-t" role="form" action="{formurl 'jauth~login:in'}" method="post" autocomplete="off">
                 <div class="form-group">
                     <input autocomplete="off" type="text" class="form-control" placeholder="{@jauth~auth.login@}" required="" name="login" id="login" maxlength="25">

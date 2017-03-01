@@ -173,8 +173,8 @@ default=messages.log
 ;emailHeaders = "Content-Type: text/plain; charset=UTF-8\nFrom: webmaster@yoursite.com\nX-Mailer: Jelix\nX-Priority: 1 (Highest)\n"
 
 [mailer]
-webmasterEmail="root@localhost"
-webmasterName=
+webmasterEmail="rakotoarijohn@gmail.com"
+webmasterName= YWA
 
 ; How to send mail : "mail" (mail()), "sendmail" (call sendmail), "smtp" (send directly to a smtp)
 ;                   or "file" (store the mail into a file, in filesDir directory)
@@ -192,17 +192,17 @@ filesDir="mails/"
 ; if mailer = smtp , fill the following parameters
 
 ; SMTP hosts.  All hosts must be separated by a semicolon : "smtp1.example.com:25;smtp2.example.com"
-smtpHost=localhost
+smtpHost=smtp.gmail.com
 ; default SMTP server port
-smtpPort=25
+smtpPort=465
 ; secured connection or not. possible values: "", "ssl", "tls"
-smtpSecure=
+smtpSecure=ssl
 ; SMTP HELO of the message (Default is hostname)
 smtpHelo=
 ; SMTP authentication
-smtpAuth=off
-smtpUsername=
-smtpPassword=
+smtpAuth=on
+smtpUsername=ystawa@gmail.com
+smtpPassword=Ro_ysta_l;
 ; SMTP server timeout in seconds
 smtpTimeout=10
 

@@ -262,13 +262,13 @@ $(document).ready(function(){
     $('.btn-submit').click(function(){
         if(($('#urlpage').val() != '') && ($('#urlpage').val() != '[fiche]'))
         {
-            $('#urlpage').rules('add',{
+            /*$('#urlpage').rules('add',{
                 url: true,
                 messages: 
                 {
                     url:"Veuillez entrer un url valide"
                 }
-            });
+            });*/
         }
         else
         {
@@ -283,13 +283,13 @@ $(document).ready(function(){
     $('#urlpage').change(function(){
         if(($('#urlpage').val() != '') && ($('#urlpage').val() != '[fiche]'))
         {
-            $('#urlpage').rules('add',{
+            /*$('#urlpage').rules('add',{
                 url: true,
                 messages: 
                 {
                     url:"Veuillez entrer un url valide"
                 }
-            });
+            });*/
         }
         else
         {

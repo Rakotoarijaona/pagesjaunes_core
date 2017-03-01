@@ -14,7 +14,7 @@
                         <div class="desc-long">
                             {if ($oEntreprise->video_presentation_active == '1' && $oEntreprise->video_presentation != '')}
                             <h1>{$oEntreprise->raisonsociale|upper}
-                                <span>{$oEntreprise->souscategoriesListToString()}.</span>
+                                <span>{$oEntreprise->souscategoriesListToStringFiche()}</span>
                             </h1>
                             <figure class="animation">
                                 <div class="flowplayer minimal" data-ratio="0.42" data-autoplay="true">
@@ -26,17 +26,17 @@
                             <p>{$oEntreprise->activite|upper}</p>
                             {elseif ($oEntreprise->logo != '')}
                             <div class="clearfix">
-                                <figure class="logo"><img src="{$j_basepath}entreprise/images/{$oEntreprise->logo}"></figure>
+                                <figure class="logo"><img src="{$j_basepath}entreprise/images/{$oEntreprise->logo}" alt="{$oEntreprise->logo}" title="{$oEntreprise->logo}"></figure>
                                 <h1>{$oEntreprise->raisonsociale|upper}
-                                    <span>{$oEntreprise->souscategoriesListToString()}.</span>
+                                    <span>{$oEntreprise->souscategoriesListToStringFiche()}</span>
                                 </h1>
                                 <p>{$oEntreprise->activite|upper}</p>
                             </div>
                             {else}
                             <div class="clearfix">
-                                <figure class="logo"><img src="{$j_basepath}icones/{$oEntreprise->getCategorieIcon()}"></figure>
+                                <figure class="logo"><img src="{$j_basepath}icones/{$oEntreprise->getCategorieIcon()}" alt="{$oEntreprise->getCategorieIcon()}" title="{$oEntreprise->getCategorieIcon()}"></figure>
                                 <h1>{$oEntreprise->raisonsociale|upper}
-                                    <span>{$oEntreprise->souscategoriesListToString()}.</span>
+                                    <span>{$oEntreprise->souscategoriesListToStringFiche()}</span>
                                 </h1>
                                 <p>{$oEntreprise->activite|upper}</p>
                             </div>
@@ -80,7 +80,7 @@
                             {/if}
                             {if sizeof ($oEntreprise->getMarqueList())>0}
                             <div class="service-wrapper">
-                                <h3>Produits</h3>
+                                <h3>Marques</h3>
                                 <ul>
                                 {for ($i=0; $i<sizeof($oEntreprise->getMarqueList());$i++)}
                                     {if ($i!=0 && $i%3 == 0)}
@@ -213,7 +213,7 @@
                                                 <div class="col-sm-10">
                                                     <div class="clearfix">
                                                         <figure>
-                                                            <img src="{$j_basepath}entreprise/produits/{$oCatalogue->image_produit}">
+                                                            <img src="{$j_basepath}entreprise/produits/{$oCatalogue->image_produit}" alt="{$oCatalogue->image_produit}" title="{$oCatalogue->image_produit}">
                                                         </figure>
                                                         <div class="infos">
                                                             <h3>{$oCatalogue->nom_produit|upper}</h3>
@@ -233,7 +233,7 @@
                                             <div class="catalog-detail" id="product_detail{$oCatalogue->id}">
                                                 <div class="row">
                                                     <div class="col-sm-4">
-                                                        <figure><img src="{$j_basepath}entreprise/produits/{$oCatalogue->image_produit}"></figure>
+                                                        <figure><img src="{$j_basepath}entreprise/produits/{$oCatalogue->image_produit}" alt="{$oCatalogue->image_produit}" title="{$oCatalogue->image_produit}"></figure>
                                                     </div>
                                                     <div class="col-sm-8">
                                                         <h3>{$oCatalogue->nom_produit|upper}</h3>
@@ -270,7 +270,7 @@
                 <h2><i class="fa fa-film"></i> Vidéos</h2>
                 <div class="owl-carousel owl-theme video-list owl-loaded owl-drag">
                     {foreach($oEntreprise->getVideosYoutubeList() as  $video)}
-                    <div class="item"><a href="{$video->url_youtube}" class="video-th"><img src="{$j_basepath}entreprise/vignetteYoutube/{$video->vignette_video}" width="200" height="145"></a></div>       
+                    <div class="item"><a href="{$video->url_youtube}" class="video-th"><img src="{$j_basepath}entreprise/vignetteYoutube/{$video->vignette_video}" width="200" height="145" alt="{$video->vignette_video}" title="{$video->vignette_video}"></a></div>
                     {/foreach}
                 </div>
             </div>
@@ -280,8 +280,8 @@
             <div class="bloc-media">
                 <h2><i class="fa fa-camera-retro"></i> Galérie photos</h2>
                 <div class="owl-carousel owl-theme">
-                    {foreach($oEntreprise->getImagesGalerieList() as  $image)}             
-                        <div class="item"><a class="fancybox" rel="gallery1" href="{$j_basepath}{$PHOTOS_FOLDER}/{$PHOTOS_BIG_FOLDER}/{$image->image}"><img src="{$j_basepath}{$PHOTOS_FOLDER}/{$PHOTOS_THUMBNAIL_FOLDER}/{$image->image}" width="145" height="145"></a></div>
+                    {foreach($oEntreprise->getImagesGalerieList() as  $image)}
+                        <div class="item"><a class="fancybox" rel="gallery1" href="{$j_basepath}{$PHOTOS_FOLDER}/{$PHOTOS_BIG_FOLDER}/{$image->image}"><img src="{$j_basepath}{$PHOTOS_FOLDER}/{$PHOTOS_THUMBNAIL_FOLDER}/{$image->image}" width="145" height="145" alt="{$image->image}" title="{$image->image}"></a></div>
                     {/foreach}
                 </div>
             </div>

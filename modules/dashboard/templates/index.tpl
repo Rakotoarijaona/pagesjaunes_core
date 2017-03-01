@@ -24,7 +24,7 @@
                     <h1 class="no-margins">{$nbAvecInfoPayant}</h1>
                     <div class="stat-percent font-bold text-success">{$pAvecInfoPayant}%</div>
                     <small>Avec au moins un info payante </small>
-                    <a target="_blank" href="{jurl 'entreprise~entreprise:index'}" class="stat-view-more"><small>En savoir plus</small></a>
+                    <a target="_blank" href="{jurl 'entreprise~entreprise:index', array('filtreInfo'=>3)}" class="stat-view-more"><small>En savoir plus</small></a>
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
                     <h1 class="no-margins">{$nbAvecInfoComp}</h1>
                     <div class="stat-percent font-bold text-success">{$pAvecInfoComp}%</div>
                     <small>Avec au moins un info complémentaire </small>
-                    <a target="_blank" href="{jurl 'entreprise~entreprise:index'}" class="stat-view-more"><small>En savoir plus</small></a>
+                    <a target="_blank" href="{jurl 'entreprise~entreprise:index', array('filtreInfo'=>2)}" class="stat-view-more"><small>En savoir plus</small></a>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
                     <h1 class="no-margins">{$nbAvecInfoSimple}</h1>
                     <div class="stat-percent font-bold text-success">{$pAvecInfoSimple}%</div>
                     <small>Avec seulement des infos simples </small>
-                    <a target="_blank" href="{jurl 'entreprise~entreprise:index'}" class="stat-view-more"><small>En savoir plus</small></a>
+                    <a target="_blank" href="{jurl 'entreprise~entreprise:index', array('filtreInfo'=>1)}" class="stat-view-more"><small>En savoir plus</small></a>
                 </div>
             </div>
         </div>
@@ -60,6 +60,17 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Evolution des inscriptions</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-lg-12">
@@ -71,7 +82,7 @@
                 </div>
             </div>
         </div>
-    </div>      
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
@@ -97,15 +108,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {if sizeof($toLastInserted)}
+                        {if sizeof($toLastInserted)>0}
                         {foreach ($toLastInserted as $oEntreprise)}
                         <tr>
-                            <td><strong>{$oEntreprise->raisonsociale|upper}</strong></td>
+                            <td><a target="_blank" href="{jurl 'entreprise~entreprise:edition', array('id'=>$oEntreprise->id)}"><strong>{$oEntreprise->raisonsociale|upper}</strong></a></td>
                             <td>{$oEntreprise->souscategoriesListToString()}</td>
                             <td>{$oEntreprise->getDateCreation()}</td>
                             {if ($oEntreprise->video_presentation_active == 1) || ($oEntreprise->qui_sommes_nous_active == 1) || ($oEntreprise->nos_services_active == 1) || ($oEntreprise->nos_references_active == 1) || ($oEntreprise->videos_active == 1) || ($oEntreprise->galerie_image_active == 1) || ($oEntreprise->catalogue_active == 1)}
                             <td class="text-success">infos payantes</td>
-                            {elseif (sizeof($oEntreprise->getServiceList()>0) || sizeof($oEntreprise->getProduitList()>0) || sizeof($oEntreprise->getMarqueList()>0))}
+                            {elseif (sizeof($oEntreprise->getServiceList())>0 || sizeof($oEntreprise->getProduitList())>0 || sizeof($oEntreprise->getMarqueList())>0)}
                             <td class="text-info">infos complémentaires</td>
                             {else}
                             <td class="text-warning">infos simples</td>

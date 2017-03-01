@@ -344,9 +344,6 @@
                                                 <div class="form-group">
                                                     <label>Vignette youtube</label>
                                                     <div class="fileupload fileupload-new vignette-fileupload" data-provides="fileupload">
-                                                        <div class="fileupload-new thumbnail" style="width: 189px; max-height: 137px">
-                                                            <img src="" id="vignette-thumbnail" alt="" />
-                                                        </div>
                                                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 189px; max-height: 137px; line-height: 10px"></div>
                                                         <div>
                                                             <span class="btn btn-default btn-file">
@@ -376,7 +373,7 @@
                                         <div class="col-md-8 bloc-media">
                                             <div class="row m-b-5">
                                                 <div class="col-lg-12 text-right">
-                                                    <a onclick="clearVideoForm();" class="btn btn-primary">
+                                                    <a onclick="clearVideoForm();" class="btn btn-default">
                                                         Ajouter
                                                     </a>
                                                 </div>
@@ -573,7 +570,7 @@
                                         <div class="col-lg-7">
                                             <div class="row m-b-5">
                                                 <div class="col-lg-12 text-right">
-                                                    <a onclick="clearCatalogueForm();" class="btn btn-primary">
+                                                    <a onclick="clearCatalogueForm();" class="btn btn-default">
                                                         Ajouter
                                                     </a>
                                                 </div>

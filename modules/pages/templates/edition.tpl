@@ -89,6 +89,7 @@
 $(document).ready(function()
 {
     CKEDITOR.replace('pagescontent');
+    CKEDITOR.config.contentsCss = '{/literal}{$j_basepath}{literal}frontlibraries/stylesheets/styles_pagesjaunes.css' ; 
     
     $('#updatepagesform').validate({        
         rules: {

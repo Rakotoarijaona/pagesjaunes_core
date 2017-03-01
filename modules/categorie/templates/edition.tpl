@@ -20,15 +20,7 @@
 
 <div class="wrapper wrapper-content animated fadeIn">
                       
-    {if (isset ($messageSuccess))}
-    {foreach ($messageSuccess as $message)}
-    <div class="row">
-        <div class="col-lg-6">   
-            <div class="r-alert r-alert-success"><em>{$message}</em></div>
-        </div>
-    </div>
-    {/foreach}
-    {/if}
+    {jmessage}
     <div class="row">
         <div class="col-lg-6">
             <div class="ibox float-e-margins">

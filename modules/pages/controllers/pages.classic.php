@@ -28,7 +28,7 @@ class pagesCtrl extends jController {
     function index() {
         $resp = $this->getResponse('html');
         if (!jAcl2::check("pages.restrictall")) { //Test droit restrict all
-            $tpl = new jTpl();        
+            $tpl = new jTpl();
             
             $toPages = CPages::getList();
 

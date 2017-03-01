@@ -1,6 +1,10 @@
+<!-- pacer -->
+<script src="{$j_basepath}frontlibraries/javascripts/pace/pace.min.js" type="text/javascript"></script>
+
 <script src="{$j_basepath}frontlibraries/javascripts/jquery-2.1.1.js"></script>
 <script src="{$j_basepath}frontlibraries/javascripts/jquery-ui.custom.min.js"></script>
 <script src="{$j_basepath}frontlibraries/javascripts/jquery-ui-1.10.4.min.js"></script>
+
 <!-- Jquery Validate -->
 <script src="{$j_basepath}adminlibraries/js/plugins/validate/jquery.validate.min.js"></script>
 <script src="{$j_basepath}adminlibraries/js/plugins/validate/additional-methods.js"></script>
@@ -69,7 +73,7 @@ $(document).ready(function()
         placeholder: 'Entreprise, produit, marque, région, adresse, téléphone',
         tags: true,
         tokenSeparators: [','],
-        minimumInputLength: 3,
+        minimumInputLength: 2,
         ajax: {
             dataType: 'json',
             url: {/literal}{urljsstring 'front_office~default:autoComplSearch'}{literal},
@@ -82,8 +86,16 @@ $(document).ready(function()
             }
         },
     });
-
 });
+
+Pace.options = {
+  ajax: false,
+  document: false,
+  eventLag: false,
+  elements: {
+    selectors: ['.form-search']
+  }
+};
 
 {/literal}
 </script>

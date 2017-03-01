@@ -21,52 +21,70 @@
                     <h2>Statistiques</h2>
                 </div>
                 <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group r-form">
-                                <label class="control-label">Date début</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control required pointer" name="filtre_datedebut" id="filtre_datedebut" data-msg-required="Veuillez renseigner la date début" readonly placeholder="Veuillez cliquez içi pour choisir la date" value="">
-                                    <span class="input-group-btn">
-                                        <a href="javascript:;" onclick="return clearDate(this);" class="btn btn-white">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </span>
+                    <form method="GET" action="{jurl 'ads~ads:statistiques'}">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group r-form">
+                                    <label class="control-label">Date début</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control required pointer" name="filtre_datedebut" id="filtre_datedebut" data-msg-required="Veuillez renseigner la date début" readonly placeholder="Veuillez cliquez içi pour choisir la date" value="{if !empty($dateDebut)}{$dateDebut}{/if}">
+                                        <span class="input-group-btn">
+                                            <a href="javascript:;" onclick="return clearDate(this);" class="btn btn-white">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group r-form">
+                                    <label class="control-label">Date fin</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control required pointer" name="filtre_datefin" id="filtre_datefin" data-msg-required="Veuillez renseigner la date fin" readonly placeholder="Veuillez cliquez içi pour choisir la date" value="{if !empty($dateFin)}{$dateFin}{/if}">
+                                        <span class="input-group-btn">
+                                            <a href="javascript:;" onclick="return clearDate(this);" class="btn btn-white">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group r-form">
+                                    <label class="control-label">ID Annonce</label>
+                                    <select name="annonce_id" id="annonce_id" class="form-control required" data-msg-required="Veuillez choisir une ID">
+                                        {if !empty($idAnnonce)}
+                                            <option value="{$idAnnonce}" selected >{$idAnnonce}</option>
+                                        {/if}
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group r-form">
-                                <label class="control-label">Date fin</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control required pointer" name="filtre_datefin" id="filtre_datefin" data-msg-required="Veuillez renseigner la date fin" readonly placeholder="Veuillez cliquez içi pour choisir la date" value="">
-                                    <span class="input-group-btn">
-                                        <a href="javascript:;" onclick="return clearDate(this);" class="btn btn-white">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </span>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <div class="form-group r-form">
+                                    <button type="submit" class="btn btn-white" style="width: 30%; min-width:150px"><span class="text-success">Filtrer les résultats</span></button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group r-form">
-                                <label class="control-label">ID Annonce</label>
-                                <select name="annonce_id" id="annonce_id" class="form-control required" data-msg-required="Veuillez choisir une ID">
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <div class="form-group r-form">
-                                <button class="btn btn-white" style="width: 30%; min-width:150px"><span class="text-success">Filtrer les résultats</span></button>
-                            </div>
-                        </div>                        
-                    </div>                          
+                    </form>
                     <div class="col-lg-12 hr-line-dashed"></div>
                     <div class="row">
                         <div class="col-md-12">
                             <h3>LISTE DES STATISTIQUES</h3>
+                            {if (isset($oAdsPurchase))}
+                                <div class="row">
+                                    <div class="col-md-12 text-left">
+                                        <div class="form-group r-form">
+                                            <strong>Id de l'annonce:</strong> {$oAdsPurchase->id}<br/>
+                                            <strong>Type:</strong> {$oAdsPurchase->getZone()->name} <br/>
+                                            {if ($oAdsPurchase->website_url != '')}
+                                                <strong>Url :</strong> {$oAdsPurchase->website_url}<br/>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            {/if}
                             <div class="table-responsive" id="stats-list">
                                 <table class="footable table table-hover" data-page-size="18" data-filter="#table-filter">
                                     <thead>
@@ -80,91 +98,57 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {if sizeof($toListAds) > 0}
-                                            {foreach ($toListAds as $oAds)}
+                                        {if sizeof($toStat['item']) > 0}
+                                            {foreach ($toStat['item'] as $id=>$oStat)}
                                                 <tr>
                                                     <td>
-                                                        {$oAds->id}
+                                                        {$id}
                                                     </td>
                                                     <td>
-                                                        {$oAds->advertiser_name}
-                                                        {if $oAds->advertiser_mail != ''}
-                                                            <br/><small>{$oAds->advertiser_mail}</small>
-                                                        {/if}
+                                                        {$oStat['tc']}
                                                     </td>
                                                     <td>
-                                                        {$oAds->getZone()->name}
-                                                        <br/><small>{$oAds->getZone()->width} x {$oAds->getZone()->height}</small>
+                                                        {$oStat['tv']}
                                                     </td>
                                                     <td>
-                                                        <strong>Début:</strong> {$oAds->getPublicationStart()} <br/>
-                                                        <strong>Fin:</strong> {$oAds->getPublicationEnd()}
+                                                        {$oStat['ctr']}
                                                     </td>
                                                     <td>
-                                                        {$oAds->price}
-                                                        {$oAds->currency}
-                                                        <br/>
-                                                        {if ($oAds->payment_status == 1)}
-                                                            <strong><span class="text-success">Payé</span></strong>
-                                                        {elseif ($oAds->payment_status == 2)}
-                                                            <strong><span class="text-warning">Non payé</span></strong>
-                                                        {elseif ($oAds->payment_status == 3)}
-                                                            <strong><span class="text-danger">Invalide</span></strong>
-                                                        {/if}
-
+                                                        {$oStat['cpm']}
                                                     </td>
                                                     <td>
-                                                        <a href="{$j_basepath}publicites/big/{$oAds->banner}" title="{$oAds->banner}" target="_blank"><img src="{$j_basepath}publicites/thumbnail/{$oAds->banner}" alt="image"></a>
-                                                    </td>
-                                                    <td>
-                                                        {if ($oAds->status == 1)}
-                                                            <strong><span class="text-warning">En attente</span></strong>
-                                                        {elseif ($oAds->status == 2)}
-                                                            <strong><span class="text-success">Approuvé</span></strong>
-                                                        {elseif ($oAds->status == 3)}
-                                                            <strong><span class="text-danger">Rejeté</span></strong>
-                                                        {elseif ($oAds->status == 4)}
-                                                            <strong><span class="text-danger">Expiré</span></strong>
-                                                        {elseif ($oAds->status == 5)}
-                                                            <strong><span class="text-info">Réservé</span></strong>
-                                                        {/if}
-                                                    </td>
-                                                    <td>
-                                                        {ifacl2 "ads.update"}
-                                                        <a href="{jurl 'ads~ads:set_expired', array('id'=>$oAds->id)}" class="btn btn-warning btn-xs btn-block">Expiré</a>
-                                                        {/ifacl2}
-                                                        {ifacl2 "ads.update"}
-                                                        <a href="{jurl 'ads~ads:stats_info', array('id'=>$oAds->id)}" class="btn btn-info btn-xs btn-block">Stats</a>
-                                                        {/ifacl2}
-                                                        {ifacl2 "ads.update"}
-                                                        <a href="{jurl 'ads~ads:copier_annonceur', array('id'=>$oAds->id)}" class="btn btn-success btn-xs btn-block">Copier</a>
-                                                        {/ifacl2}
-                                                        {ifacl2 "ads.update"}
-                                                        <a href="{jurl 'ads~ads:editer_annonceur', array('id'=>$oAds->id)}" class="btn btn-warning btn-xs btn-block">Editer</a>
-                                                        {/ifacl2}
-                                                        {ifacl2 "ads.delete"}
-                                                        <a href="{jurl 'ads~ads:supprimer_annonce', array('id'=>$oAds->id)}" class="btn btn-danger btn-xs btn-block">Supprimer</a>
-                                                        {/ifacl2}
+                                                        {$oStat['cpc']}
                                                     </td>
                                                 </tr>
                                             {/foreach}
                                         {else}
-                                        <tr>
-                                            <td colspan ="8">
-                                                <div class="alert alert-info text-center">Aucuns résultats</div>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td colspan ="8">
+                                                    <div class="alert alert-info text-center">Aucuns résultats</div>
+                                                </td>
+                                            </tr>
                                         {/if}
                                     </tbody>
                                     <tfoot>
-                                        <tr>
-                                            <td>Totals</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0,00%</td>
-                                            <td>0,00%</td>
-                                            <td>0,00%</td>
-                                        </tr>
+                                        {if sizeof($toStat['total']) > 0}
+                                            <tr>
+                                                <td>Totals</td>
+                                                <td>{$toStat['total']['tc']}</td>
+                                                <td>{$toStat['total']['tv']}</td>
+                                                <td>{$toStat['total']['ctr']}</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </tr>
+                                        {else}
+                                            <tr>
+                                                <td>Totals</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>0,00%</td>
+                                                <td>0,00%</td>
+                                                <td>0,00%</td>
+                                            </tr>
+                                        {/if}
                                     </tfoot>
                                 </table>
                             </div>

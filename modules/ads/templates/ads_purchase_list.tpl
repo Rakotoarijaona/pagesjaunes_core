@@ -87,8 +87,12 @@
                                                 {/if}
                                             </td>
                                             <td>
+                                                {if !empty($oAds->getPublicationStart())}
                                                 <strong>Début:</strong> {$oAds->getPublicationStart()} <br/>
                                                 <strong>Fin:</strong> {$oAds->getPublicationEnd()}
+                                                {else}
+                                                Permanent
+                                                {/if}
                                             </td>
                                             <td>
                                                 {$oAds->price}
@@ -124,7 +128,7 @@
                                                 <a href="{jurl 'ads~ads:set_expired', array('id'=>$oAds->id)}" class="btn btn-warning btn-xs btn-block">Expiré</a>
                                                 {/ifacl2}
                                                 {ifacl2 "ads.update"}
-                                                <a href="{jurl 'ads~ads:stats_info', array('id'=>$oAds->id)}" class="btn btn-info btn-xs btn-block">Stats</a>
+                                                <a href="{jurl 'ads~ads:statistiques', array('annonce_id'=>$oAds->id)}" class="btn btn-info btn-xs btn-block">Stats</a>
                                                 {/ifacl2}
                                                 {ifacl2 "ads.update"}
                                                 <a href="{jurl 'ads~ads:copier_annonceur', array('id'=>$oAds->id)}" class="btn btn-success btn-xs btn-block">Copier</a>
@@ -140,7 +144,7 @@
                                     {/foreach}
                                 {else}
                                 <tr>
-                                    <td colspan ="8">
+                                    <td colspan ="9">
                                         <div class="alert alert-info text-center">Aucuns résultats</div>
                                     </td>
                                 </tr>
@@ -148,7 +152,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="8">
+                                    <td colspan="9">
                                         <ul class="pagination pull-right"></ul>
                                     </td>
                                 </tr>

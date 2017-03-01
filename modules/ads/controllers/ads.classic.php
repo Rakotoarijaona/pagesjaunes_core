@@ -6,10 +6,10 @@
 * @copyright R
 * @license    All rights reserved
 */
-jClasses::inc("entreprise~Entreprise");
-jClasses::inc("categorie~categorie");
-jClasses::inc("categorie~souscategorie");
-jClasses::inc("catalogue~Catalogue");
+jClasses::inc("entreprise~CEntreprise");
+jClasses::inc("categorie~CCategorie");
+jClasses::inc("categorie~CSouscategorie");
+jClasses::inc("catalogue~CCatalogue");
 jClasses::inc("common~CCommonTools");
 jClasses::inc("common~CPhotosUpload");
 jClasses::inc("ads~CAds");
@@ -138,7 +138,7 @@ class adsCtrl extends jController {
 
             // Liste des categories
             $oListCategorie = array();
-            $oList = Categorie::getList();
+            $oList = CCategorie::getList();
             $i = 0;
             foreach ($oList as $categorie) {
                 $oListCategorie[$i]['categorie'] = $categorie;
@@ -169,7 +169,7 @@ class adsCtrl extends jController {
             $status             = $this->param('status','');
             $no_follow          = $this->param('no_follow','');
             $stats_tracking     = $this->param('stats_tracking','');
-            $price              = $this->param('price','');
+            $price              = $this->param('price',0);
             $currency           = $this->param('currency','');
             $payment_method     = $this->param('payment_method','');
             $payment_status     = $this->param('payment_status','');
@@ -185,10 +185,8 @@ class adsCtrl extends jController {
 
         
             if (($advertiser_id != '') && ($type_zone != '') && 
-                ($status != '') && ($price != '') && ($currency != '') && 
-                ($payment_method != '') && ($payment_status != '') && 
-                (($inscription == 1 && $sub_id != '') || $inscription == 0) && ($cost_model != '') && 
-                ($publication_start != '') && ($publication_day != '') && (isset($_FILES['image'])))
+                ($status != '') && ($currency != '') && 
+                ($payment_method != '') && ($payment_status != '') && ($cost_model != '') && (isset($_FILES['image'])))
             {
 
                 $oAdsPurchase = new CAdsPurchase();
@@ -209,8 +207,15 @@ class adsCtrl extends jController {
                     $oAdsPurchase->charging_model       = $cost_model;
 
                     $dt = new jDateTime();
-                    $dt->setFromString($publication_start, jDateTime::LANG_DFORMAT);
-                    $oAdsPurchase->publication_start    = $dt->toString(jDateTime::DB_DFORMAT);
+                    if ($publication_start != '')
+                    {
+                        $dt->setFromString($publication_start, jDateTime::LANG_DFORMAT);
+                        $oAdsPurchase->publication_start    = $dt->toString(jDateTime::DB_DFORMAT);
+                    }
+                    else
+                    {
+                        $oAdsPurchase->publication_start    = '';
+                    }
 
                     $oAdsPurchase->publication_day      = $publication_day;
                     $oAdsPurchase->uploadImage('image', $type_zone);
@@ -292,7 +297,7 @@ class adsCtrl extends jController {
 
                 // Liste des categories
                 $oListCategorie = array();
-                $oList = Categorie::getList();
+                $oList = CCategorie::getList();
                 $i = 0;
                 foreach ($oList as $categorie) {
                     $oListCategorie[$i]['categorie'] = $categorie;
@@ -381,13 +386,10 @@ class adsCtrl extends jController {
             $alt_text           = $this->param('alt_text','');
             $categorie_filtre   = $this->param('categorie_filtre','');
             $sub_id             = $this->param('sub_id','');
-
         
             if (($id != '') && ($advertiser_id != '') && ($type_zone != '') && 
                 ($status != '') && ($price != '') && ($currency != '') && 
-                ($payment_method != '') && ($payment_status != '') && 
-                (($inscription == 1 && $sub_id != '') || $inscription == 0) && ($cost_model != '') && 
-                ($publication_start != '') && ($publication_day != ''))
+                ($payment_method != '') && ($payment_status != '') && ($cost_model != ''))
             {
 
                 $oAdsPurchase = CAdsPurchase::getById($id);
@@ -405,10 +407,18 @@ class adsCtrl extends jController {
                 $oAdsPurchase->charging_model       = $cost_model;
 
                 $dt = new jDateTime();
-                $dt->setFromString($publication_start, jDateTime::LANG_DFORMAT);
-                $oAdsPurchase->publication_start    = $dt->toString(jDateTime::DB_DFORMAT);
+                if ($publication_start != '')
+                {
+                    $dt->setFromString($publication_start, jDateTime::LANG_DFORMAT);
+                    $oAdsPurchase->publication_start    = $dt->toString(jDateTime::DB_DFORMAT);
+                }
+                else
+                {
+                    $oAdsPurchase->publication_start    = '';
+                }
 
                 $oAdsPurchase->publication_day      = $publication_day;
+
                 if ($_FILES['image']['name'] != '')
                 {
                     $oAdsPurchase->uploadImage('image', $type_zone);
@@ -429,7 +439,6 @@ class adsCtrl extends jController {
                         $oAdsPurchase->souscategorie_id = trim($filtre[1]);
                     } 
                 }
-
                 $oAdsPurchase->update();
                 jMessage::add(jLocale::get("ads~ads.update.success").' (id = '.$id.')', "success");
             } else {
@@ -597,10 +606,23 @@ class adsCtrl extends jController {
         $resp = $this->getResponse('html');
         if (!jAcl2::check("ads.restrictall")) 
         { //Test droit restrict all
-            $tpl = new jTpl();
-            $oAdsStat = new CAdsStat();
-            print_r($oAdsStat->getStatOverview());
-            die;
+            $tpl        = new jTpl();
+            $ads_id     = $this->param('annonce_id', '');
+            $date_debut = $this->param('filtre_datedebut', '');
+            $date_fin   = $this->param('filtre_datefin', '');
+            if ($ads_id != '')
+            {
+                $oAdsPurchase = CAdsPurchase::getById($ads_id);
+                $tpl->assign("oAdsPurchase", $oAdsPurchase);
+            }
+            $oAdsStat     = new CAdsStat($ads_id, $date_debut, $date_fin);
+            $toStat     = $oAdsStat->getStatOverview();
+
+            $tpl->assign("idAnnonce", $ads_id);
+            $tpl->assign("dateDebut", $date_debut);
+            $tpl->assign("dateFin", $date_fin);
+            $tpl->assign("toStat", $toStat);
+
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $resp->body->assign('MAIN', $tpl->fetch('ads~ads_stats'));
             $resp->body->assign('selectedMenuItem','ads');

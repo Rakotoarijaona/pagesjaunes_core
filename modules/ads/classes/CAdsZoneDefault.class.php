@@ -8,8 +8,8 @@
 
 jClasses::inc("common~CCommonTools");
 jClasses::inc ("common~ImageWorkshop") ;
-jClasses::inc("categorie~categorie");
-jClasses::inc("categorie~souscategorie");
+jClasses::inc("categorie~CCategorie");
+jClasses::inc("categorie~CSouscategorie");
 
 class CAdsZoneDefault
 {
@@ -372,14 +372,14 @@ class CAdsZoneDefault
     // Get souscategorie object by id
     public function getSouscategorie()
     {
-        $oSouscategorie = Souscategorie::getById($this->souscategorie_id);
+        $oSouscategorie = CSouscategorie::getById($this->souscategorie_id);
         return $oSouscategorie;
     }
 
     // Get categorie object by id
     public function getCategorie()
     {
-        $oCategorie = Categorie::getById($this->categorie_id);
+        $oCategorie = CCategorie::getById($this->categorie_id);
         return $oCategorie;
     }
 

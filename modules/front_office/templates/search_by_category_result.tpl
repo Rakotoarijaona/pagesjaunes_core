@@ -32,11 +32,11 @@
                         {foreach $toEntreprise as $oEntreprise}
                         <li>
                             <div class="result-item clearfix">
-                                <a href="{jurl 'front_office~default:fiche_details', array('entreprise' => $oEntreprise->id)}">
+                                <a href="{jurl 'front_office~default:fiche_details', array('entreprise' => $oEntreprise->id)}" title="{$oEntreprise->raisonsociale|upper}">
                                     {if $oEntreprise->logo != ''}
-                                    <figure><img src="{$j_basepath}entreprise/images/{$oEntreprise->logo}"></figure>
+                                    <figure><img src="{$j_basepath}entreprise/images/{$oEntreprise->logo}" alt="{$oEntreprise->logo}" title="{$oEntreprise->logo}"></figure>
                                     {else}
-                                    <figure><img src="{$j_basepath}icones/{$oEntreprise->getCategorieIcon()}"></figure>
+                                    <figure><img src="{$j_basepath}icones/{$oEntreprise->getCategorieIcon()}" alt="{$oEntreprise->getCategorieIcon()}" title="{$oEntreprise->getCategorieIcon()}"></figure>
                                     {/if}
                                     <div class="infos">
                                         <h3>{$oEntreprise->raisonsociale|upper}</h3>
@@ -60,7 +60,7 @@
                                     <i class="fa fa-globe"></i>
                                     {/if}
                                 </p>
-                                <a href="{jurl 'front_office~default:fiche_details', array('entreprise' => $oEntreprise->id)}" class="btn btn-default"><i class="fa fa-phone"></i> Contactez</a>
+                                <a href="{jurl 'front_office~default:fiche_details', array('entreprise' => $oEntreprise->id)}" class="btn btn-default" title="Contactez"><i class="fa fa-phone"></i> Contactez</a>
                             </div>
                         </li>
                         {/foreach}

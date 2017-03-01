@@ -10,7 +10,7 @@
 jClasses::inc("slideshow~CSlideshow");
 jClasses::inc("common~CCommonTools");
 jClasses::inc("common~CPhotosUpload");
-jClasses::inc("entreprise~Entreprise");
+jClasses::inc("entreprise~CEntreprise");
 class slideshowCtrl extends jController {
     
     public function index() {
@@ -18,7 +18,7 @@ class slideshowCtrl extends jController {
         $tpl = new jTpl();
 
         if (jAcl2::check("slideshow.list") && !(jAcl2::check("slideshow.restrictall"))) { //test jAcl
-            $list = Slideshow::getList();
+            $list = CSlideshow::getList();
 
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $tpl->assign('list', $list);
@@ -41,7 +41,7 @@ class slideshowCtrl extends jController {
             $resp = $this->getResponse('html');
             $tpl = new jTpl();
             $tpl->assign("SCRIPT", jZone::get('common~script'));
-            $toEntreprise = Entreprise::getList();
+            $toEntreprise = CEntreprise::getList();
             $tpl->assign('toEntreprise', $toEntreprise);
             $resp->body->assign('MAIN', $tpl->fetch('slideshow~add.form'));
         }
@@ -56,13 +56,13 @@ class slideshowCtrl extends jController {
     public function save_add() {        
         if (jAcl2::check("slideshow.create") && !(jAcl2::check("slideshow.restrictall"))) { //test jAcl
             $resp = $this->getResponse('redirect');
-            $slideshow = new Slideshow();
+            $slideshow = new CSlideshow();
             $error = 0;
             if ($this->param('slidename') != '' && $this->param('radioimageseul') != '' && isset ($_FILES) && $this->param('radiopublie') != '')
             {
                 $slideshow->zSlideshow_identifiant = $this->param('slidename');
                 $namealias = CCommonTools::generateAlias ($slideshow->zSlideshow_identifiant);
-                if (Slideshow::ifNameExist($namealias) == 0)
+                if (CSlideshow::ifNameExist($namealias) == 0)
                 {
                     $slideshow->zSlideshow_namealias = $namealias;
                             
@@ -135,7 +135,12 @@ class slideshowCtrl extends jController {
             $resp = $this->getResponse('redirect');
             if ($this->param('slideshowId') != '')
             {
-                Slideshow::delete($this->param('slideshowId'));
+                $slideshow = CSlideshow::getById($this->param('slideshowId'));
+                //delete old file
+                unlink(PHOTOS_FOLDER."/".PHOTOS_MEDIUM_FOLDER."/".$slideshow->zSlideshow_visuelbackground);
+                unlink(PHOTOS_FOLDER."/".PHOTOS_BIG_FOLDER."/".$slideshow->zSlideshow_visuelbackground);
+                unlink(PHOTOS_FOLDER."/".PHOTOS_THUMBNAIL_FOLDER."/".$slideshow->zSlideshow_visuelbackground);
+                CSlideshow::delete($this->param('slideshowId'));
                 jMessage::add(jLocale::get("slideshow~slideshow.delete.success"), "danger");
             }
             $resp->action = 'slideshow~slideshow:index';
@@ -156,13 +161,13 @@ class slideshowCtrl extends jController {
         if (jAcl2::check("slideshow.update") && !(jAcl2::check("slideshow.restrictall"))) { //test jAcl
             if ($slideshowId != '')
             {
-                $slideshow = Slideshow::getById($slideshowId);
+                $slideshow = CSlideshow::getById($slideshowId);
                 if ($slideshow != null) {
                     $resp = $this->getResponse('html');
                     $tpl = new jTpl();
                     $tpl->assign("SCRIPT", jZone::get('common~script'));
                     $photosFolderPath = PHOTOS_FOLDER.'/'.PHOTOS_MEDIUM_FOLDER.'/';
-                    $toEntreprise = Entreprise::getList();
+                    $toEntreprise = CEntreprise::getList();
                     $tpl->assign('toEntreprise', $toEntreprise);
                     $tpl->assign('photosFolderPath',$photosFolderPath);
                     $tpl->assign('slideshow', $slideshow);
@@ -202,14 +207,14 @@ class slideshowCtrl extends jController {
             $errors = 0;
             if (!empty($slideshowId) && !empty($this->param('slidename')))
             {
-                $oldSlideshow = Slideshow::getById($slideshowId);
+                $oldSlideshow = CSlideshow::getById($slideshowId);
                 if (!empty($oldSlideshow->iSlideshow_id))
                 {
                     $oldSlideshow->zSlideshow_identifiant = $this->param('slidename');
 
                     $namealias = CCommonTools::generateAlias ($oldSlideshow->zSlideshow_identifiant);
 
-                    if (Slideshow::ifUpdateNameExist($oldSlideshow->iSlideshow_id, $namealias) == 0)
+                    if (CSlideshow::ifUpdateNameExist($oldSlideshow->iSlideshow_id, $namealias) == 0)
                     {
                         $oldSlideshow->zSlideshow_namealias = $namealias;
 
@@ -305,7 +310,7 @@ class slideshowCtrl extends jController {
                 {
                     $count = 0;
                     foreach ($actionGroup as $slideshowId) {
-                        Slideshow::delete($slideshowId);
+                        CSlideshow::delete($slideshowId);
                         $count += 1; 
                     }
                     if ($count<1) jMessage::add('aucun Slideshow supprimé','delete');
@@ -336,7 +341,7 @@ class slideshowCtrl extends jController {
         $name = $this->param('name');
         $namealias = CCommonTools::generateAlias ($name);
         $valid = "true";
-        if (Slideshow::ifNameExist($namealias) == 1)
+        if (CSlideshow::ifNameExist($namealias) == 1)
         {
             $valid = "false";
         }
@@ -351,7 +356,7 @@ class slideshowCtrl extends jController {
         $name = $this->param('name');
         $namealias = CCommonTools::generateAlias($name);
         $valid = "true";
-        if (Slideshow::ifUpdateNameExist($id, $namealias) == 1)
+        if (CSlideshow::ifUpdateNameExist($id, $namealias) == 1)
         {
             $valid = "false";
         }

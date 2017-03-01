@@ -1,5 +1,5 @@
 <div class="container clearfix">
-    <form id="form-search" class="form-inline" method="post" action="{jurl 'front_office~search'}">
+    <form id="form-search" class="form-search form-inline" method="post" action="{jurl 'front_office~search'}">
         <div class="form-group search-form">
             <select name="s[]" id="s" class="form-control" style="width:400px;" multiple>
                 {if !empty($search)}

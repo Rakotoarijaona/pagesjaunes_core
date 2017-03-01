@@ -38,14 +38,19 @@ class myHtmlResponse extends jResponseHtml {
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'frontlibraries/stylesheets/jquery.fancybox.css');
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'frontlibraries/stylesheets/styles-old.css');
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'frontlibraries/stylesheets/styles_pagesjaunes.css');
+
         //File upload
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'adminlibraries/js/plugins/bootstrap-fileupload/bootstrap-fileupload.min.css');
+
         //$this->addCssLink(jApp::config()->urlengine['basePath'].'frontlibraries/stylesheets/fileinput.css');
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'frontlibraries/stylesheets/sweetalert/sweetalert.css');
         $this->body->bodyTagAttributes = array('class'=>'skin-2');
 
         // select2
         $this->addCSSLink(jApp::config()->urlengine['basePath'].'frontlibraries/javascripts/select2/dist/css/select2.min.css');
+
+        // pace
+        $this->addCSSLink(jApp::config()->urlengine['basePath'].'frontlibraries/javascripts/pace/themes/black/pace-theme-material.css', array('rel' => 'stylesheet'));
     }
 
     protected function doAfterActions() {

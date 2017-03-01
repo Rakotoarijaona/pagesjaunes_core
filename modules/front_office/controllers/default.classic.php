@@ -11,13 +11,12 @@
 require_once(jApp::appPath().'modules/common/controllers/jControllerRSR.php');
 
 jClasses::inc("slideshow~CSlideshow");
-jClasses::inc("entreprise~Entreprise");
-jClasses::inc("homepage~Contenuhomepage");
-jClasses::inc("categorie~categorie");
-jClasses::inc("catalogue~Catalogue");
-jClasses::inc("categorie~souscategorie");
+jClasses::inc("entreprise~CEntreprise");
+jClasses::inc("homepage~CContenuhomepage");
+jClasses::inc("categorie~CCategorie");
+jClasses::inc("catalogue~CCatalogue");
+jClasses::inc("categorie~CSouscategorie");
 jClasses::inc("front_office~CPagination");
-jClasses::inc("catalogue~Catalogue");
 jClasses::inc("pages~CPages");
 jClasses::inc("common~CPhotosUpload");
 jClasses::inc("common~ImageWorkshop");
@@ -26,7 +25,7 @@ jClasses::inc("ads~CAdsTracker");
 jClasses::inc("ads~CAdsZoneDefault");
 jClasses::inc("ads~CAdsPurchase");
 
-class defaultCtrl extends jControllerRSR
+class defaultCtrl extends jController
 {
     public $pluginParams = array(
         '*' => array('auth.required' => false),
@@ -39,7 +38,7 @@ class defaultCtrl extends jControllerRSR
         $tpl = new jTpl();
 
         // slider show
-        $toListSlideshow = Slideshow::getPublie();
+        $toListSlideshow = CSlideshow::getPublie();
         $tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
         $tpl->assign('PHOTOS_THUMBNAIL_FOLDER',PHOTOS_THUMBNAIL_FOLDER);
         $tpl->assign('PHOTOS_BIG_FOLDER',PHOTOS_BIG_FOLDER);
@@ -48,19 +47,19 @@ class defaultCtrl extends jControllerRSR
         //section plus consulté
         $stickycolor = array('#ff0000','#ff9900','#2200cc','#00CC00','#8800cc','#0099cc');
         $stickyrandom1 = array_rand($stickycolor, 3);
-        $toEntreprisePlusConsulte = Entreprise::getMostVisited(3);
+        $toEntreprisePlusConsulte = CEntreprise::getMostVisited(3);
         $tpl->assign('toEntreprisePlusConsulte', $toEntreprisePlusConsulte);
         $tpl->assign('stickyrandom1', $stickyrandom1);
         $tpl->assign('stickycolor', $stickycolor);
 
         //section derniers ajouts
         $stickyrandom2 = array_rand($stickycolor, 3);
-        $toEntrepriseDernierAjoute= Entreprise::getLastInserted(3);
+        $toEntrepriseDernierAjoute= CEntreprise::getLastInserted(3);
         $tpl->assign('toEntrepriseDernierAjoute', $toEntrepriseDernierAjoute);
         $tpl->assign('stickyrandom2', $stickyrandom2);
 
         //Section contenus homepage
-        $oHomepageContent = Contenuhomepage::getById(1);
+        $oHomepageContent = CContenuhomepage::getById(1);
         $tpl->assign('oHomepageContent', $oHomepageContent);
 
         // common script
@@ -71,29 +70,37 @@ class defaultCtrl extends jControllerRSR
     }
 
     // fiche detail
-    function fiche_details() {
+    public function fiche_details()
+    {
         $resp = $this->getResponse('html');
         $id = $this->param('entreprise');
         $tpl = new jTpl();
-        $oEntreprise = Entreprise::getById($id);
-
-        // comptage de consultation de l'entreprise
-        if ($oEntreprise != "")
+        $oEntreprise = CEntreprise::getById($id);
+        if ($oEntreprise->is_publie == 1)
         {
-            if(!isset($_SESSION['compteur_visite_entreprise'][$id]))
+            // comptage de consultation de l'entreprise
+            if ($oEntreprise != "")
             {
-                $_SESSION['compteur_visite_entreprise'][$id] = 'visite';                    
-                $oEntreprise->incrementeNombreVisite();
+                if(!isset($_SESSION['compteur_visite_entreprise'][$id]))
+                {
+                    $_SESSION['compteur_visite_entreprise'][$id] = 'visite';                    
+                    $oEntreprise->incrementeNombreVisite();
+                }
             }
-        }
-        $tpl->assign('oEntreprise', $oEntreprise);
-        $tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
-        $tpl->assign('PHOTOS_THUMBNAIL_FOLDER',PHOTOS_THUMBNAIL_FOLDER);
-        $tpl->assign('PHOTOS_BIG_FOLDER',PHOTOS_BIG_FOLDER);
+            $tpl->assign('oEntreprise', $oEntreprise);
+            $tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
+            $tpl->assign('PHOTOS_THUMBNAIL_FOLDER',PHOTOS_THUMBNAIL_FOLDER);
+            $tpl->assign('PHOTOS_BIG_FOLDER',PHOTOS_BIG_FOLDER);
 
-        // common script
-        $tpl->assign("COMMONSCRIPT", jZone::get('front_office~commonscript'));
-        $resp->body->assign('MAIN', $tpl->fetch('front_office~fiche_details'));
+            // common script
+            $tpl->assign("COMMONSCRIPT", jZone::get('front_office~commonscript'));
+            $resp->body->assign('MAIN', $tpl->fetch('front_office~fiche_details'));
+        }
+        else
+        {
+            $resp = $this->getResponse('redirect');
+            $resp->action = 'front_office~default:index';
+        }
 
         return $resp;
     }
@@ -110,9 +117,9 @@ class defaultCtrl extends jControllerRSR
         //recherche par categorie
         if (!empty($sousCategorie_id))
         {
-            $oSouscategorie = Souscategorie::getById($sousCategorie_id);
+            $oSouscategorie = CSouscategorie::getById($sousCategorie_id);
 
-            $toSortedEntreprise = Entreprise::searchBySouscategorie($sousCategorie_id);  
+            $toSortedEntreprise = CEntreprise::searchBySouscategorie($sousCategorie_id);  
 
             //pagination
             $iNbTotalResult = 0;
@@ -150,7 +157,7 @@ class defaultCtrl extends jControllerRSR
             {
                 $toEntreprise[] = $toResult[$i];
             }
-            $url = jUrl::get("front_office~default:search", array("soucategorie"=>$sousCategorie_id));
+            $url = jUrl::get("front_office~default:liste", array("soucategorie"=>$sousCategorie_id));
             $pagination = CPagination::paginate($url, $inbPagination, $iCurrentPage);
 
             $tpl->assign('pagination', $pagination);
@@ -187,7 +194,7 @@ class defaultCtrl extends jControllerRSR
 
         $resp->action = "front_office~default:recherche";
         if (!empty($to_find)) {
-            $resp->params = array("s" => $to_find);
+            $resp->params = array("s" => mb_strtolower($to_find, "UTF-8"));
         }
 
         return $resp;
@@ -210,7 +217,7 @@ class defaultCtrl extends jControllerRSR
         $tpl = new jTpl();
 
         $toEntreprise = array();
-        $paginationParams = array();
+        $paginationParams = array("s" => $search);
         $to_find = "";
 
         if (!empty($search)) {
@@ -218,9 +225,9 @@ class defaultCtrl extends jControllerRSR
             $to_find = implode(" +", $search);
         }
 
-        $toEntreprise = Entreprise::search($to_find, true, $nbRecs, $currentPage, $sortField, $sortSens);
+        $toEntreprise = CEntreprise::search($to_find, true, $nbRecs, $currentPage, $sortField, $sortSens);
 
-        $pagination = CCommonTools::getPagination("front_office~default:search", $nbRecs, $currentPage, NB_DATA_PER_PAGE, NB_LINK_TO_DISPLAY, $paginationParams);
+        $pagination = CCommonTools::getPagination("front_office~default:recherche", $nbRecs, $currentPage, NB_DATA_PER_PAGE, NB_LINK_TO_DISPLAY, $paginationParams);
 
         // defined constant
         CCommonTools::assignDefinedConstants($tpl);
@@ -246,8 +253,8 @@ class defaultCtrl extends jControllerRSR
         $datas = array();
         $term = $this->param("q");
         $selected = $this->param("selected");
-        if (!empty($term) && strlen($term) > 3) {
-            $datas = Entreprise::frontAutoComplet($term, $selected);
+        if (!empty($term) && strlen($term) > 1) {
+            $datas = CEntreprise::frontAutoComplet($term, $selected);
         }
         $resp->data = $datas;
         return $resp;
@@ -259,7 +266,7 @@ class defaultCtrl extends jControllerRSR
         $resp = $this->getResponse('html');
         $id = $this->param('entreprise');
         $tpl = new jTpl();
-        $oEntreprise = Entreprise::getById($id);
+        $oEntreprise = CEntreprise::getById($id);
 
         $tpl->assign('oEntreprise', $oEntreprise);
         $tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
@@ -277,7 +284,6 @@ class defaultCtrl extends jControllerRSR
         $resp = $this->getResponse('html');
 
         $tpl = new jTpl();
-        $oCatalogue = Catalogue::getByid($this->param('id'));
 
         // common script
         $tpl->assign("COMMONSCRIPT", jZone::get('front_office~commonscript'));
@@ -291,139 +297,222 @@ class defaultCtrl extends jControllerRSR
     {
         $resp = $this->getResponse('redirect');
 
-        if (($this->param('raisonsociale') != '') && ($this->param('activite') != '') && ($this->param('adresse') != '') && ($this->param('email') != '') && ($this->param('phone1') != ''))
+        // parameters
+        $raisonsociale = $this->param('raisonsociale');
+        $activite = $this->param('activite');
+        $adresse = $this->param('adresse');
+        $region = $this->param('region');
+
+        // entreprise
+        $entreprise = new CEntreprise();
+        $entreprise->raisonsociale = $raisonsociale;
+        $entreprise->activite = $activite;
+        $entreprise->adresse = $adresse;
+        $entreprise->region = $region;
+
+        //logo
+        $logo = "";
+        if (isset($_FILES["filelogo"]))
         {
-            $oEntreprise = new Entreprise();
+            $iErrorCode = 0 ;
+            $zFileName          = $_FILES["filelogo"]["name"] ;
+            $zFileType          = $_FILES["filelogo"]["type"] ;
+            $iFileSize          = intval ($_FILES["filelogo"]["size"]) ;
+            $zDirTempName       = $_FILES["filelogo"]["tmp_name"] ;
 
-            $oEntreprise->raisonsociale = $this->param('raisonsociale');
-            $oEntreprise->activite = $this->param('activite');
-            $oEntreprise->adresse = $this->param('adresse');
+            $bCreateFolders     = true ;
+            $zBackgroundColor   = null ;
+            $iImageQuality      = IMAGE_QUALITY ;
 
-            //$entreprise->logo
-            if (isset($_FILES["filelogo"]))
+            // rename file if already exists
+            if (file_exists ("entreprise/images" . "/" . $zFileName))
             {
-                $iErrorCode = 0 ;
-                $zFileName          = $_FILES["filelogo"]["name"] ;
-                $zFileType          = $_FILES["filelogo"]["type"] ;
-                $iFileSize          = intval ($_FILES["filelogo"]["size"]) ;
-                $zDirTempName       = $_FILES["filelogo"]["tmp_name"] ;
+                $iExistFileCount = 1 ;
 
-                $bCreateFolders     = true ;
-                $zBackgroundColor   = null ;
-                $iImageQuality      = IMAGE_QUALITY ;
+                $zExt           = strtolower (CCommonTools::getFileNameExtension ($zFileName)) ;
+                $zNoExtName     = preg_replace ("/[.]" . $zExt . "$/", "", $zFileName) ;
 
-                // rename file if already exists
-                if (file_exists ("entreprise/images" . "/" . $zFileName))
+                while (file_exists ("entreprise/images" . "/" . $zNoExtName . "-" . $iExistFileCount . "." . $zExt))
                 {
-                    $iExistFileCount = 1 ;
-
-                    $zExt           = strtolower (CCommonTools::getFileNameExtension ($zFileName)) ;
-                    $zNoExtName     = preg_replace ("/[.]" . $zExt . "$/", "", $zFileName) ;
-
-                    while (file_exists ("entreprise/images" . "/" . $zNoExtName . "-" . $iExistFileCount . "." . $zExt))
-                    {
-                        $iExistFileCount++ ;
-                    }
-                    $zFileName = $zNoExtName . "-" . $iExistFileCount . "." . $zExt ;
+                    $iExistFileCount++ ;
                 }
-                // thumbnail (must)
-                $oLayerThumbnail    = ImageWorkshop::initFromPath ($_FILES ["filelogo"]['tmp_name']) ;
-                $iExpectedWidth     = 200 ;
-                $iExpectedHeight    = 200 ;
+                $zFileName = $zNoExtName . "-" . $iExistFileCount . "." . $zExt ;
+            }
+            // thumbnail (must)
+            $oLayerThumbnail    = ImageWorkshop::initFromPath ($_FILES ["filelogo"]['tmp_name']) ;
+            $iExpectedWidth     = 200 ;
+            $iExpectedHeight    = 200 ;
 
-                ($iExpectedWidth > $iExpectedHeight) ? $iLargestSide = $iExpectedWidth : $iLargestSide = $iExpectedHeight;
+            ($iExpectedWidth > $iExpectedHeight) ? $iLargestSide = $iExpectedWidth : $iLargestSide = $iExpectedHeight;
 
-                $oLayerThumbnail->cropMaximumInPixel (0, 0, "MM") ;
-                $oLayerThumbnail->resizeInPixel ($iLargestSide, $iLargestSide) ;
-                $oLayerThumbnail->cropInPixel ($iExpectedWidth, $iExpectedHeight, 0, 0, 'MM') ;
-                $oLayerThumbnail->save ("entreprise/images", $zFileName, $bCreateFolders, $zBackgroundColor, $iImageQuality) ;
-                $oEntreprise->logo = $zFileName;
-            }
-            $oEntreprise->url_website = $this->param('website');
-
-            $oEntreprise->emails[] = $this->param('email');
-            //telephone
-            $oEntreprise->telephones[0] = $this->param('phone1'); 
-            if ($this->param('phone2') != '')
-            {
-                $oEntreprise->telephones[1] = $this->param('phone2'); 
-            }
-            if ($this->param('phone3') != '')
-            {
-                $oEntreprise->telephones[2] = $this->param('phone3'); 
-            }
-            //services
-            if ($this->param('service1') != '')
-            {
-                $oEntreprise->services[] = $this->param('service1'); 
-            }
-            if ($this->param('service2') != '')
-            {
-                $oEntreprise->services[] = $this->param('service2'); 
-            }
-            if ($this->param('service3') != '')
-            {
-                $oEntreprise->services[] = $this->param('service3'); 
-            }
-            if ($this->param('service4') != '')
-            {
-                $oEntreprise->services[] = $this->param('service4'); 
-            }
-            if ($this->param('service5') != '')
-            {
-                $oEntreprise->services[] = $this->param('service5'); 
-            }
-            //produits
-            if ($this->param('product1') != '')
-            {
-                $oEntreprise->produits[] = $this->param('product1'); 
-            }
-            if ($this->param('product2') != '')
-            {
-                $oEntreprise->produits[] = $this->param('product2'); 
-            }
-            if ($this->param('product3') != '')
-            {
-                $oEntreprise->produits[] = $this->param('product3'); 
-            }
-            if ($this->param('product4') != '')
-            {
-                $oEntreprise->produits[] = $this->param('product4'); 
-            }
-            if ($this->param('product5') != '')
-            {
-                $oEntreprise->produits[] = $this->param('product5'); 
-            }
-            //marques
-            if ($this->param('marque1') != '')
-            {
-                $oEntreprise->marques[] = $this->param('marque1'); 
-            }
-            if ($this->param('marque2') != '')
-            {
-                $oEntreprise->marques[] = $this->param('marque2'); 
-            }
-            if ($this->param('marque3') != '')
-            {
-                $oEntreprise->marques[] = $this->param('marque3'); 
-            }
-            if ($this->param('marque4') != '')
-            {
-                $oEntreprise->marques[] = $this->param('marque4'); 
-            }
-            if ($this->param('marque5') != '')
-            {
-                $oEntreprise->marques[] = $this->param('marque5'); 
-            }
-            //statut en attente
-            $oEntreprise->is_publie = 2;
-
-            $oEntreprise->insert_from_inscription();
-            $resp->action = "front_office~default:pages";
-            $resp->params = array('p'=>'remerciement_edition');
-            return $resp;
+            $oLayerThumbnail->cropMaximumInPixel (0, 0, "MM") ;
+            $oLayerThumbnail->resizeInPixel ($iLargestSide, $iLargestSide) ;
+            $oLayerThumbnail->cropInPixel ($iExpectedWidth, $iExpectedHeight, 0, 0, 'MM') ;
+            $oLayerThumbnail->save ("entreprise/images", $zFileName, $bCreateFolders, $zBackgroundColor, $iImageQuality) ;
+            $entreprise->logo = $zFileName;
+            $logo = CCommonTools::getDomainAndScheme() . jApp::config()->urlengine['basePath'] . "entreprise/images/" . $zFileName;
         }
-        $resp->action = "front_office~default:inscription";
+
+        //web site
+        $website = $this->stringParam("website", "", true);
+        $entreprise->url_website = $website;
+
+        // email
+        $email = $this->stringParam("email", "", true);
+        $entreprise->emails[] = $email;
+
+        //telephone
+        $phones = array();
+        $entreprise->telephones[0] = $this->param('phone1');
+        $phones[] = $this->param('phone1');
+
+        if ($this->param('phone2') != '')
+        {
+            $entreprise->telephones[1] = $this->param('phone2');
+            $phones[] = $this->param('phone2');
+        }
+        if ($this->param('phone3') != '')
+        {
+            $entreprise->telephones[2] = $this->param('phone3');
+            $phones[] = $this->param('phone3');
+        }
+        $numeroTelephone = implode(", ", $phones);
+
+        //services
+        $services = array();
+        if ($this->param('service1') != '')
+        {
+            $entreprise->services[] = $this->stringParam("service1", "", true);
+            $services[] = $this->stringParam("service1", "", true);
+        }
+        if ($this->param('service2') != '')
+        {
+            $entreprise->services[] = $this->stringParam("service2", "", true);
+            $services[] = $this->stringParam("service2", "", true);
+        }
+        if ($this->param('service3') != '')
+        {
+            $entreprise->services[] = $this->stringParam("service3", "", true);
+            $services[] = $this->stringParam("service3", "", true);
+        }
+        if ($this->param('service4') != '')
+        {
+            $entreprise->services[] = $this->stringParam("service4", "", true);
+            $services[] = $this->stringParam("service4", "", true);
+        }
+        if ($this->param('service5') != '')
+        {
+            $entreprise->services[] = $this->stringParam("service5", "", true);
+            $services[] = $this->stringParam("service5", "", true);
+        }
+        $service = (!empty($services)) ? implode(", ", $services) : "";
+
+        //produits
+        $produits = array();
+        if ($this->param('product1') != '')
+        {
+            $entreprise->produits[] = $this->stringParam("product1", "", true);
+            $produits[] = $this->stringParam("product1", "", true);
+        }
+        if ($this->param('product2') != '')
+        {
+            $entreprise->produits[] = $this->stringParam("product2", "", true);
+            $produits[] = $this->stringParam("product2", "", true);
+        }
+        if ($this->param('product3') != '')
+        {
+            $entreprise->produits[] = $this->stringParam("product3", "", true);
+            $produits[] = $this->stringParam("product3", "", true);
+        }
+        if ($this->param('product4') != '')
+        {
+            $entreprise->produits[] = $this->stringParam("product4", "", true);
+            $produits[] = $this->stringParam("product4", "", true);
+        }
+        if ($this->param('product5') != '')
+        {
+            $entreprise->produits[] = $this->stringParam("product5", "", true);
+            $produits[] = $this->stringParam("product5", "", true);
+        }
+        $product = (!empty($produits)) ? implode(", ", $produits) : "";
+
+
+        //marques
+        $marques = array();
+        if ($this->param('marque1') != '')
+        {
+            $entreprise->marques[] = $this->stringParam("marque1", "", true);
+            $marques[] = $this->stringParam("marque1", "", true);
+        }
+        if ($this->param('marque2') != '')
+        {
+            $entreprise->marques[] = $this->stringParam("marque2", "", true);
+            $marques[] = $this->stringParam("marque2", "", true);
+        }
+        if ($this->param('marque3') != '')
+        {
+            $entreprise->marques[] = $this->stringParam("marque3", "", true);
+            $marques[] = $this->stringParam("marque3", "", true);
+        }
+        if ($this->param('marque4') != '')
+        {
+            $entreprise->marques[] = $this->stringParam("marque4", "", true);
+            $marques[] = $this->stringParam("marque4", "", true);
+        }
+        if ($this->param('marque5') != '')
+        {
+            $entreprise->marques[] = $this->stringParam("marque5", "", true);
+            $marques[] = $this->stringParam("marque5", "", true);
+        }
+        $marque = (!empty($marques)) ? implode(", ", $marques) : "";
+
+        //statut en attente
+        $entreprise->is_publie = 2;
+
+        $entreprise->insert_from_inscription();
+
+        // CONTACT
+        $mailInscription = new jMailer();
+        $mailInscription->isHTML(true);
+
+        $tplInscription = $mailInscription->Tpl('common~email.entreprise.inscription.form');
+        $tplInscription->assign("raisonsociale", $raisonsociale);
+        $tplInscription->assign("activite", $activite);
+        $tplInscription->assign("adresse", $adresse);
+        $tplInscription->assign("numeroTelephone", $numeroTelephone);
+        $tplInscription->assign("email", $email);
+        $tplInscription->assign("website", $website);
+        $tplInscription->assign("service", $service);
+        $tplInscription->assign("product", $product);
+        $tplInscription->assign("marque", $marque);
+        $tplInscription->assign("logo", $logo);
+
+        // addresses
+        $mailInscription->AddAddress(EMAIL_CONTACT_ADMIN);
+        $mailInscription->AddAddress(EMAIL_ADMIN_ADMIN);
+        $mailInscription->setFrom($email, $name);
+
+        //$mailContact->Send();
+
+        // REPLY
+        $mailAccuse = new jMailer();
+        $mailAccuse->isHTML(true);
+
+        // template
+        $tplAccuse = $mailAccuse->Tpl('common~email.inscription.reply');
+        $tplAccuse->assign("phone", $phone);
+
+        // addresses
+        $mailAccuse->setFrom(EMAIL_CONTACT_ADMIN);
+        $mailAccuse->AddAddress($email);
+        $mailAccuse->AddAddress(EMAIL_ADMIN_ADMIN);
+
+        //$mailAccuse->Send();
+
+        jMessage::add(jLocale::get("common~email.sent.success"), "success");
+
+        $resp->action = "front_office~default:pages";
+        $resp->params = array('p'=>'remerciement-edition');
 
         return $resp;
     }
@@ -435,7 +524,7 @@ class defaultCtrl extends jControllerRSR
 
         $tpl = new jTpl();
 
-        $oCatalogue = Catalogue::getByid($this->param('id'));
+        $oCatalogue = CCatalogue::getByid($this->param('id'));
 
         //publicités
         $resp->body->assign('listType','default');
@@ -460,25 +549,25 @@ class defaultCtrl extends jControllerRSR
 
         if ($connectedUser->id > 0) {
 
-            $oCatalogue = Catalogue::getByid($this->param('id'));
+            $oCatalogue = CCatalogue::getByid($this->param('id'));
 
             $id = $connectedUser->id;
 
-            $oEntreprise = Entreprise::getById($id);
+            $oEntreprise = CEntreprise::getById($id);
 
             if ($oEntreprise->raisonsociale != '')
             {
-                $oEntreprise->emails = Entreprise::getEmailsById($id);
-                $oEntreprise->telephones = Entreprise::getTelephonesById($id);
-                $oEntreprise->services = Entreprise::getServices($id);
-                $oEntreprise->produits = Entreprise::getProduits($id);
-                $oEntreprise->marques = Entreprise::getMarques($id);
+                $oEntreprise->emails = CEntreprise::getEmailsById($id);
+                $oEntreprise->telephones = CEntreprise::getTelephonesById($id);
+                $oEntreprise->services = CEntreprise::getServices($id);
+                $oEntreprise->produits = CEntreprise::getProduits($id);
+                $oEntreprise->marques = CEntreprise::getMarques($id);
 
 
-                $oCatalogueList = Entreprise::getCatalogues($id);
+                $oCatalogueList = CEntreprise::getCatalogues($id);
                 $tpl->assign ("oCatalogueList", $oCatalogueList);
-                $oEntreprise->videos_youtube =  Entreprise::getVideosYoutube($id);
-                $oEntreprise->galerie_image =  Entreprise::getImagesGalerie($id);
+                $oEntreprise->videos_youtube =  CEntreprise::getVideosYoutube($id);
+                $oEntreprise->galerie_image =  CEntreprise::getImagesGalerie($id);
             
                 $tpl->assign("oEntreprise", $oEntreprise);
                 $tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
@@ -507,7 +596,7 @@ class defaultCtrl extends jControllerRSR
 
         if (!empty($this->param('entreprise')) && !empty($this->param('raisonsociale')) && !empty($this->param('activite')) && !empty($this->param('adresse')) && (sizeof($this->param('tel_phone')) > 0) && ($this->param('email') != ''))
         {
-            $oEntreprise = Entreprise::getById(($this->intParam('entreprise')/137));
+            $oEntreprise = CEntreprise::getById(($this->intParam('entreprise')/137));
             if (!empty($oEntreprise))
             {
                 //Raison sociale
@@ -743,7 +832,7 @@ class defaultCtrl extends jControllerRSR
                 {
                     $paramRemovedCatalogue = $this->param('rmvdcatalogue');
                     foreach ($paramRemovedCatalogue as $paramId) {
-                        $oCatalogue = Catalogue::getByid($paramId / 137);
+                        $oCatalogue = CCatalogue::getByid($paramId / 137);
                         $oCatalogue->delete();
                     }
                 }
@@ -760,7 +849,7 @@ class defaultCtrl extends jControllerRSR
                         if (!empty($this->param($zInputNomProduitName)) && !empty($this->param($zInputMarqueProduitName)) && !empty($this->param($zInputReferenceProduitName)) && !empty($this->param($zInputDescriptionProduitName)) && !empty($this->param($zInputPrixProduitName)) && isset($_FILES[$zInputImageName]))
                         {
                             if(!empty($_FILES[$zInputImageName])) {
-                                $oCatalogue = new Catalogue();
+                                $oCatalogue = new CCatalogue();
                                 $oCatalogue->reference_produit = $this->param($zInputReferenceProduitName);
                                 $oCatalogue->entreprise_id = $oEntreprise->id;
                                 $oCatalogue->nom_produit = $this->param($zInputNomProduitName);
@@ -805,7 +894,7 @@ class defaultCtrl extends jControllerRSR
                         $zInputPrixProduitName = 'oldcatalogue-prix-'.$index;
                         if (!empty($this->param($zInputNomProduitName)) && !empty($this->param($zInputMarqueProduitName)) && !empty($this->param($zInputReferenceProduitName)) && !empty($this->param($zInputDescriptionProduitName)) && !empty($this->param($zInputPrixProduitName)))
                         {
-                            $oCatalogue = Catalogue::getByid($index / 137);
+                            $oCatalogue = CCatalogue::getByid($index / 137);
                             $oCatalogue->reference_produit = $this->param($zInputReferenceProduitName);
                             $oCatalogue->nom_produit = $this->param($zInputNomProduitName);
                             $oCatalogue->description_produit = $this->param($zInputDescriptionProduitName);
@@ -840,7 +929,7 @@ class defaultCtrl extends jControllerRSR
             $oEntreprise->update();
 
             $resp->action = "front_office~default:pages";
-            $resp->params = array('p'=>'remerciement_edition');
+            $resp->params = array('p'=>'remerciement-edition');
             return $resp;
         }
         $resp->action = "front_office~default:index";
@@ -871,7 +960,7 @@ class defaultCtrl extends jControllerRSR
         if (jApp::coord()->request->isAjax())
         {
             $resp = $this->getResponse('json');
-            $toListEntreprise = Entreprise::getList();
+            $toListEntreprise = CEntreprise::getList();
             $videoId = $this->param('id');
             if ($videoId != '')
             {
@@ -1093,6 +1182,59 @@ class defaultCtrl extends jControllerRSR
             $tracker->is_default = $isdefault;
             $tracker->insert();
         }  
+
+        return $resp;
+    }
+
+    // send contact email
+    public function sendEmailContact()
+    {
+        $resp = $this->getResponse('redirect');
+
+        //parameters
+        $name = $this->stringParam("name", "", true);
+        $email = $this->stringParam("email", "", true);
+        $phone = $this->stringParam("phone", "", true);
+        $subject = $this->stringParam("subject", "", true);
+        $message = $this->stringParam("message", "", true);
+        $code = $this->stringParam("code", "", true);
+        $message = str_replace(PHP_EOL, '<br/>', $message);
+
+        // CONTACT
+        $mailContact = new jMailer();
+        $mailContact->isHTML(true);
+
+        $tplContact = $mailContact->Tpl('common~email.contact.form');
+        $tplContact->assign("name", $name);
+        $tplContact->assign("phone", $phone);
+        $tplContact->assign("message", $message);
+
+        // addresses
+        $mailContact->AddAddress(EMAIL_CONTACT_ADMIN);
+        $mailContact->AddAddress(EMAIL_ADMIN_ADMIN);
+        $mailContact->setFrom($email, $name);
+
+        //$mailContact->Send();
+
+        // REPLY
+        $mailAccuse = new jMailer();
+        $mailAccuse->isHTML(true);
+
+        // template
+        $tplAccuse = $mailAccuse->Tpl('common~email.contact.reply');
+        $tplAccuse->assign("phone", $phone);
+        $tplAccuse->assign("message", $message);
+
+        // addresses
+        $mailAccuse->setFrom(EMAIL_CONTACT_ADMIN);
+        $mailAccuse->AddAddress($email);
+        $mailAccuse->AddAddress(EMAIL_ADMIN_ADMIN);
+
+        //$mailAccuse->Send();
+
+        jMessage::add(jLocale::get("common~email.sent.success"), "success");
+
+        $resp->action = 'front_office~default:contact';
 
         return $resp;
     }

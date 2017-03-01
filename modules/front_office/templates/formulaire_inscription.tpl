@@ -1,81 +1,94 @@
 {$COMMONSCRIPT}
+<script src="{$j_basepath}adminlibraries/js/plugins/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
 
 <!-- contenus -->
 <main>
     <div class="container">
         <div class="page-header">
             <div class="row">
-                <div class="col-md-8"><h1>Formulaire d’inscription</h1></div>
+                <div class="col-md-8"><h1>Formulaire d'inscription</h1></div>
             </div>
         </div>
     </div>
-    <div class="form-wrapper">        
+    <div class="form-wrapper">
         <div role="form">
             <div class="screen-reader-response" style="display:none;"></div>
-            <form action="{jurl 'front_office~default:save_insription'}" method="post" id="form" class="form" enctype="multipart/form-data">
+            <form action="{jurl 'front_office~default:save_insription'}" method="post" id="formInscription" name="formInscription" class="form" enctype="multipart/form-data">
                 <div class="container">
                     <div class="row">
                         <p>Veuillez remplir les champs ci-dessous, les champs marqués par (*) sont obligatoires</p>
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-10">
-                                    <p>
+                                    <div class="form-group">
                                         <label>Nom ou raison sociale (*)</label>
                                         <span>
-                                            <input type="text" name="raisonsociale" value="" size="40" maxlength="200"/>
+                                            <input autocomplete="off" type="text" name="raisonsociale" id="raisonsociale" value="" size="40" maxlength="200" required data-msg-required="Veuillez renseigner la raison sociale" />
                                         </span>
-                                    </p>
-                                    <p>
+                                    </div>
+                                    <div class="form-group">
                                         <label>Description courte de votre activité (*)</label>
                                         <span class="your-activite">
-                                            <input type="text" name="activite" value="" size="40" maxlength="200"/>
+                                            <input autocomplete="off" autocomplete="off" type="text" name="activite" id="activite" value="" size="40" maxlength="200" required data-msg-required="Vuillez renseigner votre activité" />
                                         </span>
-                                    </p>
-                                    <p>
+                                    </div>
+                                    <div class="form-group">
                                         <label>Adresse (*)</label>
                                         <span class="your-adresse">
-                                            <textarea name="adresse" cols="40" rows="3" maxlength="500" minlength="10"></textarea>
+                                            <textarea name="adresse" id="adresse" cols="40" rows="3" maxlength="500" minlength="10" required data-msg-required="Veuillez renseigner l'adresse"></textarea>
                                         </span>
-                                    </p>
-                                    <p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Région</label>
+                                        <input id="region" name="region" id="region" type="text" class="form-control" value="" maxlength="50" />
+                                    </div>
+                                    <div class="form-group">
                                         <label>Site web </label>
                                         <span class="your-website">
-                                            <input type="text" name="website" value="" size="40"/>
+                                            <input autocomplete="off" type="text" name="website" id="website" value="" size="40" data-rule-url="true" data-msg-url="Veuillez renseigner un lien valide" />
                                         </span>
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-10 col-sm-offset-2">
-                                    <p>
-                                        <label>Logo</label>
-                                        <span class="filelogo">
-                                            <input type="file" class="file" name="filelogo" value="1" size="40"/>
-                                        </span>
-                                    </p>
-                                    <p>
+                                    <div class="form-group r-form">
+                                        <label>Logo :</label>
+                                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 150px; max-height: 150px"></div>
+                                            <div>
+                                                <span class="btn btn-default btn-file">
+                                                    <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Parcourir</span>
+                                                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Changer</span>
+                                                    <input type="file" class="default" name="filelogo" id="filelogo" accept="image/*"/>
+                                                </span>&nbsp;
+                                                <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> Supprimer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group r-form">
                                         <label>
                                             Contacts téléphoniques au format international <b>261(0)...</b> (*) <br/>
                                             Veuillez remplir au moins le premier champ
                                         </label><br />
                                         <span class="tel-phone1">
-                                            <input type="tel" name="phone1" value="" size="40" maxlength="15"/>
+                                            <input autocomplete="off" type="tel" name="phone1" id="phone1" value="" size="40" maxlength="15" required data-msg-required="Veuillez renseigner le numéro de téléphone" data-rule-phone="true" data-msg-phone="Veuillez renseigner un numéro de téléphone valide" />
                                         </span><br />
                                         <span class="tel-phone2">
-                                            <input type="tel" name="phone2" value="" size="40" maxlength="15"/>
+                                            <input autocomplete="off" type="tel" name="phone2" id="phone2" value="" size="40" maxlength="15" data-rule-phone="true" data-msg-phone="Veuillez renseigner un numéro de téléphone valide" />
                                         </span><br />
                                         <span class="tel-phone3">
-                                            <input type="tel" name="phone3" value="" size="40" maxlength="15"/>
+                                            <input autocomplete="off" type="tel" name="phone3" id="phone3" value="" size="40" maxlength="15" data-rule-phone="true" data-msg-phone="Veuillez renseigner un numéro de téléphone valide" />
                                         </span>
-                                    </p>
-                                    <p>
+                                    </div>
+                                    <div class="form-group r-form">
                                         <label>Contact email (*)</label>
                                         <span class="your-email">
-                                            <input type="email" name="email" value="" size="40" maxlength="255"/>
+                                            <input autocomplete="off" type="email" name="email" id="email" value="" size="40" maxlength="255" required data-msg-required="Veuillez renseigner le contact email" data-rule-email="true" data-msg-email="Veuillez renseigner un adresse email valide" />
                                         </span>
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -89,19 +102,19 @@
                             <p class="info">Vos offres de services</p>
                             <p>
                                 <span class="service1">
-                                    <input type="text" name="service1" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="service1" id="service1" value="" size="40" />
                                 </span>
                                 <span class="service2">
-                                    <input type="text" name="service2" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" />
+                                    <input autocomplete="off" type="text" name="service2" id="service2" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" />
                                 </span>
                                 <span class="service3">
-                                    <input type="text" name="service3" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="service3" id="service3" value="" size="40" />
                                 </span>
                                 <span class="service4">
-                                    <input type="text" name="service4" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="service4" id="service4" value="" size="40" />
                                 </span>
                                 <span class="service5">
-                                    <input type="text" name="service5" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="service5" id="service5" value="" size="40" />
                                 </span>
                             </p>
                         </div>
@@ -110,19 +123,19 @@
                             <p class="info">Vos produits</p>
                             <p>
                                 <span class="product1">
-                                    <input type="text" name="product1" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="product1" id="product1" value="" size="40" />
                                 </span>
                                 <span class="product2">
-                                    <input type="text" name="product2" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="product2" id="product2" value="" size="40" />
                                 </span>
                                 <span class="product3">
-                                    <input type="text" name="product3" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="product3" id="product3" value="" size="40" />
                                 </span>
                                 <span class="product4">
-                                    <input type="text" name="product4" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="product4" id="product4" value="" size="40" />
                                 </span>
                                 <span class="product5">
-                                    <input type="text" name="product5" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="product5" id="product5" value="" size="40" />
                                 </span>
                             </p>
                         </div>
@@ -131,19 +144,19 @@
                             <p class="info">Les marques que vous representez</p>
                             <p>
                                 <span class="marque1">
-                                    <input type="text" name="marque1" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="marque1" id="marque1" value="" size="40" />
                                 </span>
                                 <span class="marque2">
-                                    <input type="text" name="marque2" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="marque2" id="marque2" value="" size="40" />
                                 </span>
                                 <span class="marque3">
-                                    <input type="text" name="marque3" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="marque3" id="marque3" value="" size="40" />
                                 </span>
                                 <span class="marque4">
-                                    <input type="text" name="marque4" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="marque4" id="marque4" value="" size="40" />
                                 </span>
                                 <span class="marque5">
-                                    <input type="text" name="marque5" value="" size="40"/>
+                                    <input autocomplete="off" type="text" name="marque5" id="marque5" value="" size="40" />
                                 </span>
                             </p>
                         </div>
@@ -158,7 +171,7 @@
                                     <img src="{jurl 'common~common:generateCaptcha'}" id="captcha" style="margin-top:6px;" />
                                 </div>
                                 <span class="input-group-addon">
-                                    <a href="javascript:;" onclick="reGenerateCaptcha();" class="btn btn-primary btn-sm text-complete"><i class="fs-14 fa fa-repeat"></i></a>
+                                    <a href="javascript:;" onclick="reGenerateCaptcha();" class="btn btn-default text-complete"><i class="fs-14 fa fa-repeat"></i></a>
                                 </span>
                             </div>
 
@@ -190,37 +203,10 @@
 
 {literal}
 <script type="text/javascript">
-var $input = $('input.file[type=file]');
-if ($input.length) {
-    $input.fileinput({
-        language: 'fr',
-        browseClass: "btn btn-default",
-        showUpload: false,
-        showRemove: false,
-        allowedFileExtensions : ['jpg', 'png','gif']
-    });
-}
-
 $(document).ready(function()
 {
-    $('#form').validate({
+    $("#formInscription").validate({
         rules: {
-            raisonsociale: {
-             required: true
-            },
-            activite: {
-             required: true
-            },
-            adresse: {
-             required: true
-            },
-            phone1: {
-             required: true
-            },
-            email: {
-             required: true,
-             email:true
-            },
             code: {
                 remote: {
                     url: {/literal}{urljsstring 'common~common:isValidCaptcha', array()}{literal},
@@ -233,21 +219,12 @@ $(document).ready(function()
                 }
             }
         },
-        messages: {
-            raisonsociale: "Ce champ est obligatoire",
-            activite: "Ce champ est obligatoire",
-            adresse: {
-                required:"Ce champ est obligatoire",
-                minlength:"Veuillez entrer une adresse valide"
-            },
-            phone1: "Ce champ est obligatoire",
-            email: {
-                required:"Ce champ est obligatoire",
-                email:"Veuillez entrer un email valide"
-            },
-            code: {
-                    remote: "Code incorrect, veuillez saisir de nouveau"
-                }
+        messages: 
+        {
+            code:
+            {
+                remote: "Code incorrect, veuillez saisir de nouveau"
+            }
         }
     });
 });

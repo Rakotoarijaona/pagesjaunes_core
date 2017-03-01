@@ -7,8 +7,8 @@
 * @link      http://www.yourwebsite.undefined
 * @license    All rights reserved
 */
-jClasses::inc("categorie~categorie");
-jClasses::inc("categorie~souscategorie");
+jClasses::inc("categorie~CCategorie");
+jClasses::inc("categorie~CSouscategorie");
 jClasses::inc ("common~ImageWorkshop") ;
 jClasses::inc ("common~CCommonTools") ;
 
@@ -34,7 +34,7 @@ class categorieCtrl extends jController {
 
             //Liste de tous les categories
             $oList = array();
-            $oListCategorie = Categorie::getList();
+            $oListCategorie = CCategorie::getList();
             $i = 0;
             foreach ($oListCategorie as $categorie) {
                 $oList[$i]['categorie'] = $categorie;
@@ -69,7 +69,7 @@ class categorieCtrl extends jController {
 
             //Liste de tous les categories
             $oList = array();
-            $oListCategorie = Categorie::getList();
+            $oListCategorie = CCategorie::getList();
             $i = 0;
             foreach ($oListCategorie as $categorie) {
                 $oList[$i]['categorie'] = $categorie;
@@ -79,34 +79,27 @@ class categorieCtrl extends jController {
             $tpl->assign("oList", $oList);
             $tpl->assign("oListCategorie", $oListCategorie);
 
-            //jMessage
-            if (jMessage::get('error') != '')
-            {
-                $messageError = jMessage::get('error');
-                $tpl->assign('messageError', $messageError);
-            }
-            if (jMessage::get('success') != '')
-            {
-                $messageSuccess = jMessage::get('success');
-                $tpl->assign('messageSuccess', $messageSuccess);
-            }
-            jMessage::clearAll();
-
-            if ($this->param('categorieid') != null)
+            if ($this->param('categorieid', '') != '')
             {
                 $id = $this->param('categorieid');
-                $oRecord = Categorie::getById($id); 
+                $oRecord = CCategorie::getById($id); 
                 $iscategorie = 1;
+                $tpl->assign('oRecord', $oRecord);
+                $tpl->assign('iscategorie', $iscategorie);
+            }
+            elseif ($this->param('souscategorieid', '') != '')
+            {
+                $id = $this->param('souscategorieid');
+                $oRecord = CSouscategorie::getById($id); 
+                $iscategorie = 0;
                 $tpl->assign('oRecord', $oRecord);
                 $tpl->assign('iscategorie', $iscategorie);
             }
             else
             {
-                $id = $this->param('souscategorieid');
-                $oRecord = Souscategorie::getById($id); 
-                $iscategorie = 0;
-                $tpl->assign('oRecord', $oRecord);
-                $tpl->assign('iscategorie', $iscategorie);
+                $resp = $this->getResponse('redirect');
+                $resp->action = 'categorie~categorie:index';
+                return $resp;
             }
 
             $resp->body->assign('MAIN', $tpl->fetch('categorie~edition'));
@@ -126,7 +119,7 @@ class categorieCtrl extends jController {
         if (!jAcl2::check("categorie.restrictall")) { //Test droit restrict all
             if ($this->param('categorieid') != '')
             {
-                $success = Categorie::deleteById($this->param('categorieid'));
+                $success = CCategorie::deleteById($this->param('categorieid'));
                 if ($success == 1)
                 {
                     jMessage::add(jLocale::get("categorie~categorie.delete.alert.success"), "success");
@@ -153,7 +146,7 @@ class categorieCtrl extends jController {
         if (!jAcl2::check("categorie.restrictall")) { //Test droit restrict all
             if ($this->param('souscategorieid') != '')
             {
-                $success = Souscategorie::deleteById($this->param('souscategorieid'));
+                $success = CSouscategorie::deleteById($this->param('souscategorieid'));
                 if ($success == 1)
                 {
                     jMessage::add(jLocale::get("categorie~souscategorie.delete.alert.success"), "success");
@@ -174,13 +167,14 @@ class categorieCtrl extends jController {
         return $resp;
     }
 
-    function save_ajout() {        
+    public function save_ajout() 
+    {
         if (!jAcl2::check("categorie.restrictall")) { //Test droit restrict all
             if (($this->param('nom')!='')&&($this->param('ispublie')!=''))
             {
                 if (($this->param('categorie_parent')==''|| $this->param('categorie_parent')==0) && ($_FILES["vignette"]['name']!=''))
                 {                
-                    $oCategorie = new Categorie();
+                    $oCategorie = new CCategorie();
                     $oCategorie->name = $this->param('nom');
                     $namealias = CCommonTools::generateAlias ($oCategorie->name);
                     $oCategorie->namealias = $namealias;
@@ -197,18 +191,21 @@ class categorieCtrl extends jController {
                         $zBackgroundColor   = null ;
                         $iImageQuality      = IMAGE_QUALITY ;
 
+                        $zExt           = strtolower (CCommonTools::getFileNameExtension ($zFileName)) ;
+                        $zNoExtName     = preg_replace ("/[.]" . $zExt . "$/", "", $zFileName) ;
+                        $zNoExtName     = CCommonTools::generateAlias ($zNoExtName);
+                        $zFileName      =  $zNoExtName ."." . $zExt ;
+
                         // rename file if already exists
                         if (file_exists ("icones" . "/" . $zFileName))
                         {
                             $iExistFileCount = 1 ;
 
-                            $zExt           = strtolower (CCommonTools::getFileNameExtension ($zFileName)) ;
-                            $zNoExtName     = preg_replace ("/[.]" . $zExt . "$/", "", $zFileName) ;
-
                             while (file_exists ("icones" . "/" . $zNoExtName . "-" . $iExistFileCount . "." . $zExt))
                             {
                                 $iExistFileCount++ ;
                             }
+
                             $zFileName = $zNoExtName . "-" . $iExistFileCount . "." . $zExt ;
                         }
                         // thumbnail (must)
@@ -236,7 +233,7 @@ class categorieCtrl extends jController {
                 }
                 else
                 {
-                    $osouscategorie = new Souscategorie();
+                    $osouscategorie = new CSouscategorie();
                     $osouscategorie->name = $this->param('nom');
                     $namealias = CCommonTools::generateAlias ($osouscategorie->name);
                     if ((categorie::ifNameExist($namealias) == 0)&&(souscategorie::ifNameExist($namealias) == 0))
@@ -265,15 +262,16 @@ class categorieCtrl extends jController {
         return $resp;        
     }
 
-    
-    function enregistrer_modif()
-    {     
+    // Sauvegarde de la modification
+    public function enregistrer_modif()
+    {        
+        $resp = $this->getResponse('redirect');
         if (!jAcl2::check("categorie.restrictall")) { //Test droit restrict all
             if ($this->intParam('parent') == '')
             {
                 if ($this->intParam('iscategorie') == 1)
                 {
-                    $oCategorie = Categorie::getById($this->intParam('id'));
+                    $oCategorie = CCategorie::getById($this->intParam('id'));
                     if (($this->param('name')!='')&&($this->param('ispublie')!=''))
                     {
                         $oCategorie->name = $this->param('name');
@@ -294,18 +292,21 @@ class categorieCtrl extends jController {
                                 $zBackgroundColor   = null ;
                                 $iImageQuality      = IMAGE_QUALITY ;
 
+                                $zExt           = strtolower (CCommonTools::getFileNameExtension ($zFileName)) ;
+                                $zNoExtName     = preg_replace ("/[.]" . $zExt . "$/", "", $zFileName) ;
+                                $zNoExtName     = CCommonTools::generateAlias ($zNoExtName);
+                                $zFileName      =  $zNoExtName . "." . $zExt ;
+
                                 // rename file if already exists
                                 if (file_exists ("icones" . "/" . $zFileName))
                                 {
                                     $iExistFileCount = 1 ;
 
-                                    $zExt           = strtolower (CCommonTools::getFileNameExtension ($zFileName)) ;
-                                    $zNoExtName     = preg_replace ("/[.]" . $zExt . "$/", "", $zFileName) ;
-
                                     while (file_exists ("icones" . "/" . $zNoExtName . "-" . $iExistFileCount . "." . $zExt))
                                     {
                                         $iExistFileCount++ ;
                                     }
+
                                     $zFileName = $zNoExtName . "-" . $iExistFileCount . "." . $zExt ;
                                 }
                                 // thumbnail (must)
@@ -328,6 +329,7 @@ class categorieCtrl extends jController {
                             }                 
                             $oCategorie->ispublie = $this->intParam('ispublie');
                             $oCategorie->update();
+                            $resp->params = array('categorieid' => $oCategorie->id);
                             jMessage::add(jLocale::get("categorie~categorie.update.alert.success"),'success');
                         }
                         else
@@ -338,7 +340,7 @@ class categorieCtrl extends jController {
                 }
                 else
                 {
-                    $oCategorie = new Categorie();
+                    $oCategorie = new CCategorie();
                     if (($this->param('name')!='')&&($this->param('ispublie')!=''))
                     {
                         $oCategorie->id = $this->intParam('id');
@@ -360,18 +362,21 @@ class categorieCtrl extends jController {
                                 $zBackgroundColor   = null ;
                                 $iImageQuality      = IMAGE_QUALITY ;
 
+                                $zExt           = strtolower (CCommonTools::getFileNameExtension ($zFileName)) ;
+                                $zNoExtName     = preg_replace ("/[.]" . $zExt . "$/", "", $zFileName) ;
+                                $zNoExtName     = CCommonTools::generateAlias ($zNoExtName);
+                                $zFileName      =  $zNoExtName . "." . $zExt ;
+
                                 // rename file if already exists
                                 if (file_exists ("icones" . "/" . $zFileName))
                                 {
                                     $iExistFileCount = 1 ;
 
-                                    $zExt           = strtolower (CCommonTools::getFileNameExtension ($zFileName)) ;
-                                    $zNoExtName     = preg_replace ("/[.]" . $zExt . "$/", "", $zFileName) ;
-
                                     while (file_exists ("icones" . "/" . $zNoExtName . "-" . $iExistFileCount . "." . $zExt))
                                     {
                                         $iExistFileCount++ ;
                                     }
+
                                     $zFileName = $zNoExtName . "-" . $iExistFileCount . "." . $zExt ;
                                 }
                                 // thumbnail (must)
@@ -388,10 +393,11 @@ class categorieCtrl extends jController {
                                 //end-rename file if already exists
 
                                 $oCategorie->vignette = $zFileName;  
-                            }                       
-                            Souscategorie::deleteById($this->intParam('id'));
+                            }
+                            CSouscategorie::deleteById($this->intParam('id'));
                             $oCategorie->ispublie = $this->intParam('ispublie');
-                            $oCategorie->insert();
+                            $newId = $oCategorie->insert();
+                            $resp->params = array('categorieid' => $newId);
                             jMessage::add(jLocale::get("categorie~categorie.add.alert.success"),'success');
                         }
                         else
@@ -405,7 +411,7 @@ class categorieCtrl extends jController {
             {
                 if ($this->intParam('iscategorie') == 1)
                 {
-                    $oSouscategorie = new Souscategorie();
+                    $oSouscategorie = new CSouscategorie();
                     if (($this->param('name')!='') && ($this->param('ispublie')!=''))
                     {
                         $oSouscategorie->name = $this->param('name');
@@ -413,10 +419,11 @@ class categorieCtrl extends jController {
                         if (souscategorie::ifNameExist($namealias) == 0)
                         {
                             $oSouscategorie->namealias = $namealias;
-                            $oSouscategorie->categorieid = $this->intParam('parent');                     
+                            $oSouscategorie->categorieid = $this->intParam('parent');
                             $oSouscategorie->ispublie = $this->intParam('ispublie');
-                            $oSouscategorie->insert();
-                            $oCategorie = Categorie::deleteById($this->intParam('id'));
+                            $newId = $oSouscategorie->insert();
+                            $resp->params = array('souscategorieid' => $newId);
+                            $oCategorie = CCategorie::deleteById($this->intParam('id'));
                             jMessage::add(jLocale::get("categorie~souscategorie.add.alert.success"),'success');
                         }
                         else
@@ -427,7 +434,7 @@ class categorieCtrl extends jController {
                 }
                 else
                 {
-                    $oSouscategorie = new Souscategorie();
+                    $oSouscategorie = new CSouscategorie();
                     if (($this->param('name')!='')&&($this->param('ispublie')!=''))
                     {
                         $oSouscategorie->id = $this->intParam('id');
@@ -436,9 +443,10 @@ class categorieCtrl extends jController {
                         if ((souscategorie::ifUpdateNameExist($this->intParam('id'), $namealias) == 0)&&(categorie::ifNameExist($namealias) == 0))
                         {
                             $oSouscategorie->namealias = $namealias;
-                            $oSouscategorie->categorieid = $this->intParam('parent');                     
+                            $oSouscategorie->categorieid = $this->intParam('parent');
                             $oSouscategorie->ispublie = $this->intParam('ispublie');
                             $oSouscategorie->update();
+                            $resp->params = array('souscategorieid' => $oSouscategorie->id);
                             jMessage::add(jLocale::get("categorie~souscategorie.update.alert.success"),'success');
                         }
                         else
@@ -449,8 +457,7 @@ class categorieCtrl extends jController {
                 }                 
             }
             
-            $resp = $this->getResponse('redirect');
-            $resp->action = "categorie~categorie:index";
+            $resp->action = "categorie~categorie:edition";
         }
         else {
             $resp = $this->getResponse('html');

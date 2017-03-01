@@ -7,8 +7,8 @@
 * @link      http://www.yourwebsite.undefined
 * @license    All rights reserved
 */
-jClasses::inc("categorie~categorie");
-jClasses::inc("categorie~souscategorie");
+jClasses::inc("categorie~CCategorie");
+jClasses::inc("categorie~CSouscategorie");
 
 class motsclesCtrl extends jController {
 
@@ -23,7 +23,7 @@ class motsclesCtrl extends jController {
             $tpl = new jTpl();      
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $oList = array();
-            $oListCategorie = Categorie::getList();
+            $oListCategorie = CCategorie::getList();
             $i = 0;
             $iCategorieParent = 0;
             foreach ($oListCategorie as $categorie) {
@@ -33,7 +33,7 @@ class motsclesCtrl extends jController {
             }
             if (!empty($this->param('souscategorieId')))
             {
-                $oSouscategorie = Souscategorie::getById($this->intParam('souscategorieId'));
+                $oSouscategorie = CSouscategorie::getById($this->intParam('souscategorieId'));
                 $iCategorieParent = $oSouscategorie->getParent()->id;
                 $tpl->assign("oSouscategorie", $oSouscategorie);
             }
@@ -59,7 +59,7 @@ class motsclesCtrl extends jController {
         if (!jAcl2::check("keywords.restrictall")) { //Test droit restrict all
             if (!empty($this->param('id')))
             {
-                $oSouscategorie = Souscategorie::getById($this->intParam('id'));
+                $oSouscategorie = CSouscategorie::getById($this->intParam('id'));
                 $oSouscategorie->updateMotsCles($this->param('tags'));
                 $resp->params = array('souscategorieId'=>$oSouscategorie->id);
             }

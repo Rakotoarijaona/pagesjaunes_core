@@ -9,7 +9,7 @@
 jClasses::inc("common~CCommonTools");
 jClasses::inc("profile~CJacl2Group");
 
-class User
+class CUser
 {
     public $usr_id;
     public $usr_login;
@@ -50,7 +50,7 @@ class User
         $this->usr_date_lastlogin;
         $this->usr_publication_status;
         $this->usr_activation_status;
-        $this->usr_typeLabel = User::get_Group_label($this->usr_login);
+        $this->usr_typeLabel = CUser::get_Group_label($this->usr_login);
     }
 
     // Récupération des données à partir de record vers un object (mapping)
@@ -70,7 +70,7 @@ class User
             $this->usr_dateupdate = $record->date_update;
             $this->usr_publicationstatus = $record->publication_status;
             $this->usr_activationstatus = $record->activation_status;
-            $this->usr_typeLabel = User::get_Group_label($this->usr_login);
+            $this->usr_typeLabel = CUser::get_Group_label($this->usr_login);
         }
     }
 
@@ -127,7 +127,7 @@ class User
         $toResult = array();
         foreach ($userList as $user)
         {
-            $oUser = new User();
+            $oUser = new CUser();
             $oUser->fetchFromRecord($user);
             $toResult[] = $oUser;
         }
@@ -190,7 +190,7 @@ class User
     {
         $userFactory = jDao::get('user~jelixuser');
         $res = $userFactory->getByLogin($login);
-        $oUser = new User();
+        $oUser = new CUser();
         if ($res)
         {
             $oUser->fetchFromRecord($res);
@@ -286,14 +286,14 @@ class User
         }
 
         foreach ($res as $row) {
-            $user = new User();
+            $user = new CUser();
             $user->fetchFromRecord($row);
             CCommonTools::encodeDaoRecUtf8($user);
             $results[] = $user;
         }
 
         if ($oneRecord) {
-            return (isset($results[0])) ? $results[0] : new User();
+            return (isset($results[0])) ? $results[0] : new CUser();
         } else {
             return $results;
         }
@@ -304,10 +304,10 @@ class User
     {
         $jAuthUserRecords = jAuth::getUser($usr_login);
         if ($this->usr_login != $jAuthUserRecords->login) {
-            $jAuthUserRecords->login = $this->usr_login;        
+            $jAuthUserRecords->login = $this->usr_login;
         }
         if ($this->usr_password != $jAuthUserRecords->password) {
-            jAuth::changePassword($usr_login, $this->usr_password);         
+            jAuth::changePassword($usr_login, $this->usr_password);
         }
         if ($this->usr_email != $jAuthUserRecords->email) {
             $jAuthUserRecords->email = $this->usr_email;
@@ -324,16 +324,41 @@ class User
         if ($this->usr_photo != $jAuthUserRecords->photo) {
             $jAuthUserRecords->photo = $this->usr_photo;
         }
-        if ($this->usr_typeLabel != User::get_Group_label($this->usr_login)) {
-            User::update_user_group($this->usr_login,$this->usr_typeLabel);
+        if ($this->usr_typeLabel != CUser::get_Group_label($this->usr_login)) {
+            CUser::update_user_group($this->usr_login,$this->usr_typeLabel);
         }
         jAuth::updateUser($jAuthUserRecords);
+    }
+
+    public function changePassword($usr_login)
+    {
+            jAuth::changePassword($usr_login, $this->usr_password);
+    }
+
+    public function createToken()
+    {
+        $jAuthUserRecords = jAuth::getUser($this->usr_login);
+        if ($jAuthUserRecords->login) {
+            $jAuthUserRecords->token = CCommonTools::getRandString(60, '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+            $jAuthUserRecords->date_token = CCommonTools::RgetDateNowSQL();
+            jAuth::updateUser($jAuthUserRecords);
+        }
+    }
+
+    public static function destroyToken($usr_login)
+    {
+        $jAuthUserRecords = jAuth::getUser($usr_login);
+        if ($jAuthUserRecords->login) {
+            $jAuthUserRecords->token = '';
+            $jAuthUserRecords->date_token = '';
+            jAuth::updateUser($jAuthUserRecords);
+        }
     }
 
     // delete
     public static function delete($user_id = 0)
     {
-        $groupLabel = User::get_Group_label($user_id);
+        $groupLabel = CUser::get_Group_label($user_id);
         if ($groupLabel != 'superadmin')
         {
             jAcl2DbUserGroup::removeUserFromGroup($user_id,$groupLabel);
@@ -344,7 +369,7 @@ class User
     // Update group
     public static function update_user_group($login,$newgroupid)
     {
-        $oldgroupid = User::get_Group_label($login);
+        $oldgroupid = CUser::get_Group_label($login);
         jAcl2DbUserGroup::removeUserFromGroup($login,$oldgroupid);
         jAcl2DbUserGroup::addUserToGroup($login, $newgroupid);
     }

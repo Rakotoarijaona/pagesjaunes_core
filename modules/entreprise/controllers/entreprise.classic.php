@@ -7,14 +7,16 @@
 * @link      http://www.yourwebsite.undefined
 * @license    All rights reserved
 */
-jClasses::inc("entreprise~Entreprise");
-jClasses::inc("categorie~categorie");
-jClasses::inc("categorie~souscategorie");
-jClasses::inc("catalogue~Catalogue");
+require_once(jApp::appPath().'modules/common/controllers/jControllerRSR.php');
+
+jClasses::inc("entreprise~CEntreprise");
+jClasses::inc("categorie~CCategorie");
+jClasses::inc("categorie~CSouscategorie");
+jClasses::inc("catalogue~CCatalogue");
 jClasses::inc("common~CCommonTools");
 jClasses::inc("common~CPhotosUpload");
 
-class entrepriseCtrl extends jController {
+class entrepriseCtrl extends jControllerRSR {
     
     public $pluginParams = array(
         'index'             => array('jacl2.right'=>'entreprise.list'),
@@ -25,29 +27,140 @@ class entrepriseCtrl extends jController {
 
     public function index() 
     {
-        if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
-            $resp = $this->getResponse('html');
-            $tpl = new jTpl();        
-            
-            $toListEntreprise = Entreprise::getList();
+        if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all    
+
+            // check if request is ajax
+            $isAjax = jApp::coord()->request->isAjax();
+
+            // response
+            $resp = ($isAjax) ? $this->getResponse('htmlfragment') : $this->getResponse('html');
+
+            $tpl = new jTpl();
+
+            // Filtres
+            $filtreStatus   = array();
+            $filtreCategorie = '';
+            $filtreInfo     = '';
+            $filtreNonPublie = '';
+            $filtrePublie = '';
+            $filtreEnAttente = '';
+            $filtreRecherche = '';
+
+            if ($this->param('filtreInfo', '') != '')
+            {
+                $filtreInfo = $this->param('filtreInfo');
+            }
+            if ($this->param('filtrePublication', '') != '')
+            {
+                $filtre = $this->param('filtrePublication');
+                if (sizeof($filtre) > 0)
+                {
+                    foreach ($filtre as $f)
+                    {
+                    
+                        $filtreStatus[] = 'is_publie = '.$f;
+                        if ($f == 0)
+                        {
+                            $filtreNonPublie = 'checked';
+                        }
+                        elseif ($f == 1)
+                        {
+                            $filtrePublie = 'checked';
+                        }
+                        elseif ($f == 2)
+                        {
+                            $filtreEnAttente = 'checked';
+                        }
+                    }
+                }
+            }
+            if ($this->param('filtreCategorie', '') != '')
+            {
+                $filtreCategorie = $this->param('filtreCategorie');
+            }
+            if ($this->param('filtreRecherche', '') != '')
+            {
+                $filtreRecherche = $this->param('filtreRecherche');
+            }
+
+            $tpl->assign('filtreNonPublie',$filtreNonPublie);
+            $tpl->assign('filtrePublie',$filtrePublie);
+            $tpl->assign('filtreEnAttente',$filtreEnAttente);
+            $tpl->assign('filtreInfo',$filtreInfo);
+            $tpl->assign('filtreCategorie',$filtreCategorie);
+            $tpl->assign('filtreRecherche',$filtreRecherche);
 
             $oListCategorie = array();
-            $oList = Categorie::getList();
+            $oList = CCategorie::getList();
             $i = 0;
+
             foreach ($oList as $categorie) {
                 $oListCategorie[$i]['categorie'] = $categorie;
                 $oListCategorie[$i]['souscategorie'] = $categorie->getChild();
                 $i+=1;
             }
 
-            $tpl->assign("toListEntreprise", $toListEntreprise);
-            $tpl->assign("oListCategorie", $oListCategorie);
-            $tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
-            $tpl->assign('PHOTOS_BIG_FOLDER',PHOTOS_BIG_FOLDER);
-            $tpl->assign('PHOTOS_THUMBNAIL_FOLDER',PHOTOS_THUMBNAIL_FOLDER);
-            $tpl->assign("SCRIPT", jZone::get('common~script'));
-            $resp->body->assign('MAIN', $tpl->fetch('entreprise~index'));
-            $resp->body->assign('selectedMenuItem','entreprise');
+            //pagination parameters
+            $paginationParams = array();
+            $hasPagination = true;
+            $page = $this->intParam("page", 1, true);
+            $sortSens = $this->stringParam("sortsens", "DESC", true);
+            $sortField = $this->stringParam("sortfield", "raisonsociale", true);
+            $listStatus = $this->intParam("ls", LIST_ACTIVE, true);
+
+            //pagination parameters
+            $paginationParams = array();
+
+            //and filters
+            $andFilters = array();
+            if ($listStatus == LIST_ACTIVE) {
+                $andFilters[] = "abonnement_removalstatus = " . NO;
+                $paginationParams["ls"] = NO;
+            } else {
+                $andFilters[] = "abonnement_removalstatus = " . YES;
+                $paginationParams["ls"] = YES;
+            }
+
+            // Liste
+            $nbRecs = 0;
+            $toListEntreprise = CEntreprise::getListFiltered($filtreStatus, $filtreInfo, $filtreCategorie, $filtreRecherche, $hasPagination, $nbRecs, $page, NB_DATA_PER_PAGE, $sortField, $sortSens);
+
+            // pagination
+            $pagination = CCommonTools::getPagination("entreprise~entreprise:index", $nbRecs, $page, NB_DATA_PER_PAGE, NB_LINK_TO_DISPLAY, array(), false, "paginateEntreprise");
+
+            if ($isAjax) {
+
+                $resp->tplname = 'entreprise~entreprise_list';
+                CCommonTools::assignDefinedConstants($resp->tpl);
+                $resp->tpl->assign("toListEntreprise", $toListEntreprise);
+                $resp->tpl->assign("page", $page);
+                $resp->tpl->assign("nbRecs", $nbRecs);
+                $resp->tpl->assign("oListCategorie", $oListCategorie);
+                $resp->tpl->assign("pagination", $pagination);
+                $resp->tpl->assign("sortsens", $sortSens);
+                $resp->tpl->assign("sortfield", $sortField);
+                $resp->tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
+                $resp->tpl->assign('PHOTOS_BIG_FOLDER',PHOTOS_BIG_FOLDER);
+                $resp->tpl->assign('PHOTOS_THUMBNAIL_FOLDER',PHOTOS_THUMBNAIL_FOLDER);
+
+            } else {
+
+                CCommonTools::assignDefinedConstants($tpl);
+                $tpl->assign("toListEntreprise", $toListEntreprise);
+                $tpl->assign("oListCategorie", $oListCategorie);
+                $tpl->assign("pagination", $pagination);
+                $tpl->assign("sortsens", $sortSens);
+                $tpl->assign("sortfield", $sortField);
+                $tpl->assign("page", $page);
+                $tpl->assign("nbRecs", $nbRecs);
+                $tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
+                $tpl->assign('PHOTOS_BIG_FOLDER',PHOTOS_BIG_FOLDER);
+                $tpl->assign('PHOTOS_THUMBNAIL_FOLDER',PHOTOS_THUMBNAIL_FOLDER);
+                $tpl->assign("SCRIPT", jZone::get('common~script'));
+                $resp->body->assign('MAIN', $tpl->fetch('entreprise~index'));
+                $resp->body->assign('selectedMenuItem','entreprise');
+
+            }
         }else {
             $resp = $this->getResponse('html');
             $tpl = new jTpl();
@@ -62,7 +175,7 @@ class entrepriseCtrl extends jController {
         $resp = $this->getResponse('htmlfragment');
 
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
-            $toListEntreprise = Entreprise::getList();
+            $toListEntreprise = CEntreprise::getList();
             $resp->tpl->assign("toListEntreprise", $toListEntreprise);
             $resp->tplname = "entreprise~entreprise_list";
         }else {
@@ -80,7 +193,7 @@ class entrepriseCtrl extends jController {
         $resp = $this->getResponse('htmlfragment');
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $categorieId = $this->param('categorieId');
-            $toListEntreprise = Entreprise::filterByCategorie($categorieId);
+            $toListEntreprise = CEntreprise::filterByCategorie($categorieId);
             $resp->tpl->assign("toListEntreprise", $toListEntreprise);
             $resp->tplname = "entreprise~entreprise_list"; 
         }      
@@ -98,7 +211,7 @@ class entrepriseCtrl extends jController {
         $resp = $this->getResponse('htmlfragment');
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $souscategorieId = $this->param('souscategorieId');
-            $toListEntreprise = Entreprise::filterBySouscategorie($souscategorieId);
+            $toListEntreprise = CEntreprise::filterBySouscategorie($souscategorieId);
             $resp->tpl->assign("toListEntreprise", $toListEntreprise);
             $resp->tplname = "entreprise~entreprise_list";
         }      
@@ -119,7 +232,7 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             // Liste des categories
             $oListCategorie = array();
-            $oList = Categorie::getList();
+            $oList = CCategorie::getList();
             $i = 0;
             foreach ($oList as $categorie) {
                 $oListCategorie[$i]['categorie'] = $categorie;
@@ -191,7 +304,7 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $entrepriseId = $this->param('entrepriseId');
             $operation = $this->param('operation');
-            $oEntreprise = Entreprise::getById($entrepriseId);
+            $oEntreprise = CEntreprise::getById($entrepriseId);
             if ($operation == 'insert'){            
                 $urlVideo = $this->param('urlVideo');
                 if ($_FILES['videosfile']['name'] != ''){
@@ -220,9 +333,9 @@ class entrepriseCtrl extends jController {
             }
 
             // update weight
-            Entreprise::setWeight($entrepriseId);
+            CEntreprise::setWeight($entrepriseId);
 
-            $oEntreprise->videos_youtube =  Entreprise::getVideosYoutube($this->param('entrepriseId'));
+            $oEntreprise->videos_youtube =  CEntreprise::getVideosYoutube($this->param('entrepriseId'));
             $resp->tpl->assign("oEntreprise", $oEntreprise);
             $resp->tplname = "entreprise~videos_list";
         }      
@@ -274,7 +387,7 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $entrepriseId = $this->param('entrepriseId');
             $operation = $this->param('operation');
-            $oEntreprise = Entreprise::getById($entrepriseId);
+            $oEntreprise = CEntreprise::getById($entrepriseId);
             if ($operation == 'insert')
             {            
                 if (isset($_FILES['imagefile']))
@@ -298,7 +411,7 @@ class entrepriseCtrl extends jController {
                 $oEntreprise->deleteImagesGalerie($imageId);
             }     
             
-            $oEntreprise->galerie_image =  Entreprise::getImagesGalerie($this->param('entrepriseId'));
+            $oEntreprise->galerie_image =  CEntreprise::getImagesGalerie($this->param('entrepriseId'));
             $resp->tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
             $resp->tpl->assign('PHOTOS_BIG_FOLDER',PHOTOS_BIG_FOLDER);
             $resp->tpl->assign('PHOTOS_THUMBNAIL_FOLDER',PHOTOS_THUMBNAIL_FOLDER);
@@ -318,7 +431,7 @@ class entrepriseCtrl extends jController {
         $resp = $this->getResponse('redirect');
 
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
-            $entreprise = new Entreprise();
+            $entreprise = new CEntreprise();
             $entreprise->raisonsociale = $this->param("raisonSociale");
             $entreprise->activite = $this->param("descActivite");
             $entreprise->adresse = $this->param("adresse");
@@ -362,7 +475,7 @@ class entrepriseCtrl extends jController {
             $resp->params = array('id'=>$entreprise->id);
 
             // update weight
-            Entreprise::setWeight($entreprise->id);
+            CEntreprise::setWeight($entreprise->id);
         }
         else {
             $resp = $this->getResponse('html');
@@ -377,14 +490,14 @@ class entrepriseCtrl extends jController {
         $id = $this->param("id");
 
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
-            $oEntreprise = Entreprise::getById($id);
+            $oEntreprise = CEntreprise::getById($id);
             if ($oEntreprise->raisonsociale != '')
             {
                 $resp = $this->getResponse('html');
                 $tpl = new jTpl();
                 // Liste des categories
                 $oListCategorie = array();
-                $oList = Categorie::getList();
+                $oList = CCategorie::getList();
                 $i = 0;
                 foreach ($oList as $categorie) {
                     $oListCategorie[$i]['categorie'] = $categorie;
@@ -394,17 +507,17 @@ class entrepriseCtrl extends jController {
 
                 $tpl->assign("oListCategorie", $oListCategorie);
                 
-                $oEntreprise->emails = Entreprise::getEmailsById($id);
-                $oEntreprise->telephones = Entreprise::getTelephonesById($id);
-                $oEntreprise->services = Entreprise::getServices($id);
-                $oEntreprise->produits = Entreprise::getProduits($id);
-                $oEntreprise->marques = Entreprise::getMarques($id);
+                $oEntreprise->emails = CEntreprise::getEmailsById($id);
+                $oEntreprise->telephones = CEntreprise::getTelephonesById($id);
+                $oEntreprise->services = CEntreprise::getServices($id);
+                $oEntreprise->produits = CEntreprise::getProduits($id);
+                $oEntreprise->marques = CEntreprise::getMarques($id);
 
 
-                $oCatalogueList = Entreprise::getCatalogues($id);
+                $oCatalogueList = CEntreprise::getCatalogues($id);
                 $tpl->assign ("oCatalogueList", $oCatalogueList);
-                $oEntreprise->videos_youtube =  Entreprise::getVideosYoutube($id);
-                $oEntreprise->galerie_image =  Entreprise::getImagesGalerie($id);
+                $oEntreprise->videos_youtube =  CEntreprise::getVideosYoutube($id);
+                $oEntreprise->galerie_image =  CEntreprise::getImagesGalerie($id);
             
                 $tpl->assign("oEntreprise", $oEntreprise);
                 $souscategoriesJSON = $oEntreprise->souscategoriesJSON();
@@ -439,7 +552,7 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $entrepriseId = $this->param('entrepriseId');
             $operation = $this->param('operation');
-            $oEntreprise = Entreprise::getById($entrepriseId);
+            $oEntreprise = CEntreprise::getById($entrepriseId);
             $id = $this->intParam('emailId');
             if ($operation == 'insert')
             {            
@@ -455,7 +568,7 @@ class entrepriseCtrl extends jController {
                 $oEntreprise->deleteEmail($id);
             }
 
-            $oEntreprise->emails = Entreprise::getEmailsById($entrepriseId);
+            $oEntreprise->emails = CEntreprise::getEmailsById($entrepriseId);
             $resp->tpl->assign ("oEntreprise", $oEntreprise);
 
             $resp->tplname = 'entreprise~email_list';
@@ -494,7 +607,7 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $entrepriseId = $this->param('entrepriseId');
             $operation = $this->param('operation');
-            $oEntreprise = Entreprise::getById($entrepriseId);
+            $oEntreprise = CEntreprise::getById($entrepriseId);
             $id = $this->intParam('telephoneId');
             if ($operation == 'insert')
             {            
@@ -510,7 +623,7 @@ class entrepriseCtrl extends jController {
                 $oEntreprise->deleteTelephone($id);
             }
 
-            $oEntreprise->telephones = Entreprise::getTelephonesById($entrepriseId);
+            $oEntreprise->telephones = CEntreprise::getTelephonesById($entrepriseId);
             $resp->tpl->assign ("oEntreprise", $oEntreprise);
 
             $resp->tplname = 'entreprise~telephone_list';
@@ -551,7 +664,7 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $entrepriseId = $this->param('entrepriseId');
             $operation = $this->param('operation');
-            $oEntreprise = Entreprise::getById($entrepriseId);
+            $oEntreprise = CEntreprise::getById($entrepriseId);
             $id = $this->intParam('serviceId');
             if ($operation == 'insert')
             {            
@@ -567,7 +680,7 @@ class entrepriseCtrl extends jController {
                 $oEntreprise->deleteService($id);
             }
 
-            $oEntreprise->services = Entreprise::getServices($entrepriseId);
+            $oEntreprise->services = CEntreprise::getServices($entrepriseId);
             $resp->tpl->assign ("oEntreprise", $oEntreprise);
 
             $resp->tplname = 'entreprise~service_list';
@@ -607,7 +720,7 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $entrepriseId = $this->param('entrepriseId');
             $operation = $this->param('operation');
-            $oEntreprise = Entreprise::getById($entrepriseId);
+            $oEntreprise = CEntreprise::getById($entrepriseId);
             $id = $this->intParam('produitId');
             if ($operation == 'insert')
             {            
@@ -623,7 +736,7 @@ class entrepriseCtrl extends jController {
                 $oEntreprise->deleteProduit($id);
             }
 
-            $oEntreprise->produits = Entreprise::getProduits($entrepriseId);
+            $oEntreprise->produits = CEntreprise::getProduits($entrepriseId);
             $resp->tpl->assign ("oEntreprise", $oEntreprise);
 
             $resp->tplname = 'entreprise~produit_list';
@@ -664,7 +777,7 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $entrepriseId = $this->param('entrepriseId');
             $operation = $this->param('operation');
-            $oEntreprise = Entreprise::getById($entrepriseId);
+            $oEntreprise = CEntreprise::getById($entrepriseId);
             $id = $this->intParam('marqueId');
             if ($operation == 'insert')
             {            
@@ -680,7 +793,7 @@ class entrepriseCtrl extends jController {
                 $oEntreprise->deleteMarque($id);
             }
 
-            $oEntreprise->marques = Entreprise::getMarques($entrepriseId);
+            $oEntreprise->marques = CEntreprise::getMarques($entrepriseId);
             $resp->tpl->assign ("oEntreprise", $oEntreprise);
 
             $resp->tplname = 'entreprise~marque_list';
@@ -733,7 +846,7 @@ class entrepriseCtrl extends jController {
             $radioGalerieImage = $this->param('radioActivVideo');
             $radioActivCatalogue = $this->param('radioActivCatalogue');
 
-            $oEntreprise = Entreprise::getById($entrepriseId);
+            $oEntreprise = CEntreprise::getById($entrepriseId);
             if (($raisonSociale != '') && ($oEntreprise->raisonsociale != $raisonSociale))
             {
                 $oEntreprise->raisonsociale = $raisonSociale;
@@ -821,7 +934,7 @@ class entrepriseCtrl extends jController {
             $oEntreprise->update();
 
             // update weight
-            Entreprise::setWeight($entrepriseId);
+            CEntreprise::setWeight($entrepriseId);
 
             jMessage::add(jLocale::get("common~common.alert.success"), "success");
 
@@ -843,9 +956,9 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $entrepriseId = $this->param('id');
 
-            Entreprise::deleteEntreprise($entrepriseId);
+            CEntreprise::deleteEntreprise($entrepriseId);
 
-            $toListEntreprise = Entreprise::getList();
+            $toListEntreprise = CEntreprise::getList();
             $resp->tpl->assign("toListEntreprise", $toListEntreprise);
             $resp->tplname = 'entreprise~entreprise_list';
         }
@@ -864,10 +977,10 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $toEntrepriseId = $this->param('entrepriseGroup');
             foreach ($toEntrepriseId as $entrepriseId) {
-                Entreprise::deleteEntreprise($entrepriseId);
+                CEntreprise::deleteEntreprise($entrepriseId);
             }
             
-            $toListEntreprise = Entreprise::getList();
+            $toListEntreprise = CEntreprise::getList();
             $resp->tpl->assign("toListEntreprise", $toListEntreprise);
             $resp->tplname = 'entreprise~entreprise_list';
         }
@@ -886,11 +999,11 @@ class entrepriseCtrl extends jController {
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
             $entrepriseId = $this->param('entrepriseId');
             $operation = $this->param('operation');
-            $oEntreprise = Entreprise::getById($entrepriseId);
+            $oEntreprise = CEntreprise::getById($entrepriseId);
 
             
-            if ($operation == 'insert'){            
-                $oCatalogue = new Catalogue();
+            if ($operation == 'insert'){
+                $oCatalogue = new CCatalogue();
                 if (isset($_FILES['img_produit']))
                 {
                     if ($_FILES['img_produit']['name'] != '')
@@ -917,7 +1030,7 @@ class entrepriseCtrl extends jController {
             }
             elseif ($operation == 'update')
             {
-                $oCatalogue = Catalogue::getById($this->param('id_produit'));
+                $oCatalogue = CCatalogue::getById($this->param('id_produit'));
                 $oCatalogue->reference_produit = $this->param('refProduit');
                 $oCatalogue->nom_produit = $this->param('nomProduit');
                 if (isset($_FILES['img_produit']))
@@ -937,7 +1050,7 @@ class entrepriseCtrl extends jController {
             }
             elseif ($operation == 'delete') 
             {
-                $oCatalogue = Catalogue::getById($this->param('id'));
+                $oCatalogue = CCatalogue::getById($this->param('id'));
                 $entrepriseId = $oCatalogue->entreprise_id;
                 $oCatalogue->delete();
             }
@@ -945,15 +1058,15 @@ class entrepriseCtrl extends jController {
             {
                 $group = $this->param('catalogueGroup');
                 foreach ($group as $id_produit) {
-                    $oCatalogue = Catalogue::getById($id_produit);
+                    $oCatalogue = CCatalogue::getById($id_produit);
                     $oCatalogue->delete();
                 }            
             }
 
             // update weight
-            Entreprise::setWeight($entrepriseId);
+            CEntreprise::setWeight($entrepriseId);
 
-            $oCatalogueList = Entreprise::getCatalogues($entrepriseId);
+            $oCatalogueList = CEntreprise::getCatalogues($entrepriseId);
             $resp->tpl->assign ("oCatalogueList", $oCatalogueList);
             $resp->tplname = 'entreprise~catalogue_list';
         }
@@ -985,7 +1098,7 @@ class entrepriseCtrl extends jController {
     {
         $resp = $this->getResponse('htmlfragment');
         if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
-            $oCatalogue = Catalogue::getById($this->param('id'));
+            $oCatalogue = CCatalogue::getById($this->param('id'));
             $resp->tpl->assign ("oCatalogue", $oCatalogue);
             $resp->tplname = 'entreprise~update_catalogue_form';
         }
@@ -1004,7 +1117,7 @@ class entrepriseCtrl extends jController {
         $resp = $this->getResponse('text');
         $raisonsociale = $this->param('raisonsociale');
         $valid = "true";
-        if (Entreprise::ifRaisonsocialeExist($raisonsociale) == 1)
+        if (CEntreprise::ifRaisonsocialeExist($raisonsociale) == 1)
         {
             $valid = "false";
         }
@@ -1018,7 +1131,7 @@ class entrepriseCtrl extends jController {
         $id = $this->param('id');
         $raisonsociale = $this->param('raisonsociale');
         $valid = "true";
-        if (Entreprise::ifUpdateRaisonsocialeExist($id, $raisonsociale) == 1)
+        if (CEntreprise::ifUpdateRaisonsocialeExist($id, $raisonsociale) == 1)
         {
             $valid = "false";
         }
@@ -1031,7 +1144,7 @@ class entrepriseCtrl extends jController {
         $resp = $this->getResponse('text');
         $login = $this->param('login');
         $valid = "true";
-        if (Entreprise::ifLoginExist($login) == 1)
+        if (CEntreprise::ifLoginExist($login) == 1)
         {
             $valid = "false";
         }
@@ -1045,7 +1158,7 @@ class entrepriseCtrl extends jController {
         $id = $this->param('id');
         $login = $this->param('login');
         $valid = "true";
-        if (Entreprise::ifUpdateLoginExist($id, $login) == 1)
+        if (CEntreprise::ifUpdateLoginExist($id, $login) == 1)
         {
             $valid = "false";
         }
@@ -1063,7 +1176,7 @@ class entrepriseCtrl extends jController {
 
         $term = $this->param("q");
         if (!empty($term)) {
-            $datas = Entreprise::autoComplet($term);
+            $datas = CEntreprise::autoComplet($term);
         }
         $resp->data = $datas;
 

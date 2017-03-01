@@ -8,11 +8,12 @@
 * @license    All rights reserved
 */
 
-jClasses::inc("entreprise~Entreprise");
-jClasses::inc("categorie~categorie");
-jClasses::inc("categorie~souscategorie");
-jClasses::inc("toprecherche~Toprecherche");
-class toprechercheCtrl extends jController {
+jClasses::inc("entreprise~CEntreprise");
+jClasses::inc("categorie~CCategorie");
+jClasses::inc("toprecherche~CToprecherche");
+
+class toprechercheCtrl extends jController
+{
     public $pluginParams    =array(
         'index'                     =>array('jacl2.right'=>'topsrecherche.list'),
         'addTopRecherche'           =>array('jacl2.right'=>'topsrecherche.create'),
@@ -28,7 +29,7 @@ class toprechercheCtrl extends jController {
     {
         if (!jAcl2::check("topsrecherche.restrictall")) { //Test droit restrict all
             $resp = $this->getResponse('html');
-            $toToprecherche = Toprecherche::getList();
+            $toToprecherche = CToprecherche::getList();
             $tpl = new jTpl();
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $tpl->assign('toToprecherche', $toToprecherche);
@@ -51,7 +52,7 @@ class toprechercheCtrl extends jController {
             $tpl = new jTpl();
         	// Liste des categories
             $oListCategorie = array();
-            $oList = Categorie::getList();
+            $oList = CCategorie::getList();
             $i = 0;
             foreach ($oList as $categorie) {
                 $oListCategorie[$i]['categorie'] = $categorie;
@@ -77,7 +78,7 @@ class toprechercheCtrl extends jController {
     	$resp = $this->getResponse('redirect');
         if (!jAcl2::check("topsrecherche.restrictall")) { //Test droit restrict all
         	$selected = $this->param('id');
-            $oToprecherche = Toprecherche::getByid($selected);
+            $oToprecherche = CToprecherche::getByid($selected);
             $oToprecherche->delete();
             jMessage::add(jLocale::get("toprecherche~toprecherche.delete.success"), "success");
             $resp->action = 'toprecherche~toprecherche:index';        
@@ -95,8 +96,8 @@ class toprechercheCtrl extends jController {
     	$resp = $this->getResponse('redirect');
         if (!jAcl2::check("topsrecherche.restrictall")) { //Test droit restrict all
         	$topGroup = $this->param('topGroup');
-        	foreach ($topGroup as $id) {    		
-    	        $oToprecherche = Toprecherche::getByid($id);
+        	foreach ($topGroup as $id) {
+    	        $oToprecherche = CToprecherche::getByid($id);
     	        $oToprecherche->delete();
         	}
             $resp->action = "toprecherche~toprecherche:index";
@@ -115,8 +116,8 @@ class toprechercheCtrl extends jController {
     	$resp = $this->getResponse('htmlfragment');
         if (!jAcl2::check("topsrecherche.restrictall")) { //Test droit restrict all
         	$souscategorieId = $this->param('souscategorieId');
-        	$toEntreprise = Entreprise::filterBySouscategorieNameDesc($souscategorieId);
-        	$oToprecherche = Toprecherche::getBySouscategorieId($souscategorieId);
+        	$toEntreprise = CEntreprise::filterBySouscategorieNameDesc($souscategorieId);
+        	$oToprecherche = CToprecherche::getBySouscategorieId($souscategorieId);
         	
         	$resp->tpl->assign('oToprecherche', $oToprecherche);
         	$resp->tpl->assign('toEntreprise', $toEntreprise);
@@ -138,10 +139,10 @@ class toprechercheCtrl extends jController {
         	{
                 if ($this->param('toprecherche1') != '')
                 {
-            		$oToprecherche = Toprecherche::checkIfExist($this->param('souscategorieId'));
+            		$oToprecherche = CToprecherche::checkIfExist($this->param('souscategorieId'));
             		if ($oToprecherche == '')
             		{
-        	    		$oToprecherche = new Toprecherche();
+        	    		$oToprecherche = new CToprecherche();
         	    		$oToprecherche->souscategorie_id = $this->param('souscategorieId');
         		    	$oToprecherche->entreprise_id_top1 = $this->param('toprecherche1');
         		    	$oToprecherche->entreprise_id_top2 = $this->param('toprecherche2');

@@ -10,7 +10,8 @@
 
 jClasses::inc("common~CCommonTools");
 jClasses::inc("common~CPhotosUpload");
-jClasses::inc("homepage~homepage");
+jClasses::inc("homepage~CHomepage");
+jClasses::inc("homepage~CContenuhomepage");
 
 class homepageCtrl extends jController {
     /**
@@ -24,7 +25,7 @@ class homepageCtrl extends jController {
             $tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
             $tpl->assign('PHOTOS_MEDIUM_FOLDER',PHOTOS_MEDIUM_FOLDER);
 
-            $oHomepage = Contenuhomepage::getById(1);
+            $oHomepage = CContenuhomepage::getById(1);
             $tpl->assign('oHomepage', $oHomepage);
 
             $resp->body->assign('MAIN', $tpl->fetch('homepage~index'));
@@ -44,7 +45,7 @@ class homepageCtrl extends jController {
             $resp = $this->getResponse('htmlfragment');
             
             $resp->tplname='homepage~edit_homepage.form';
-            $oHomepage = Contenuhomepage::getById(1);
+            $oHomepage = CContenuhomepage::getById(1);
             $resp->tpl->assign('oHomepage', $oHomepage);
             $resp->tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
             $resp->tpl->assign('PHOTOS_MEDIUM_FOLDER',PHOTOS_MEDIUM_FOLDER);
@@ -62,7 +63,7 @@ class homepageCtrl extends jController {
         $resp = $this->getResponse('redirect');
             
         if (jAcl2::check("homepage.update") && !jAcl2::check("homepage.restrictall")) {
-            $oHomepage = Contenuhomepage::getById(1);
+            $oHomepage = CContenuhomepage::getById(1);
             //background_parallax
             if (isset($_FILES['background_parallax']))
             {

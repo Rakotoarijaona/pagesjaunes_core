@@ -32,7 +32,7 @@
                                 <div class="form-group r-form">
                                     <label class="control-label">Entreprise</label>
                                     <div class="input-group">
-                                        <select data-placeholder="Selectionnez une entreprise" style="width:250px" name="entrepriseId" id="entrepriseId" class="chosen-select" tabindex="6">
+                                        <select data-placeholder="Selectionnez une entreprise" style="width:250px" name="entrepriseId" id="entrepriseId" class="chosen-select" tabindex="2">
                                             <option value="">Selectionnez une entreprise</option>
                                             {foreach ($toEntreprise as $rowEntreprise)}
                                             <option value="{$rowEntreprise->id}">{$rowEntreprise->raisonsociale}</option>
@@ -260,13 +260,13 @@ $(document).ready(function(){
     $('.btn-submit').click(function(){
         if(($('#urlpage').val() != '') && ($('#urlpage').val() != '[fiche]'))
         {
-            $('#urlpage').rules('add',{
+            /*$('#urlpage').rules('add',{
                 url: true,
                 messages: 
                 {
                     url:"Veuillez entrer un url valide"
                 }
-            });
+            });*/
         }
         else
         {
@@ -282,13 +282,13 @@ $(document).ready(function(){
     $('#urlpage').change(function(){
         if(($('#urlpage').val() != '') && ($('#urlpage').val() != '[fiche]'))
         {
-            $('#urlpage').rules('add',{
+            /*$('#urlpage').rules('add',{
                 url: true,
                 messages: 
                 {
                     url:"Veuillez entrer un url valide"
                 }
-            });
+            });*/
         }
         else
         {

@@ -22,7 +22,7 @@
                     <form id="adsform" role="form" action="{jurl 'ads~ads:save_delete_annonceur'}" method="POST">
                         <input type="hidden" name="id" value="{$oAdsPurchase->id}"/>
                         <div class="form-group r-form">
-                            <label>Êtes-vous sure de vouloir supprimer la publicité "{$oAdsPurchase->id}" de {$oAdsPurchase->advertiser_name}?</label>
+                            <label>Êtes-vous sure de vouloir supprimer la publicité "{$oAdsPurchase->id}"?</label>
                         </div>
                         <div class="thumbnail" style="max-width: 300px;">
                             <img src="{$j_basepath}publicites/big/{$oAdsPurchase->banner}" alt="" />
@@ -30,7 +30,7 @@
                         <div class="col-lg-12 hr-line-dashed"></div>
                         <div class="row">
                             <div class="col-lg-12 text-left">
-                              <button type="submit" class="btn btn-primary btn-save">Oui</button>              
+                              <button type="submit" class="btn btn-primary btn-save">Oui</button>
                               <a href="{jurl 'ads~ads:liste_annonce'}" class="btn btn-white" id="cancel">Annuler</a>
                             </div>
                         </div>
@@ -45,8 +45,7 @@
 <script type="text/javascript">
 $(document).ready(function()
 {
-    
-    
+
 });
 </script>
 {/literal}

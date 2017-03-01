@@ -8,8 +8,8 @@
 * @license    All rights reserved
 */
 
-jClasses::inc("entreprise~Entreprise");
-jClasses::inc("catalogue~Catalogue");
+jClasses::inc("entreprise~CEntreprise");
+jClasses::inc("catalogue~CCatalogue");
 jClasses::inc("common~CPhotosUpload");
 jClasses::inc ("common~ImageWorkshop") ;
 jClasses::inc ("common~CCommonTools") ;
@@ -43,7 +43,7 @@ class entrepriseCtrl extends jController {
     	$videosId = $this->param('id');
     	$urlVideo = $this->param('url');
         $entrepriseId = $this->param('entrepriseId');
-        $oEntreprise = Entreprise::getById($entrepriseId);
+        $oEntreprise = CEntreprise::getById($entrepriseId);
         $resp->data = array('url_youtube'=>'');
         $maFactory = jDao::get('entreprise~videos');
         if ($videosId == '')
@@ -66,7 +66,7 @@ class entrepriseCtrl extends jController {
                     $toVideos['url_youtube'] = $oVideos->url_youtube;
                     $toVideos['vignette_video'] = $oVideos->vignette_video;
                 }
-                $resp->data = $toVideos;            
+                $resp->data = $toVideos;
             }
         }
         else
@@ -100,7 +100,7 @@ class entrepriseCtrl extends jController {
     {
         $resp = $this->getResponse('text');
         $entrepriseId = $this->param('entrepriseId');
-        $oEntreprise = Entreprise::getById($entrepriseId);
+        $oEntreprise = CEntreprise::getById($entrepriseId);
         $videoId = $this->param('id');
         $oEntreprise->deleteVideoYoutube($videoId);
         $resp->content = 'Suppréssion réussie';
@@ -130,7 +130,7 @@ class entrepriseCtrl extends jController {
     {
         $resp = $this->getResponse('json');
         $entrepriseId = $this->param('entrepriseId');
-        $oEntreprise = Entreprise::getById($entrepriseId);
+        $oEntreprise = CEntreprise::getById($entrepriseId);
         $resp->data = array('image'=>'');
         $maFactory = jDao::get('entreprise~images');
         $image = '';
@@ -162,7 +162,7 @@ class entrepriseCtrl extends jController {
     {
         $resp = $this->getResponse('text');
         $entrepriseId = $this->param('entrepriseId');
-        $oEntreprise = Entreprise::getById($entrepriseId);
+        $oEntreprise = CEntreprise::getById($entrepriseId);
         $imageId = $this->param('id');
         $oEntreprise->deleteImagesGalerie($imageId);
         $resp->content = 'Suppréssion réussie';
@@ -210,7 +210,7 @@ class entrepriseCtrl extends jController {
 
         $entrepriseId       = $this->param('entrepriseId');
 
-        $oEntreprise    = Entreprise::getById($entrepriseId);
+        $oEntreprise    = CEntreprise::getById($entrepriseId);
 
         $resp->data     = array('nom_produit'=>'');
 
@@ -222,7 +222,7 @@ class entrepriseCtrl extends jController {
         {            
             $image_produit = '';
 
-            $oCatalogue = new Catalogue();
+            $oCatalogue = new CCatalogue();
 
             $oCatalogue->reference_produit  = $catalogueRef;
             $oCatalogue->entreprise_id      = $entrepriseId;
@@ -260,14 +260,14 @@ class entrepriseCtrl extends jController {
                     $toCatalogue['prix_produit']        = $oCatalogue->prix_produit;
                 }
 
-                $resp->data = $toCatalogue;            
+                $resp->data = $toCatalogue;
             }
         }
         else
         {
             $image_produit = '';
 
-            $oCatalogue = Catalogue::getByid($catalogueId);
+            $oCatalogue = CCatalogue::getByid($catalogueId);
 
             $oCatalogue->reference_produit  = $catalogueRef;
             $oCatalogue->entreprise_id      = $entrepriseId;
@@ -312,7 +312,7 @@ class entrepriseCtrl extends jController {
         $resp = $this->getResponse('text');
 
         $catalogueId   = $this->param('id');
-        $oCatalogue    = Catalogue::getByid($catalogueId);
+        $oCatalogue    = CCatalogue::getByid($catalogueId);
 
         $oCatalogue->delete();
 
@@ -328,212 +328,208 @@ class entrepriseCtrl extends jController {
         $resp = $this->getResponse('redirect');
         $entrepriseId = $this->param('entreprise');
 
-        $oEntreprise = Entreprise::getById($entrepriseId);
+        //Entreprise
+        $entreprise = CEntreprise::getById($entrepriseId);
+        $entreprise->raisonsociale = $this->param('raisonSociale');
+        $entreprise->activite = $this->param('descActivite');
+        $entreprise->adresse = $this->param('adresse');
+        $entreprise->region = $this->param('region');
 
-        if (($this->param('raisonSociale') != '') && ($this->param('descActivite') != '') && ($this->param('adresse') != ''))
+        if ($_FILES["logo"]["name"] != '')
         {
-            //Entreprise
-            $oEntreprise->raisonsociale = $this->param('raisonSociale');
-            $oEntreprise->activite = $this->param('descActivite');
-            $oEntreprise->adresse = $this->param('adresse');
-            $oEntreprise->region = $this->param('region');
-
-            if ($_FILES["logo"]["name"] != '')
-            {
-                $fileName = $_FILES["logo"]["name"]; // The file name
-                $fileTmpLoc = $_FILES["logo"]["tmp_name"]; // File in the PHP tmp folder
-                $fileType = $_FILES["logo"]["type"]; // The type of file it is
-                $fileSize = $_FILES["logo"]["size"]; // File size in bytes
-                $fileErrorMsg = $_FILES["logo"]["error"]; // 0 for false... and 1 for true
-                $imageFileType = pathinfo($fileName,PATHINFO_EXTENSION);
-                $target_file = str_replace(' ', '', $oEntreprise->raisonsociale)."logo.".$imageFileType;
-                $uploadOk = 1;        
-                if (!$fileTmpLoc) { // if file not chosen
-                    $uploadOk = 0;
-                }        
-                if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-                    $uploadOk = 0;
-                }
-                if(move_uploaded_file($fileTmpLoc, "entreprise/images/$target_file")){
-                    $oEntreprise->logo = $target_file;
-                }
+            $fileName = $_FILES["logo"]["name"]; // The file name
+            $fileTmpLoc = $_FILES["logo"]["tmp_name"]; // File in the PHP tmp folder
+            $fileType = $_FILES["logo"]["type"]; // The type of file it is
+            $fileSize = $_FILES["logo"]["size"]; // File size in bytes
+            $fileErrorMsg = $_FILES["logo"]["error"]; // 0 for false... and 1 for true
+            $imageFileType = pathinfo($fileName,PATHINFO_EXTENSION);
+            $target_file = str_replace(' ', '', $entreprise->raisonsociale)."logo.".$imageFileType;
+            $uploadOk = 1;        
+            if (!$fileTmpLoc) { // if file not chosen
+                $uploadOk = 0;
+            }        
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+                $uploadOk = 0;
             }
-
-            $oEntreprise->contact_interne = $this->param('personneContact');
-            $oEntreprise->fonction_contact = $this->param('fonctionPersonneContact');
-            $oEntreprise->url_website = $this->param('siteweb');
-            $oEntreprise->qui_sommes_nous = $this->param('quisommesnous');
-            $oEntreprise->nos_services = $this->param('nos_services');
-            $oEntreprise->nos_references = $this->param('reference');
-            $oEntreprise->is_publie = 2;
-
-            //Télephone
-            if (!empty($this->param('hdn-rmv-telephone')))
-            {
-                if (sizeof($this->param('hdn-rmv-telephone'))>0)
-                {
-                    foreach ($this->param('hdn-rmv-telephone') as $rmvdPhone) {
-                        $oEntreprise->deleteTelephone($rmvdPhone);
-                    }
-                }
+            if(move_uploaded_file($fileTmpLoc, "entreprise/images/$target_file")){
+                $entreprise->logo = $target_file;
             }
-            $toTelephones = $oEntreprise->getTelephoneByEntrepriseId();
-            if (sizeof($toTelephones) > 0)
-            {
-                foreach ($toTelephones as $telephone) 
-                {
-                    $key = 'telephones'.$telephone->id;
-                    if (!empty($this->param($key)))
-                    {
-                        $oEntreprise->updateTelephone($telephone->id, $this->param($key));
-                    }
-                }
-            }
-            if (!empty($this->param('telephones')))
-            {
-                if (sizeof($this->param('telephones'))>0)
-                {
-                    foreach ($this->param('telephones') as $telephone) {
-                        if ($telephone != '')
-                            $oEntreprise->insertTelephone($telephone);
-                    }
-                }
-            }
-
-            //Email
-            if (!empty($this->param('hdn-rmv-email')))
-            {
-                if (sizeof($this->param('hdn-rmv-email'))>0)
-                {
-                    foreach ($this->param('hdn-rmv-email') as $rmvdEmail) {
-                        $oEntreprise->deleteEmail($rmvdEmail);
-                    }
-                }
-            }
-            $toEmails = $oEntreprise->getEmailByEntrepriseId();
-            if (sizeof($toEmails) > 0)
-            {
-                foreach ($toEmails as $email) 
-                {
-                    $key = 'emails'.$email->id;
-                    if (!empty($this->param($key)))
-                    {
-                        $oEntreprise->updateEmail($email->id, $this->param($key));
-                    }
-                }
-            }
-            if (!empty($this->param('emails')))
-            {
-                if (sizeof($this->param('emails'))>0)
-                {
-                    foreach ($this->param('emails') as $email) {
-                        if ($email != '')
-                            $oEntreprise->insertEmail($email);
-                    }
-                }
-            }
-
-            //Services
-            if (!empty($this->param('hdn-rmv-service')))
-            {
-                if (sizeof($this->param('hdn-rmv-service'))>0)
-                {
-                    foreach ($this->param('hdn-rmv-service') as $rmvdService) {
-                        $oEntreprise->deleteService($rmvdService);
-                    }
-                }
-            }
-            $toServices = $oEntreprise->getServiceByEntrepriseId();
-            if (sizeof($toServices) > 0)
-            {
-                foreach ($toServices as $service) 
-                {
-                    $key = 'services'.$service->id;
-                    if (!empty($this->param($key)))
-                    {
-                        $oEntreprise->updateService($service->id, $this->param($key));
-                    }
-                }
-            }
-            if (!empty($this->param('services')))
-            {
-                if (sizeof($this->param('services'))>0)
-                {
-                    foreach ($this->param('services') as $service) {
-                        if ($service != '')
-                            $oEntreprise->insertService($service);
-                    }
-                }
-            }
-
-            //Produits
-            if (!empty($this->param('hdn-rmv-produit')))
-            {
-                if (sizeof($this->param('hdn-rmv-produit'))>0)
-                {
-                    foreach ($this->param('hdn-rmv-produit') as $rmvdProduit) {
-                        $oEntreprise->deleteProduit($rmvdProduit);
-                    }
-                }
-            }
-            $toProduits = $oEntreprise->getProduitByEntrepriseId();
-            if (sizeof($toProduits) > 0)
-            {
-                foreach ($toProduits as $produit) 
-                {
-                    $key = 'produits'.$produit->id;
-                    if (!empty($this->param($key)))
-                    {
-                        $oEntreprise->updateProduit($produit->id, $this->param($key));
-                    }
-                }
-            }
-            if (!empty($this->param('produits')))
-            {
-                if (sizeof($this->param('produits'))>0)
-                {
-                    foreach ($this->param('produits') as $produit) {
-                        if ($produit != '')
-                            $oEntreprise->insertProduit($produit);
-                    }
-                }
-            }
-
-            //Marques
-            if (!empty($this->param('hdn-rmv-marque')))
-            {
-                if (sizeof($this->param('hdn-rmv-marque'))>0)
-                {
-                    foreach ($this->param('hdn-rmv-marque') as $rmvdMarque) {
-                        $oEntreprise->deleteMarque($rmvdMarque);
-                    }
-                }
-            }
-            $toMarques = $oEntreprise->getMarqueByEntreprise();
-            if (sizeof($toMarques) > 0)
-            {
-                foreach ($toMarques as $marques) 
-                {
-                    $key = 'marques'.$marques->id;
-                    if (!empty($this->param($key)))
-                    {
-                        $oEntreprise->updateMarque($marques->id, $this->param($key));
-                    }
-                }
-            }
-            if (!empty($this->param('marques')))
-            {
-                if (sizeof($this->param('marques'))>0)
-                {
-                    foreach ($this->param('marques') as $marques) {
-                        if ($marques != '')
-                            $oEntreprise->insertMarque($marques);
-                    }
-                }
-            }
-
-            $oEntreprise->update();
         }
+
+        $entreprise->contact_interne = $this->param('personneContact');
+        $entreprise->fonction_contact = $this->param('fonctionPersonneContact');
+        $entreprise->url_website = $this->param('siteweb');
+        $entreprise->qui_sommes_nous = $this->param('quisommesnous');
+        $entreprise->nos_services = $this->param('nos_services');
+        $entreprise->nos_references = $this->param('reference');
+        $entreprise->is_publie = 2;
+
+        //Télephone
+        if (!empty($this->param('hdn-rmv-telephone')))
+        {
+            if (sizeof($this->param('hdn-rmv-telephone'))>0)
+            {
+                foreach ($this->param('hdn-rmv-telephone') as $rmvdPhone) {
+                    $entreprise->deleteTelephone($rmvdPhone);
+                }
+            }
+        }
+        $toTelephones = $entreprise->getTelephoneByEntrepriseId();
+        if (sizeof($toTelephones) > 0)
+        {
+            foreach ($toTelephones as $telephone) 
+            {
+                $key = 'telephones'.$telephone->id;
+                if (!empty($this->param($key)))
+                {
+                    $entreprise->updateTelephone($telephone->id, $this->param($key));
+                }
+            }
+        }
+        if (!empty($this->param('telephones')))
+        {
+            if (sizeof($this->param('telephones'))>0)
+            {
+                foreach ($this->param('telephones') as $telephone) {
+                    if ($telephone != '')
+                        $entreprise->insertTelephone($telephone);
+                }
+            }
+        }
+
+        //Email
+        if (!empty($this->param('hdn-rmv-email')))
+        {
+            if (sizeof($this->param('hdn-rmv-email'))>0)
+            {
+                foreach ($this->param('hdn-rmv-email') as $rmvdEmail) {
+                    $entreprise->deleteEmail($rmvdEmail);
+                }
+            }
+        }
+        $toEmails = $entreprise->getEmailByEntrepriseId();
+        if (sizeof($toEmails) > 0)
+        {
+            foreach ($toEmails as $email) 
+            {
+                $key = 'emails'.$email->id;
+                if (!empty($this->param($key)))
+                {
+                    $entreprise->updateEmail($email->id, $this->param($key));
+                }
+            }
+        }
+        if (!empty($this->param('emails')))
+        {
+            if (sizeof($this->param('emails'))>0)
+            {
+                foreach ($this->param('emails') as $email) {
+                    if ($email != '')
+                        $entreprise->insertEmail($email);
+                }
+            }
+        }
+
+        //Services
+        if (!empty($this->param('hdn-rmv-service')))
+        {
+            if (sizeof($this->param('hdn-rmv-service'))>0)
+            {
+                foreach ($this->param('hdn-rmv-service') as $rmvdService) {
+                    $entreprise->deleteService($rmvdService);
+                }
+            }
+        }
+        $toServices = $entreprise->getServiceByEntrepriseId();
+        if (sizeof($toServices) > 0)
+        {
+            foreach ($toServices as $service) 
+            {
+                $key = 'services'.$service->id;
+                if (!empty($this->param($key)))
+                {
+                    $entreprise->updateService($service->id, $this->param($key));
+                }
+            }
+        }
+        if (!empty($this->param('services')))
+        {
+            if (sizeof($this->param('services'))>0)
+            {
+                foreach ($this->param('services') as $service) {
+                    if ($service != '')
+                        $entreprise->insertService($service);
+                }
+            }
+        }
+
+        //Produits
+        if (!empty($this->param('hdn-rmv-produit')))
+        {
+            if (sizeof($this->param('hdn-rmv-produit'))>0)
+            {
+                foreach ($this->param('hdn-rmv-produit') as $rmvdProduit) {
+                    $entreprise->deleteProduit($rmvdProduit);
+                }
+            }
+        }
+        $toProduits = $entreprise->getProduitByEntrepriseId();
+        if (sizeof($toProduits) > 0)
+        {
+            foreach ($toProduits as $produit) 
+            {
+                $key = 'produits'.$produit->id;
+                if (!empty($this->param($key)))
+                {
+                    $entreprise->updateProduit($produit->id, $this->param($key));
+                }
+            }
+        }
+        if (!empty($this->param('produits')))
+        {
+            if (sizeof($this->param('produits'))>0)
+            {
+                foreach ($this->param('produits') as $produit) {
+                    if ($produit != '')
+                        $entreprise->insertProduit($produit);
+                }
+            }
+        }
+
+        //Marques
+        if (!empty($this->param('hdn-rmv-marque')))
+        {
+            if (sizeof($this->param('hdn-rmv-marque'))>0)
+            {
+                foreach ($this->param('hdn-rmv-marque') as $rmvdMarque) {
+                    $entreprise->deleteMarque($rmvdMarque);
+                }
+            }
+        }
+        $toMarques = $entreprise->getMarqueByEntreprise();
+        if (sizeof($toMarques) > 0)
+        {
+            foreach ($toMarques as $marques) 
+            {
+                $key = 'marques'.$marques->id;
+                if (!empty($this->param($key)))
+                {
+                    $entreprise->updateMarque($marques->id, $this->param($key));
+                }
+            }
+        }
+        if (!empty($this->param('marques')))
+        {
+            if (sizeof($this->param('marques'))>0)
+            {
+                foreach ($this->param('marques') as $marques) {
+                    if ($marques != '')
+                        $entreprise->insertMarque($marques);
+                }
+            }
+        }
+
+        $entreprise->update();
 
         $resp->action = "front_office~default:pages";
         $resp->params = array('p' =>'remerciement-edition');

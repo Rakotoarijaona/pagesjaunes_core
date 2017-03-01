@@ -26,18 +26,18 @@
                                 <input id="titre" name="titre" disabled type="text" class="form-control" required>
                             </div>
                             <div class="form-group r-form">
-                                <div>
-                                    <label>Sous-catégorie *</label>
-                                    <select onchange="getToprechercheForm()" id="souscategorieId" name="souscategorieId[]" class="form-control" style="width:100%;" tabindex="2">
-                                        <option value=''>Selection...</option>
+                                <label class="control-label">Sous-catégorie *</label>
+                                <div class="input-group">
+                                    <select data-placeholder="Selectionnez une entreprise" onchange="getToprechercheForm()" id="souscategorieId" name="souscategorieId[]" class="form-control chosen-select" style="width:100%;" tabindex="2">
+                                        <option value="">Selectionnez une entreprise</option>
                                         {if (sizeof($oListCategorie)>0)}
-                                        {foreach ($oListCategorie as $rowCategorie)}
-                                        <optgroup label="{$rowCategorie['categorie']->name}">
-                                            {foreach ($rowCategorie['souscategorie'] as $souscategorie)} 
-                                            <option value='{$souscategorie->id}'{if ($selected == $souscategorie->id)}selected{/if}>{$souscategorie->name} </option>
+                                            {foreach ($oListCategorie as $rowCategorie)}
+                                            <optgroup label="{$rowCategorie['categorie']->name}">
+                                                {foreach ($rowCategorie['souscategorie'] as $souscategorie)} 
+                                                    <option value='{$souscategorie->id}'{if ($selected == $souscategorie->id)}selected{/if}>{$souscategorie->name} </option>
+                                                {/foreach}
+                                            </optgroup>
                                             {/foreach}
-                                        </optgroup>
-                                        {/foreach}
                                         {/if}
                                     </select>
                                 </div>
@@ -54,7 +54,7 @@
                     <div class="row">
                         <div class="col-lg-12 text-center">
                             <button type="button" onclick="saveTopRecherche()" class="btn-save btn btn-primary">Enregistrer</button>
-                            <button type="button" onclick="backToIndex()" class="btn btn-success">Terminer</button>
+                            <button type="button" onclick="backToIndex()" class="btn btn-white">Revenir à la liste</button>
                             <button type="button" onclick="backToIndex()" class="btn-cancel btn btn-white">Annuler</button>
                         </div>
                     </div>
@@ -73,6 +73,7 @@ $(document).ready(function()
     {
         getToprechercheForm();
     }
+    $('.chosen-select').chosen();
 
 }
 );
@@ -121,7 +122,9 @@ function saveTopRecherche()
             contentType: false,
             success: function(data) {
                 swal('',data);  
-                //$('option[value=""]').attr('selected','true'); 
+                $('option:selected').removeAttr('selected');
+                $('.chosen-select').chosen('destroy');
+                $('.chosen-select').chosen();
                 $('#titre').val('');               
                 $('#toprecherche-form').html('<div class="alert alert-info text-center">'+data+'</div>');
             }

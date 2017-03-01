@@ -1,9 +1,9 @@
 <?php
 /**
 * @package   pagesjaunes_core
-* @author    your name
-* @copyright 2011 your name
-* @link      http://www.yourwebsite.undefined
+* @author    R
+* @copyright 2017 R
+* @link      http://www.pagesjaunes.mg
 * @license    All rights reserved
 */
 

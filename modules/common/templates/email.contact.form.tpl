@@ -7,7 +7,6 @@
         </style>
     </head>
     <body>
-
         <table cellpadding="0" cellspacing="0" width="100%">
             <tbody>
                 <tr>
@@ -15,9 +14,9 @@
                         <table width="600" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
                             <tr>
                                 <td align="left" valign="center"
-                                height="30" bgcolor="#ffffff" style="padding:10px;">
+                                height="30" bgcolor="#ffffff" style="padding:10px 10px 20px 10px;">
                                     <span style="font-family:arial;color:#000000;">
-                                    {$subject}
+                                        <strong>Sujet </strong>: Requête client <strong>{$name}</strong>
                                     </span>
                                 </td>
                             </tr>
@@ -25,8 +24,14 @@
                         <table width="600" border="0" cellpadding="0" cellspacing="0" bgcolor="#DAE9C8">
                             <tr>
                                 <td align="left" valign="top"
-                                bgcolor="#ffffff" style="font-family:arial;color:#000000;padding:10px;">
-                                    {$content}
+                                bgcolor="#ffffff" style="font-family:arial;color:#000000;padding:0px 10px 10px 10px;">
+                                    {$message}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" valign="top"
+                                bgcolor="#ffffff" style="font-family:arial;color:#000000;padding:0px 10px 10px 10px;">
+                                    <p><strong>Numéro de téléphone </strong>: {$phone}</p>
                                 </td>
                             </tr>
                         </table>
@@ -34,6 +39,5 @@
                 </tr>
             </tbody>
         </table>
-
     </body>
 </html>
