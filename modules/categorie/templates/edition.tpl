@@ -19,7 +19,6 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeIn">
-                      
     {jmessage}
     <div class="row">
         <div class="col-lg-6">
@@ -232,7 +231,7 @@ $(document).ready(function(){
 
     toggle_icone_picker();
 
-    $('#parent').change(function(){        
+    $('#parent').change(function(){
         toggle_icone_picker();
     });
 
@@ -278,7 +277,7 @@ $(document).ready(function(){
             
             if ($('input[name="iscategorie"]').val() == 1)
             {
-                $.post("{/literal}{jurl 'categorie~categorie:categorieUpdateNameExist'}{literal}",
+                $.post("{/literal}{jfullurl 'categorie~categorie:categorieUpdateNameExist'}{literal}",
                 {
                     id: $('input[name="id"]').val(),
                     nom: $('#name').val()
@@ -300,7 +299,7 @@ $(document).ready(function(){
             }
             else if ($('input[name="iscategorie"]').val() == 0)
             {   
-                $.post("{/literal}{jurl 'categorie~categorie:souscategorieUpdateNameExist'}{literal}",
+                $.post("{/literal}{jfullurl 'categorie~categorie:souscategorieUpdateNameExist'}{literal}",
                 {
                     id: $('input[name="id"]').val(),
                     nom: $('#name').val()
@@ -318,8 +317,8 @@ $(document).ready(function(){
                         error = $(selector);
                         error.appendTo($('#name').parent());
                     }
-                });   
-            }                 
+                });
+            }
         }
     });
 

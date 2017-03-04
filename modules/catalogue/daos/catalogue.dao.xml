@@ -14,7 +14,7 @@
         <property name="prix_produit" fieldname="prix_produit" datatype="int" required="true"/>
         <property name="is_publie" fieldname="is_publie" datatype="tinyint" required="true"/>
         <property name="date_creation" fieldname="date_creation" datatype="datetime" required="true"/>
-        <property name="date_update" fieldname="date_update" datatype="datetime" required="true"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime"/>
         <!--<property name="" fieldname="" datatype="string/int/float/date"
         required="yes" maxlength="" minlength="" regexp="" sequence=""
         updatepattern="" insertpattern="" selectpattern=""/>-->

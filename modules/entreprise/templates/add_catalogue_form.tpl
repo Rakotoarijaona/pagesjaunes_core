@@ -26,7 +26,7 @@
 </div>
 <div class="form-group">
     <label>Marque produit *</label>
-    <input id="marqueProduit" name="marqueProduit" type="text" class="form-control required">
+    <input id="marqueProduit" name="marqueProduit" type="text" class="form-control">
 </div>
 <div class="form-group">
     <label>Prix produit *</label>
@@ -49,6 +49,13 @@
     </div>
 </div>
 <div class="form-group">
-    <button type="button" onclick="addCatalogue();" class="catalogue-save-add btn btn-success btn-outline">Enregistrer</button>
+    <button type="button" onclick="addCatalogue();" class="catalogue-save-add btn btn-success btn-outline">
+        <span class="visible-lg hidden-sm hidden-xs">
+            {@entreprise~entreprise.enregistrer.la.catalogue@}
+        </span>
+        <span class="hidden-lg visible-sm visible-xs">
+            {@common~common.enregistrer@}
+        </span>
+    </button>
     <button type="button" onclick="return setRemote(this);" data-remote-target="#catalogue-form" data-load-remote="{jfullurl 'entreprise~entreprise:getAddCatalogueForm'}" class="catalogue-clear-add-form btn btn-default btn-outline">Annuler</button>
 </div>

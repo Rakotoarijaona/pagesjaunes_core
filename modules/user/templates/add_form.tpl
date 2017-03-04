@@ -3,25 +3,22 @@
         <h2>Ajouter un utilisateur</h2> 
         <ol class="breadcrumb">
             <li>
-                <a href="{jurl 'dashboard~dashboard:index'}">Accueil</a>
+                <a href="{jfullurl 'dashboard~dashboard:index'}">Accueil</a>
             </li>
             <li>
-                <a href="{jurl 'user~user:index'}">Utilisateurs</a>
+                <a href="{jfullurl 'user~user:index'}">Utilisateurs</a>
             </li>
             <li class="active">
                 <a><strong>Ajout</strong></a>
             </li>
         </ol> 
     </div>
-    <div class="col-lg-2">
-
-    </div>
 </div>
 <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-lg-11">
-        	<form role="form" id="form" class="form-horizontal" enctype="multipart/form-data" action="{jurl 'user~user:save_ajout'}" method="post">
-	            <div class="form-group r-form">
+            <form role="form" id="form" class="form-horizontal" enctype="multipart/form-data" action="{jfullurl 'user~user:save_ajout'}" method="post">
+                <div class="form-group r-form">
                     <label class="col-sm-3 text-left control-label">Identifiant *:</label> 
                     <div class="col-sm-5">
                         <input type="text" class="form-control" name="usr_login" id="usr_login">
@@ -39,7 +36,7 @@
                             {/if}
                         </select>
                     </div>
-	            </div>
+                </div>
                 <div class="form-group r-form">
                     <label class="col-sm-3 text-left control-label">Nom :</label> 
                     <div class="col-sm-5">
@@ -95,19 +92,19 @@
                         </div>
                     </div>
                 </div>
-	            <div class="form-group">
-	            	<div class="col-sm-offset-3 col-sm-5">
-		                <em>(*: Obligatoire)</em>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-5">
+                        <em>(*: Obligatoire)</em>
                     </div>
-	            </div>
+                </div>
 
-	            <div class="form-group">
-	            	<div class="col-sm-offset-3 col-sm-5">
-		                <button type="submit" class="btn btn-primary">Enregistrer</button>
-		                <a href="{jurl 'user~user:index'}" class="btn btn-white">Annuler</a>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-5">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <a href="{jurl 'user~user:index'}" class="btn btn-white">Annuler</a>
                     </div>
-	            </div>
-	        </form>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -116,13 +113,14 @@
 {literal}
 <script>
 $(document).ready(function(){
-	$('#form').validate({
+    $('#form').validate({
         rules: {
             usr_login: {
                 required: true,
                 minlength: 3,
-                remote : {                    
-                    url: "{/literal}{jurl 'user~user:insertLoginExist'}{literal}",
+                alphanumeric: true,
+                remote : {
+                    url: "{/literal}{jfullurl 'user~user:insertLoginExist'}{literal}",
                     type: "post",
                     data: {
                         login: function () {
@@ -134,8 +132,8 @@ $(document).ready(function(){
             usr_email: {
                 required: true,
                 email: true,
-                remote : {                    
-                    url: "{/literal}{jurl 'user~user:insertEmailExist'}{literal}",
+                remote : {
+                    url: "{/literal}{jfullurl 'user~user:insertEmailExist'}{literal}",
                     type: "post",
                     data: {
                         email: function () {
@@ -159,6 +157,7 @@ $(document).ready(function(){
             usr_login: {
                 required: "Champs obligatoire",
                 minlength: "Veuillez entrer au moins 3 caractères",
+                alphanumeric: "Caractères non autorisé",
                 remote: "Cet identifiant est déjà utilisé"
             },
             usr_email: {
@@ -172,7 +171,8 @@ $(document).ready(function(){
                 equalTo : "Les mots de passes ne sont pas conformes"
             },
             usr_typeLabel: "Veuillez choisir"
-        }});
+        }
+    });
 });
 </script>
 {/literal}

@@ -13,10 +13,13 @@ jClasses::inc("profile~CJacl2Group");
 jClasses::inc("common~CCommonTools");
 jClasses::inc("common~CPhotosUpload");
 
-class userCtrl extends jController {
-    function index() {
+class userCtrl extends jController
+{
+    public function index()
+    {
         $resp = $this->getResponse('html');
         $tpl = new jTpl();
+
         if (jAcl2::check("user.list") && jAcl2::check("user.menu") && !jAcl2::check("user.restrictall")){
             $toList = CUser::getList();
             $tpl->assign('toList', $toList);
@@ -24,15 +27,17 @@ class userCtrl extends jController {
             $tpl->assign('PHOTOS_FOLDER',PHOTOS_FOLDER);
             $tpl->assign('PHOTOS_THUMBNAIL_FOLDER',PHOTOS_THUMBNAIL_FOLDER);
             $resp->body->assign('MAIN', $tpl->fetch('user~index'));
-        }    
-        else {
+        } else {
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $resp->body->assign('MAIN', $tpl->fetch('common~accessdenied'));
         }
+
         $resp->body->assign('selectedMenuItem','user');
         return $resp;
     }
-    function ajout()
+
+    // Ajout
+    public function ajout()
     {
         if (jAcl2::check("user.create") && !jAcl2::check("user.restrictall")) {
             $resp = $this->getResponse ('html') ; 
@@ -41,8 +46,7 @@ class userCtrl extends jController {
             $toListProfile = CJacl2Group::getList();
             $tpl->assign('toListProfile', $toListProfile);
             $resp->body->assign('MAIN', $tpl->fetch('user~add_form'));
-        }
-        else {
+        } else {
             $resp = $this->getResponse('html');
             $tpl = new jTpl();
             $tpl->assign("SCRIPT", jZone::get('common~script'));
@@ -52,53 +56,51 @@ class userCtrl extends jController {
         $resp->body->assign('selectedMenuItem','user');
         return $resp ;
     }
-    /*
-    save a new user
-    */
-    function save_ajout()
+
+    //save a new user
+    public function save_ajout()
     {
         if (jAcl2::check("user.create") && !jAcl2::check("user.restrictall")) {
             $resp = $this->getResponse ('redirect') ;
             $oUser = new CUser ();
-            //upload des fichiers
-            /*$uploaddir = '/var/www/uploads/';
-            $uploadTDRfile = $uploaddir . basename($_FILES['userfile']['name']);*/
             $resp->params = array () ;
 
-            if (($this->param('usr_login')!='')&&($this->param('usr_email'))&&($this->param('usr_password')!='')&&($this->param('usr_typeLabel')!=''))
-            {
+            if (($this->param('usr_login')!='')&&($this->param('usr_email'))&&
+                ($this->param('usr_password')!='')&&($this->param('usr_typeLabel')!='')) {
+
                 $oUser->usr_login               = $this->param ('usr_login') ;
                 $oUser->usr_name                = strtoupper($this->param ('name')) ;
                 $oUser->usr_lastname            = $this->param ('lastname') ;
                 $oUser->usr_email               = $this->param ('usr_email') ;
+
                 $loginalias = CCommonTools::generateAlias ($oUser->usr_login);
                 $oUser->usr_loginalias = $loginalias;
-                if ((CUser::ifEmailExist($oUser->usr_email) == 0) && (CUser::ifLoginExist($loginalias) == 0))
-                {
+
+                if ((CUser::ifEmailExist($oUser->usr_email) == 0) && (CUser::ifLoginExist($loginalias) == 0)) {
+
                     $oUploader = new CPhotosUpload ('usr_photo') ;
                     $uploadResults = $oUploader->doUpload () ;
-                    if (empty ($uploadResults ["errorcode"]))
-                    {
+
+                    if (empty ($uploadResults ["errorcode"])) {
                         $oUser->usr_photo           = $uploadResults ["filename"] ;
                     }
+
                     $oUser->usr_password            = $this->param ('usr_password') ;
-                    $oUser->usr_typeLabel            = $this->param ('usr_typeLabel') ;
+                    $oUser->usr_typeLabel           = $this->param ('usr_typeLabel') ;
                     $oUser->create();
                     jMessage::add(jLocale::get("user~user.add.success"), "success");
-                }
-                else
-                {
+
+                } else {
                     jMessage::add(jLocale::get("user~user.exist"), "danger");
                 }
-                
-            }
-            else
-            {
+
+            } else {
                 jMessage::add(jLocale::get("user~user.error"), "danger");
             }
+
             $resp->action = "user~user:index";
-        }
-        else {
+
+        } else {
             $resp = $this->getResponse('html');
             $tpl = new jTpl();
             $tpl->assign("SCRIPT", jZone::get('common~script'));
@@ -106,35 +108,9 @@ class userCtrl extends jController {
         }
         return $resp;
     }
-    /*
-    Grouped action
-    */
-    function grouped_action()
-    {
-        if (jAcl2::check("user.delete") && !jAcl2::check("user.restrictall")) {
-            $resp = $this->getResponse ('redirect') ;
-            $action = $this->param('actionGroup');
-            if (sizeof($this->param('checked'))>0 && $action=='delete') {
-                foreach ($this->param('checked') as $user)
-                {
-                    CUser::delete($user);
-                    jMessage::add(jLocale::get("user~user.delete.success"), "success");
-                }
-            }
-            $resp->action = "user~user:index";
-        }
-        else {
-            $resp = $this->getResponse('html');
-            $tpl = new jTpl();
-            $tpl->assign("SCRIPT", jZone::get('common~script'));
-            $resp->body->assign('MAIN', $tpl->fetch('common~accessdenied'));
-        }
-        return $resp;
-    }
-    /*
-    Modal update User
-    */
-    function edition()
+
+    // update User
+    public function edition()
     {
         if (jAcl2::check("user.update") && !jAcl2::check("user.restrictall")) {
             $resp = $this->getResponse ('html') ; 
@@ -151,8 +127,7 @@ class userCtrl extends jController {
             $tpl->assign ('PHOTOS_FOLDER',PHOTOS_FOLDER);
             $tpl->assign ('PHOTOS_THUMBNAIL_FOLDER',PHOTOS_THUMBNAIL_FOLDER);
             $resp->body->assign('MAIN', $tpl->fetch('user~update.form'));
-        }
-        else {
+        } else {
             $resp = $this->getResponse('html');
             $tpl = new jTpl();
             $tpl->assign("SCRIPT", jZone::get('common~script'));
@@ -162,19 +137,18 @@ class userCtrl extends jController {
         $resp->body->assign('selectedMenuItem','user');
         return $resp ;
     }
-    /*
-    Update user
-    */
-    function save_edition()
+
+    // save update user
+    public function save_edition()
     {
         $resp = $this->getResponse('redirect') ;
 
         if (jAcl2::check("user.update") && !jAcl2::check("user.restrictall")) {
             $oUser = CUser::getUserByLogin($this->param('usr_login'));
             if ($oUser != null) {
-                if (($this->param('new_usr_login')!='')&&($this->param('usr_email'))&&($this->param('usr_typeLabel')!=''))
+                if (!empty($this->param('usr_email')) && !empty($this->param('usr_typeLabel')))
                 {
-                    $oUser->usr_login = $this->param('new_usr_login');
+                    $oUser->usr_login = $this->param('usr_login');
                     $oUser->usr_name = $this->param('usr_name');
                     $oUser->usr_lastname = $this->param('usr_lastname');
                     $oUser->usr_email = $this->param('usr_email');
@@ -197,14 +171,13 @@ class userCtrl extends jController {
                             }
                         }
                         $oUser->usr_typeLabel = $this->param('usr_typeLabel');
-                        $oUser->update($this->param('usr_login'));
+                        $oUser->update($oUser->usr_login);
                         jMessage::add(jLocale::get("user~user.update.success"), "success");
                     }
                 }
             }
             $resp->action = "user~user:index";
-        }
-        else {
+        } else {
             $resp = $this->getResponse('html');
             $tpl = new jTpl();
             $tpl->assign("SCRIPT", jZone::get('common~script'));
@@ -212,17 +185,13 @@ class userCtrl extends jController {
         }
         return $resp;
     }
-    /*
-    delete
-    */
-    function delete_user()
+
+    // delete
+    public function delete_user()
     {
         if (jAcl2::check("user.delete") && !jAcl2::check("user.restrictall")) {
             $resp = $this->getResponse ('redirect') ;
             $oUser = new CUser ();
-            //upload des fichiers
-            /*$uploaddir = '/var/www/uploads/';
-            $uploadTDRfile = $uploaddir . basename($_FILES['userfile']['name']);*/
             $resp->params = array () ;
 
             if (($this->param('usr_login')!=''))
@@ -239,17 +208,14 @@ class userCtrl extends jController {
             $resp->body->assign('MAIN', $tpl->fetch('common~accessdenied'));
         }
         return $resp;
-    }/*
-    delete
-    */
-    function delete_user_group()
+    }
+
+    // Delete
+    public function delete_user_group()
     {
         if (jAcl2::check("user.delete") && !jAcl2::check("user.restrictall")) {
             $resp = $this->getResponse ('redirect') ;
             $oUser = new CUser ();
-            //upload des fichiers
-            /*$uploaddir = '/var/www/uploads/';
-            $uploadTDRfile = $uploaddir . basename($_FILES['userfile']['name']);*/
             $resp->params = array () ;
            
             foreach ($this->param('groupUser') as $usr_login) {
@@ -267,8 +233,33 @@ class userCtrl extends jController {
         return $resp;
     }
 
+    
+    // Grouped action
+    public function grouped_action()
+    {
+        if (jAcl2::check("user.delete") && !jAcl2::check("user.restrictall")) {
+
+            $resp = $this->getResponse ('redirect') ;
+            $action = $this->param('actionGroup');
+            if (sizeof($this->param('checked'))>0 && $action=='delete') {
+                foreach ($this->param('checked') as $user)
+                {
+                    CUser::delete($user);
+                    jMessage::add(jLocale::get("user~user.delete.success"), "success");
+                }
+            }
+            $resp->action = "user~user:index";
+        } else {
+            $resp = $this->getResponse('html');
+            $tpl = new jTpl();
+            $tpl->assign("SCRIPT", jZone::get('common~script'));
+            $resp->body->assign('MAIN', $tpl->fetch('common~accessdenied'));
+        }
+        return $resp;
+    }
+
     //insert Test Doublons
-    function insertLoginExist ()
+    public function insertLoginExist ()
     {
         $resp = $this->getResponse('text');
         $login = $this->param('login');
@@ -281,8 +272,9 @@ class userCtrl extends jController {
         $resp->content = $valid;
         return $resp;
     }
+
     //update Test Doublons
-    function updateLoginExist ()
+    public function updateLoginExist ()
     {
         $resp = $this->getResponse('text');
         $id = $this->param('id');
@@ -296,8 +288,9 @@ class userCtrl extends jController {
         $resp->content = $valid;
         return $resp;
     }
+
     //Test insert email doublons
-    function insertEmailExist()
+    public function insertEmailExist()
     {
         $resp = $this->getResponse('text');
         $email = $this->param('email');
@@ -310,8 +303,9 @@ class userCtrl extends jController {
         return $resp;
 
     }
+
     //update Test Doublons
-    function updateEmailExist ()
+    public function updateEmailExist ()
     {
         $resp = $this->getResponse('text');
         $id = $this->param('id');

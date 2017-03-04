@@ -41,30 +41,32 @@
                             </thead>
                             <tbody>
                                 {if sizeof($toToprecherche)}
-                                {foreach ($toToprecherche as $oToprecherche)}
-                                <tr>
-                                    <td>
-                                        <div class="checkbox" style="margin: 0px">
-                                            <input type="checkbox" class="" name="topCheck[]" id="topCheck{$oToprecherche->id}" value="{$oToprecherche->id}">
-                                            <label for="topCheck{$oToprecherche->id}"></label>
-                                        </div>
-                                    <td>{$oToprecherche->getTitle()}</td>
-                                    <td>
-                                        <div>Top 1:&nbsp;&nbsp;{$oToprecherche->getTop1()->raisonsociale}</div>
-                                        <div>Top 2:&nbsp;&nbsp;{$oToprecherche->getTop2()->raisonsociale}</div>
-                                        <div>Top 3:&nbsp;&nbsp;{$oToprecherche->getTop3()->raisonsociale}</div>
-                                    </td>
-                                    <td>{$oToprecherche->getDateCreation()}</td>
-                                    <td>
-                                        {ifacl2 "topsrecherche.update"}
-                                        <a href="{jfullurl 'toprecherche~toprecherche:edition', array('id'=>$oToprecherche->souscategorie_id)}" class="btn btn-success btn-block btn-xs">Editer</a>
-                                        {/ifacl2}
-                                        {ifacl2 "topsrecherche.delete"}
-                                        <a onclick="deleteTop({$oToprecherche->id});" class="btn btn-danger btn-block btn-xs">Supprimer</a>
-                                        {/ifacl2}
-                                    </td>
-                                </tr>
-                                {/foreach}
+                                    {foreach ($toToprecherche as $oToprecherche)}
+                                        {if (!empty($oToprecherche->getTitle()))}
+                                        <tr>
+                                            <td>
+                                                <div class="checkbox" style="margin: 0px">
+                                                    <input type="checkbox" class="" name="topCheck[]" id="topCheck{$oToprecherche->id}" value="{$oToprecherche->id}">
+                                                    <label for="topCheck{$oToprecherche->id}"></label>
+                                                </div>
+                                            <td>{$oToprecherche->getTitle()}</td>
+                                            <td>
+                                                <div>Top 1:&nbsp;&nbsp;{$oToprecherche->getTop1()->raisonsociale}</div>
+                                                <div>Top 2:&nbsp;&nbsp;{$oToprecherche->getTop2()->raisonsociale}</div>
+                                                <div>Top 3:&nbsp;&nbsp;{$oToprecherche->getTop3()->raisonsociale}</div>
+                                            </td>
+                                            <td>{$oToprecherche->getDateCreation()}</td>
+                                            <td>
+                                                {ifacl2 "topsrecherche.update"}
+                                                <a href="{jfullurl 'toprecherche~toprecherche:edition', array('id'=>$oToprecherche->souscategorie_id)}" class="btn btn-success btn-block btn-xs">Editer</a>
+                                                {/ifacl2}
+                                                {ifacl2 "topsrecherche.delete"}
+                                                <a onclick="deleteTop({$oToprecherche->id});" class="btn btn-danger btn-block btn-xs">Supprimer</a>
+                                                {/ifacl2}
+                                            </td>
+                                        </tr>
+                                        {/if}
+                                    {/foreach}
                                 {else}
                                 <tr><td colspan="5"><div class="alert alert-info">Aucuns résultats</div></td></tr>
                                 {/if}

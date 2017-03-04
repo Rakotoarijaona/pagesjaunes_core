@@ -19,13 +19,14 @@ jClasses::inc("categorie~CSouscategorie");
 jClasses::inc("front_office~CPagination");
 jClasses::inc("pages~CPages");
 jClasses::inc("common~CPhotosUpload");
+jClasses::inc("common~CRPhotosUpload");
 jClasses::inc("common~ImageWorkshop");
 jClasses::inc("common~CCommonTools");
 jClasses::inc("ads~CAdsTracker");
 jClasses::inc("ads~CAdsZoneDefault");
 jClasses::inc("ads~CAdsPurchase");
 
-class defaultCtrl extends jController
+class defaultCtrl extends jControllerRSR
 {
     public $pluginParams = array(
         '*' => array('auth.required' => false),
@@ -298,13 +299,13 @@ class defaultCtrl extends jController
         $resp = $this->getResponse('redirect');
 
         // parameters
-        $raisonsociale = $this->param('raisonsociale');
-        $activite = $this->param('activite');
-        $adresse = $this->param('adresse');
-        $region = $this->param('region');
+        $raisonsociale  = $this->stringParam('raisonsociale','');
+        $activite       = $this->stringParam('activite');
+        $adresse        = $this->stringParam('adresse');
+        $region         = $this->stringParam('region');
 
         // entreprise
-        $entreprise = new CEntreprise();
+        $entreprise     = new CEntreprise();
         $entreprise->raisonsociale = $raisonsociale;
         $entreprise->activite = $activite;
         $entreprise->adresse = $adresse;
@@ -312,45 +313,16 @@ class defaultCtrl extends jController
 
         //logo
         $logo = "";
-        if (isset($_FILES["filelogo"]))
+        if (isset($_FILES["filelogo"]) && !empty($_FILES["filelogo"]['name']))
         {
             $iErrorCode = 0 ;
             $zFileName          = $_FILES["filelogo"]["name"] ;
-            $zFileType          = $_FILES["filelogo"]["type"] ;
-            $iFileSize          = intval ($_FILES["filelogo"]["size"]) ;
-            $zDirTempName       = $_FILES["filelogo"]["tmp_name"] ;
-
-            $bCreateFolders     = true ;
-            $zBackgroundColor   = null ;
-            $iImageQuality      = IMAGE_QUALITY ;
-
-            // rename file if already exists
-            if (file_exists ("entreprise/images" . "/" . $zFileName))
+            $logoUploader = new CRPhotosUpload($zFileName, '-', 'entreprise/images');
+            $resUpload = $logoUploader->doUpload();
+            if ($resUpload['errorcode'] == 0)
             {
-                $iExistFileCount = 1 ;
-
-                $zExt           = strtolower (CCommonTools::getFileNameExtension ($zFileName)) ;
-                $zNoExtName     = preg_replace ("/[.]" . $zExt . "$/", "", $zFileName) ;
-
-                while (file_exists ("entreprise/images" . "/" . $zNoExtName . "-" . $iExistFileCount . "." . $zExt))
-                {
-                    $iExistFileCount++ ;
-                }
-                $zFileName = $zNoExtName . "-" . $iExistFileCount . "." . $zExt ;
-            }
-            // thumbnail (must)
-            $oLayerThumbnail    = ImageWorkshop::initFromPath ($_FILES ["filelogo"]['tmp_name']) ;
-            $iExpectedWidth     = 200 ;
-            $iExpectedHeight    = 200 ;
-
-            ($iExpectedWidth > $iExpectedHeight) ? $iLargestSide = $iExpectedWidth : $iLargestSide = $iExpectedHeight;
-
-            $oLayerThumbnail->cropMaximumInPixel (0, 0, "MM") ;
-            $oLayerThumbnail->resizeInPixel ($iLargestSide, $iLargestSide) ;
-            $oLayerThumbnail->cropInPixel ($iExpectedWidth, $iExpectedHeight, 0, 0, 'MM') ;
-            $oLayerThumbnail->save ("entreprise/images", $zFileName, $bCreateFolders, $zBackgroundColor, $iImageQuality) ;
-            $entreprise->logo = $zFileName;
-            $logo = CCommonTools::getDomainAndScheme() . jApp::config()->urlengine['basePath'] . "entreprise/images/" . $zFileName;
+                $entreprise->logo = $resUpload['filename'];
+            }            
         }
 
         //web site
@@ -594,7 +566,14 @@ class defaultCtrl extends jController
     {
         $resp = $this->getResponse('redirect');
 
-        if (!empty($this->param('entreprise')) && !empty($this->param('raisonsociale')) && !empty($this->param('activite')) && !empty($this->param('adresse')) && (sizeof($this->param('tel_phone')) > 0) && ($this->param('email') != ''))
+        $entreprise = $this->param('entreprise');
+        $raisonsociale = $this->param('raisonsociale');
+        $activite = $this->param('activite');
+        $adresse = $this->param('adresse');
+        $tel_phone = $this->param('tel_phone');
+        $email = $this->param('email');
+
+        if (!empty($entreprise) && !empty($raisonsociale) && !empty($activite) && !empty($adresse) && !empty($tel_phone) && !empty($email))
         {
             $oEntreprise = CEntreprise::getById(($this->intParam('entreprise')/137));
             if (!empty($oEntreprise))
@@ -613,7 +592,8 @@ class defaultCtrl extends jController
 
                 //Numéro
                 $oEntreprise->deleteAllTelephones();
-                if (!empty($toTelephones = $this->param('tel_phone')))
+                $toTelephones = $this->param('tel_phone');
+                if (!empty($toTelephones))
                 {
                     foreach ($toTelephones as $numero) {
                         $oEntreprise->insertTelephone($numero);
@@ -622,7 +602,8 @@ class defaultCtrl extends jController
 
                 //Email
                 $oEntreprise->deleteAllEmails();
-                if (!empty($toEmails = $this->param('email')))
+                $toEmails = $this->param('email');
+                if (!empty($toEmails))
                 {
                     foreach ($toEmails as $email) {
                         $oEntreprise->insertEmail($email);
@@ -663,7 +644,8 @@ class defaultCtrl extends jController
 
                 //Services
                 $toServices = $this->param('hdnServices');
-                if (!empty($this->param('rmvdservices')))
+                $rmvdservices = $this->param('rmvdservices');
+                if (!empty($rmvdservices))
                 {
                     $paramRemovedServices = $this->param('rmvdservices');
                     foreach ($paramRemovedServices as $paramId) {
@@ -679,7 +661,8 @@ class defaultCtrl extends jController
 
                 //Produits
                 $toProduits = $this->param('hdnProduits');
-                if (!empty($this->param('rmvdproduits')))
+                $rmvdproduits = $this->param('rmvdproduits');
+                if (!empty($rmvdproduits))
                 {
                     $paramRemovedProduits = $this->param('rmvdproduits');
                     foreach ($paramRemovedProduits as $paramId) {
@@ -695,7 +678,8 @@ class defaultCtrl extends jController
 
                 //Marques
                 $toMarques = $this->param('hdnMarques');
-                if (!empty($this->param('rmvdmarques')))
+                $rmvdmarques = $this->param('rmvdmarques');
+                if (!empty($rmvdmarques))
                 {
                     $paramRemovedMarques = $this->param('rmvdmarques');
                     foreach ($paramRemovedMarques as $paramId) {
@@ -720,7 +704,8 @@ class defaultCtrl extends jController
                 //vidéos youtube
                 $toNewVideos = $this->param('video_youtube');
                 $toOldVideos = $this->param('old-video');
-                if (!empty($this->param('rmvdvideos')))
+                $rmvdvideos = $this->param('rmvdvideos');
+                if (!empty($rmvdvideos))
                 {
                     $paramRemovedVideos = $this->param('rmvdvideos');
                     foreach ($paramRemovedVideos as $paramId) {
@@ -733,7 +718,8 @@ class defaultCtrl extends jController
                     {
                         $zVignetteName = 'video-thumb_'.$index;
                         $zUrlName = 'url-video_'.$index;
-                        if (!empty($this->param($zUrlName)) && isset($_FILES[$zVignetteName]))
+                        $zUrlVideoName = $this->param($zUrlName);
+                        if (!empty($zUrlVideoName) && isset($_FILES[$zVignetteName]))
                         {
                             if(!empty($_FILES[$zVignetteName])) {
                                 $urlVideo = $this->param($zUrlName);
@@ -767,7 +753,8 @@ class defaultCtrl extends jController
                     {
                         $zVignetteName = 'old-video-vignette_'.$index;
                         $zUrlName = 'old-video-url_video_'.$index;
-                        if (!empty($this->param($zUrlName)))
+                        $zOldVideoUrl = $this->param($zUrlName);
+                        if (!empty($zOldVideoUrl))
                         {
                             $videoId = $index / 137;
                             $urlVideo = $this->param($zUrlName);
@@ -798,8 +785,9 @@ class defaultCtrl extends jController
                     }
                 }
 
-                //images                
-                if (!empty($this->param('rmvdimage')))
+                //images
+                $rmvdimage = $this->param('rmvdimage');
+                if (!empty($rmvdimage))
                 {
                     $paramRemovedImages = $this->param('rmvdimage');
                     foreach ($paramRemovedImages as $paramId) {
@@ -828,7 +816,8 @@ class defaultCtrl extends jController
                 //Catalogue de produit
                 $toNewCatalogue = $this->param('catalogue');
                 $toOldCatalogue = $this->param('oldcatalogue');
-                if (!empty($this->param('rmvdcatalogue')))
+                $rmvdcatalogue = $this->param('rmvdcatalogue');
+                if (!empty($rmvdcatalogue))
                 {
                     $paramRemovedCatalogue = $this->param('rmvdcatalogue');
                     foreach ($paramRemovedCatalogue as $paramId) {
@@ -846,7 +835,14 @@ class defaultCtrl extends jController
                         $zInputReferenceProduitName = 'catalogue-reference-'.$index;
                         $zInputDescriptionProduitName = 'catalogue-description-'.$index;
                         $zInputPrixProduitName = 'catalogue-prix-'.$index;
-                        if (!empty($this->param($zInputNomProduitName)) && !empty($this->param($zInputMarqueProduitName)) && !empty($this->param($zInputReferenceProduitName)) && !empty($this->param($zInputDescriptionProduitName)) && !empty($this->param($zInputPrixProduitName)) && isset($_FILES[$zInputImageName]))
+
+                        $zInputNomProduitValue = $this->param($zInputNomProduitName);
+                        $zInputMarqueProduitValue = $this->param($zInputMarqueProduitName);
+                        $zInputReferenceProduitValue = $this->param($zInputReferenceProduitName);
+                        $zInputDescriptionProduitValue = $this->param($zInputDescriptionProduitName);
+                        $zInputPrixProduitValue = $this->param($zInputPrixProduitName);
+
+                        if (!empty($zInputNomProduitValue) && !empty($zInputMarqueProduitValue) && !empty($zInputReferenceProduitValue) && !empty($zInputDescriptionProduitValue) && !empty($zInputPrixProduitValue) && isset($_FILES[$zInputImageName]))
                         {
                             if(!empty($_FILES[$zInputImageName])) {
                                 $oCatalogue = new CCatalogue();
@@ -892,7 +888,14 @@ class defaultCtrl extends jController
                         $zInputReferenceProduitName = 'oldcatalogue-reference-'.$index;
                         $zInputDescriptionProduitName = 'oldcatalogue-description-'.$index;
                         $zInputPrixProduitName = 'oldcatalogue-prix-'.$index;
-                        if (!empty($this->param($zInputNomProduitName)) && !empty($this->param($zInputMarqueProduitName)) && !empty($this->param($zInputReferenceProduitName)) && !empty($this->param($zInputDescriptionProduitName)) && !empty($this->param($zInputPrixProduitName)))
+
+                        $zInputNomProduitValue = $this->param($zInputNomProduitName);
+                        $zInputMarqueProduitValue = $this->param($zInputMarqueProduitName);
+                        $zInputReferenceProduitValue = $this->param($zInputReferenceProduitName);
+                        $zInputDescriptionProduitValue = $this->param($zInputDescriptionProduitName);
+                        $zInputPrixProduitValue = $this->param($zInputPrixProduitName);
+
+                        if (!empty($zInputNomProduitValue) && !empty($zInputMarqueProduitValue) && !empty($zInputReferenceProduitValue) && !empty($zInputDescriptionProduitValue) && !empty($zInputPrixProduitValue))
                         {
                             $oCatalogue = CCatalogue::getByid($index / 137);
                             $oCatalogue->reference_produit = $this->param($zInputReferenceProduitName);
@@ -982,9 +985,11 @@ class defaultCtrl extends jController
     // page
     public function pages()
     {
-        if (!empty($this->param('p'))) {
+        $resp = $this->getResponse('html');
 
-            $resp = $this->getResponse('html');
+        $page = $this->param('p');
+
+        if (!empty($page)) {
 
             $tpl = new jTpl();
             $label = $this->param('p');

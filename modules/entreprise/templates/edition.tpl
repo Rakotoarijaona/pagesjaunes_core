@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Editer l'Entreprise {$oEntreprise->raisonsociale}</h2>        
+        <h2>Editer l'Entreprise {$oEntreprise->raisonsociale}</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="{jurl 'dashboard~dashboard:index'}">Accueil</a>
@@ -13,14 +13,11 @@
             </li>
         </ol>             
     </div>
-    <div class="col-lg-2">
-
-    </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <form id="edit-form" name="edit-form" action="{jurl 'entreprise~entreprise:updateEntreprise'}" method="POST" enctype="multipart/form-data" role="form">
-            <input type="hidden" name="entrepriseId" value="{$oEntreprise->id}"/>                       
+            <input type="hidden" name="entrepriseId" id="entrepriseId" value="{$oEntreprise->id}"/>
             <div class="col-lg-12">
                 {jmessage}
                 <div class="ibox float-e-margins">
@@ -61,7 +58,7 @@
                                             <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i></a>
                                         </div>
                                     </div>
-                                </div>                                       
+                                </div>
                                 <div class="form-group">
                                     <label class="control-label">Publié</label>
                                     <div class="input-group">
@@ -110,11 +107,11 @@
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Personne à contacter </label>
-                                    <input id="personneContact" name="personneContact" type="text" class="form-control" value="{$oEntreprise->contact_interne}" required>
+                                    <input id="personneContact" name="personneContact" type="text" class="form-control" value="{$oEntreprise->contact_interne}">
                                 </div>
                                 <div class="form-group r-form">
                                     <label>Fonction personne à contacter </label>
-                                    <input id="fonctionPersonneContact" name="fonctionPersonneContact" type="text" class="form-control" value="{$oEntreprise->fonction_contact}" required>
+                                    <input id="fonctionPersonneContact" name="fonctionPersonneContact" type="text" class="form-control" value="{$oEntreprise->fonction_contact}">
                                 </div>
                             </div>
                             <div class="col-lg-5">
@@ -123,7 +120,7 @@
                                     <div class="r-multi-text" id="email-list-form">
                                         <div id="email-form-input">
                                             <div id="email-add-form" class="input-group">
-                                                <input type="email" id="email-input" class="input-text form-control"> 
+                                                <input type="email" name="email" id="email-input" class="input-text form-control"> 
                                                 <span class="input-group-btn"> 
                                                     <span class="input-group-btn"> 
                                                         <button type="button" id="btn-add-email" data-entreprise-id="{$oEntreprise->id}" class="btn btn-success"><i class="fa fa-plus"></i></button>
@@ -160,7 +157,7 @@
                                     <div class="r-multi-text" id="num-list-form">
                                         <div id="num-form-input">
                                             <div id="num-add-form" class="input-group">
-                                                <input type="text" id="num-input" class="input-text form-control"> 
+                                                <input type="text" name="telephone" id="num-input" class="input-text form-control"> 
                                                 <span class="input-group-btn">
                                                 <input type="hidden" name="new-tel" value=""/>
                                                     <button type="button" id="btn-add-num" data-entreprise-id="{$oEntreprise->id}" class="btn btn-success"><i class="fa fa-plus"></i></button>
@@ -180,7 +177,7 @@
                                                             <input type="hidden" class="telephones" name="telephones_list[]" value="{$telephone->id}">
                                                             {$telephone->numero}
                                                         </td>
-                                                        <td class="text-right">                                                            
+                                                        <td class="text-right">
                                                             <a class="btn btn-success btn-xs" onclick="return setRemote(this);" data-remote-target="#num-form-input" data-load-remote="{jfullurl 'entreprise~entreprise:getUpdateTelephoneForm', array('entrepriseId'=>$oEntreprise->id, 'telephoneId'=>$telephone->id)}"><i class="fa fa-pencil"></i></a>
                                                             <a class="btn btn-danger btn-xs" onclick="deleteTelephone(this);" data-remote-target="#telephoneList" data-load-remote="{jfullurl 'entreprise~entreprise:updateTelephones',array('entrepriseId'=>$oEntreprise->id, 'operation'=>'delete', 'telephoneId'=>$telephone->id)}" class="btn btn-xs btn-danger" href="#"><i class="fa fa-times"></i></a>
                                                         </td>
@@ -195,13 +192,13 @@
                                     <label>Mots clés / tags *</label>
                                     <p>Les mots clés sont séparés de comma ou virgule (,)</p>
                                     <input type="hidden" name="id" value="">
-                                    <textarea required id="motscles" class="form-control" name="motscles" id="motscles" style="min-height:150px">{$oEntreprise->getMotsCles()}</textarea>
+                                    <textarea id="motscles" class="form-control" name="motscles" id="motscles" style="min-height:150px">{$oEntreprise->getMotsCles()}</textarea>
                                 </div>
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
                                         Front-office
                                     </div>
-                                    <div class="panel-body">                
+                                    <div class="panel-body">
                                         <div class="form-group">
                                             <label class="control-label">Editer information</label>
                                             <div class="input-group">
@@ -263,7 +260,7 @@
                                     <div class="r-multi-text" id="service-list-form">
                                         <div id="service-form-input">
                                             <div id="service-add-form" class="input-group">
-                                                <input type="text" id="service-input" class="input-text form-control"> 
+                                                <input type="text" name="service_input" id="service-input" class="input-text form-control"> 
                                                 <span class="input-group-btn"> 
                                                     <button type="button" id="btn-add-service" data-entreprise-id="{$oEntreprise->id}" class="btn btn-success"><i class="fa fa-plus"></i></button>
                                                 </span>
@@ -277,16 +274,16 @@
                                                 </thead>
                                                 <tbody>
                                                     {foreach ($oEntreprise->services as $service)}
-                                                    <tr class="rMultiItem">
-                                                        <td class="value">
-                                                            <input type="hidden" class="services" name="service_list[]" value="{$service->id}">
-                                                            {$service->name}
-                                                        </td>
-                                                        <td class="text-right">
-                                                            <a class="btn btn-success btn-xs" onclick="return setRemote(this);" data-remote-target="#service-form-input" data-load-remote="{jfullurl 'entreprise~entreprise:getUpdateServiceForm', array('entrepriseId'=>$oEntreprise->id, 'serviceId'=>$service->id)}"><i class="fa fa-pencil"></i></a>
-                                                            <a class="btn btn-danger btn-xs" onclick="deleteService(this);" data-remote-target="#serviceList" data-load-remote="{jfullurl 'entreprise~entreprise:updateServices',array('entrepriseId'=>$oEntreprise->id, 'operation'=>'delete', 'serviceId'=>$service->id)}"><i class="fa fa-times"></i></a>
-                                                        </td>
-                                                    </tr>
+                                                        <tr class="rMultiItem">
+                                                            <td class="value">
+                                                                <input type="hidden" class="services" name="service_list[]" value="{$service->id}">
+                                                                {$service->name}
+                                                            </td>
+                                                            <td class="text-right">
+                                                                <a class="btn btn-success btn-xs" onclick="return setRemote(this);" data-remote-target="#service-form-input" data-load-remote="{jfullurl 'entreprise~entreprise:getUpdateServiceForm', array('entrepriseId'=>$oEntreprise->id, 'serviceId'=>$service->id)}"><i class="fa fa-pencil"></i></a>
+                                                                <a class="btn btn-danger btn-xs" onclick="deleteService(this);" data-remote-target="#serviceList" data-load-remote="{jfullurl 'entreprise~entreprise:updateServices',array('entrepriseId'=>$oEntreprise->id, 'operation'=>'delete', 'serviceId'=>$service->id)}"><i class="fa fa-times"></i></a>
+                                                            </td>
+                                                        </tr>
                                                     {/foreach}
                                                 </tbody>
                                             </table>
@@ -300,7 +297,7 @@
                                     <div class="r-multi-text" id="produit-list-form">
                                         <div id="produit-form-input">
                                             <div id="produit-add-form" class="input-group">
-                                                <input type="text" id="produit-input" class="input-text form-control"> 
+                                                <input type="text" name="produit_input" id="produit-input" class="input-text form-control"> 
                                                 <span class="input-group-btn"> 
                                                     <button type="button" id="btn-add-produit" data-entreprise-id="{$oEntreprise->id}" class="btn btn-success"><i class="fa fa-plus"></i></button>
                                                 </span>
@@ -337,7 +334,7 @@
                                     <div class="r-multi-text" id="marque-list-form">
                                         <div id="marque-form-input">
                                             <div id="marque-add-form" class="input-group">
-                                                <input type="text" id="marque-input" class="input-text form-control"> 
+                                                <input type="text" name="marque_input" id="marque-input" class="input-text form-control"> 
                                                 <span class="input-group-btn"> 
                                                     <button type="button" id="btn-add-marque" data-entreprise-id="{$oEntreprise->id}" class="btn btn-success"><i class="fa fa-plus"></i></button>
                                                 </span>
@@ -392,7 +389,7 @@
                                 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGufa7f5AmTVVgdiEiwWclJzry3CYKw_k"></script>
                                 <div class="google-map" id="map1"></div>
                             </div>
-                        </div>                    
+                        </div>
                         <div class="col-lg-12 hr-line-dashed"></div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
@@ -459,7 +456,7 @@
                                     {/if}
                                 </div>
                             </div>
-                            <div class="col-lg-12">                                        
+                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="control-label">Activation rubrique nos services</label>
                                     <div class="input-group">
@@ -579,9 +576,9 @@
                                                     <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload" ><i class="fa fa-trash"></i></a>
                                                 </div> 
                                             </div> 
-                                        </div>                                
+                                        </div>
                                     </div>
-                                    <div class="col-lg-12" style="padding: 0px 0px" id="video-youtube-list">                                        
+                                    <div class="col-lg-12" style="padding: 0px 0px" id="video-youtube-list">
                                         <table class="table-profil table table-hover">
                                             <thead>
                                                 <tr>
@@ -597,10 +594,10 @@
                                                     <input type="hidden" name="youtube-video[]" value="{$videos->id}"/>
                                                     <td style="max-width: 200px">{$videos->url_youtube}</td>
                                                     <td><img class="tab-img-thumbnail" src="{$j_basepath}entreprise/vignetteYoutube/{$videos->vignette_video}"></td>
-                                                    <td>                 
+                                                    <td>
                                                         <a onclick="return setRemote(this);" data-remote-target="#videos-form" data-load-remote="{jfullurl 'entreprise~entreprise:getUpdateVideosForm', array('id'=>$videos->id)}" class="btn btn-success btn-xs btn-block btn-edit-videos">
                                                             Editer
-                                                        </a>                
+                                                        </a>
                                                         <a onclick="return setRemote(this);" data-remote-target="#video-youtube-list" data-load-remote="{jfullurl 'entreprise~entreprise:updateVignetteYoutube', array('id'=>$videos->id, 'entrepriseId'=>$oEntreprise->id, 'operation'=>'delete')}" class="btn btn-danger btn-xs btn-block">
                                                             Supprimer
                                                         </a>
@@ -615,7 +612,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-6 rubrique" id="rubrique-image">                                        
+                                <div class="col-lg-6 rubrique" id="rubrique-image">
                                     <div class="form-group">
                                         <label class="control-label">Activation rubrique galérie image *</label>
                                         <div class="input-group">
@@ -689,8 +686,16 @@
                             </a>
                         </div>
                     </div>
-                    <div class="ibox-content">
-
+                    <div class="ibox-content relative">
+                        <div class="loader catalogue-loader" style="display:none">
+                            <div class="spiner-item">
+                                <div class="sk-spinner sk-spinner-three-bounce">
+                                    <div class="sk-bounce1"></div>
+                                    <div class="sk-bounce2"></div>
+                                    <div class="sk-bounce3"></div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-5 r-form" id="catalogue-form">
                                 <div class="form-group">
@@ -721,7 +726,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Marque produit *</label>
-                                    <input id="marqueProduit" name="marqueProduit" type="text" class="form-control required">
+                                    <input id="marqueProduit" name="marqueProduit" type="text" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label>Prix produit *</label>
@@ -811,7 +816,7 @@
                                                     <a onclick="return setRemote(this);" data-remote-target="#catalogue-form" data-load-remote="{jfullurl 'entreprise~entreprise:getUpdateCatalogueForm', array('id'=>$oCatalogue->id)}">
                                                         <button type="button" class="btn btn-success btn-xs">Editer</button>
                                                     </a>
-                                                    <a onclick="return setRemote(this);" data-remote-target="#catalogue-list" data-load-remote="{jfullurl 'entreprise~entreprise:updateCatalogueProduit', array('id'=>$oCatalogue->id, 'operation'=>'delete')}">
+                                                    <a onclick="deleteCatalogue({$oCatalogue->id});" >
                                                         <button type="button" class="btn btn-danger btn-xs">Supprimer</button>
                                                     </a>
                                                 </td>
@@ -842,6 +847,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-12 hr-line-dashed"></div>
+                        <div class="row">
+                            <div class="col-lg-12 text-right">
+                                <button type="button" class="btn btn-success btn-save btn-outline">
+                                    <span class="visible-lg hidden-sm hidden-xs">
+                                        {@entreprise~entreprise.enregistrer.tous@}
+                                    </span>
+                                    <span class="hidden-lg visible-sm visible-xs">
+                                        {@common~common.enregistrer@}
+                                    </span>
+                                </button> 
+                                <a href="{jurl 'entreprise~entreprise:index'}" class="btn btn-white" id="btn-cancel">{@common~common.annuler@}</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -861,37 +880,154 @@
 {$SCRIPT}
 {literal}
 <script>
-$(document).ready(function(){
+$(document).ready(function() {
+
     $("#sortable-catalogue").sortable();
+
+
+    validator = $("#edit-form").validate({
+        rules: {
+            raisonSociale: {
+                required: true,
+                minlength: 5,
+                remote: {
+                    url: "{/literal}{jfullurl 'entreprise~entreprise:ifUpdateRaisonsocialeExist'}{literal}",
+                    type: "post",
+                    data: {
+                        id: function () {
+                            return $("#entrepriseId").val();
+                        },
+                        raisonsociale: function () {
+                            return $("#raisonSociale").val();
+                        }
+                    }
+                }
+            },
+            descActivite: {
+                required: true,
+                minlength: 10
+            },
+            siteweb: {
+                url: true
+            },
+            email: {
+                email: true
+            },
+            region: {
+                required: true
+            },
+            adresse: {
+                 required: true,
+                 minlength: 10
+            },
+            telephone: {
+                phone: true
+            },
+            souscategorie: {
+                required: true
+            },
+            loginEntreprise:{
+                remote: {
+                    url: "{/literal}{jfullurl 'entreprise~entreprise:ifUpdateLoginExist'}{literal}",
+                    type: "post",
+                    data: {
+                        id: function () {
+                            return $("#entrepriseId").val();
+                        },
+                        login: function () {
+                            return $("#loginEntreprise").val();
+                        }
+                    }
+                }
+            }
+        },
+        messages: {
+            raisonSociale: {
+                required: "Champs obligatoire",
+                minlength: "Veuillez entrer au moins 5 caractères",
+                remote: "Ce nom est déjà utilisé"
+            },
+            descActivite: {
+                 required: "Champs obligatoire",
+                 minlength: "Veuillez entrer au moins 10 caractères"
+            },
+            siteweb: {
+                url: "Veuillez entrer un Url valide"
+            },
+            adresse: {
+                 required: "Champs obligatoire",
+                 minlength: "Veuillez entrer au moins 10 caractères"
+            },
+            region: {
+                required: "Champs obligatoire"
+            },
+            email: {
+                 required: "Veuillez entrer au moins un email",
+                 email: "Veuillez entrer un email valide"
+            },
+            telephone: {
+                required: "Veuillez entrer au moins un numéro"
+            },
+            loginEntreprise:{
+                remote: "Ce login est déjà utilisé"
+            }
+        },        
+        errorPlacement: function(error, element) 
+        {
+            if (element.is("#email-input"))
+            {
+                element.parents("[class='input-group']").after(error);
+            }
+            else if( element.is("#num-input")) 
+            {
+                element.parents("[class='input-group']").after(error);
+            }
+            else if( element.is("#souscategorie") )
+            {
+                error.insertAfter( element );
+            }
+            else 
+            {
+                error.insertAfter( element );
+            }
+        }
+    });
+
     $('.i-checks').iCheck({
         checkboxClass: 'icheckbox_square-green',
         radioClass: 'iradio_square-green',
     });
+
     $('#btn-add-email').click(function(){
         var emailText = $('#email-add-form .input-text').val();
         var entrepriseId = $(this).data('entreprise-id');
         var operation = "insert";
-        if (isValidEmailAddress(emailText))
+        if (validator.element( "#email-input" ) && emailText != '')
         {
             $.post('{/literal}{jfullurl "entreprise~entreprise:updateEmails"}{literal}', {'emailText':emailText, 'entrepriseId': entrepriseId, 'operation': operation}, function(data) {
-                $('#emailList').html(data);     
+                $('#emailList').html(data);
                 swal("Ajouté!", "L'email a été ajouté", "success");
                 $('#email-add-form .input-text').val('');
                 $('#email-add-form .input-text').focus();
             });
         }
     });    
+
     $('#btn-add-num').click(function(){
         var numero = $('#num-add-form .input-text').val();
         var entrepriseId = $(this).data('entreprise-id');
         var operation = "insert";
-        $.post('{/literal}{jfullurl "entreprise~entreprise:updateTelephones"}{literal}', {'numero':numero, 'entrepriseId': entrepriseId, 'operation': operation}, function(data) {
-            $('#telephoneList').html(data);
-            swal("Ajouté!", "Le téléphone a été ajouté", "success");
-            $('#num-add-form .input-text').val('');
-            $('#num-add-form .input-text').focus();
-        });
+        if (validator.element( "#num-input" ) && numero != '')
+        {
+            $.post('{/literal}{jfullurl "entreprise~entreprise:updateTelephones"}{literal}', {'numero':numero, 'entrepriseId': entrepriseId, 'operation': operation}, function(data) {
+                $('#telephoneList').html(data);
+                swal("Ajouté!", "Le téléphone a été ajouté", "success");
+                $('#num-add-form .input-text').val('');
+                $('#num-add-form .input-text').focus();
+            });
+        }
     });
+
     $('#btn-add-service').click(function(){
         var name = $('#service-add-form .input-text').val();
         var entrepriseId = $(this).data('entreprise-id');
@@ -903,6 +1039,7 @@ $(document).ready(function(){
             $('#service-add-form .input-text').focus();
         });
     });
+
     $('#btn-add-produit').click(function(){
         var name = $('#produit-add-form .input-text').val();
         var entrepriseId = $(this).data('entreprise-id');
@@ -914,6 +1051,7 @@ $(document).ready(function(){
             $('#produit-add-form .input-text').focus();
         });
     });
+
     $('#btn-add-marque').click(function(){
         var name = $('#marque-add-form .input-text').val();
         var entrepriseId = $(this).data('entreprise-id');
@@ -926,10 +1064,6 @@ $(document).ready(function(){
         });
     });
 
-    function isValidEmailAddress(emailAddress) {
-    var pattern = new RegExp(/^(("[\w-+\s]+")|([\w-+]+(?:\.[\w-+]+)*)|("[\w-+\s]+")([\w-+]+(?:\.[\w-+]+)*))(@((?:[\w-+]+\.)*\w[\w-+]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][\d]\.|1[\d]{2}\.|[\d]{1,2}\.))((25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\.){2}(25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\]?$)/i);
-    return pattern.test(emailAddress);
-    };
     $('.btn-save').click(function()
     {
         var entrepriseId = $('input[name="entrepriseId"]').val();
@@ -963,6 +1097,7 @@ $(document).ready(function(){
     });
     
     $('.r-fileupload').RFileUploader();
+
     $('.r-fileupload').find('.btn-file-upload').click(function()
     {
         var file = $('#inputvideopresentation')[0].files[0];
@@ -985,11 +1120,11 @@ $(document).ready(function(){
 
     $('.footable').footable();
     CKEDITOR.replace( 'nosServices');
-    
     CKEDITOR.replace( 'quiSommesNous');
     CKEDITOR.replace( 'nosRef');
     CKEDITOR.config.contentsCss = '{/literal}{$j_basepath}{literal}frontlibraries/stylesheets/styles_pagesjaunes.css' ; 
     var souscategoriesJSON = {/literal}{$souscategoriesJSON}{literal};
+
     $("#souscategorie option").each(function(){
         for (i=0; i<souscategoriesJSON.length; i++)
         {
@@ -1011,6 +1146,7 @@ $(document).ready(function(){
         $(selector).chosen(config[selector]);
     }
 });
+
 function addCatalogue()
 {
     var img_produit = $('#img_produit')[0].files[0];
@@ -1033,6 +1169,7 @@ function addCatalogue()
         formdata.append("prixProduit",prixProduit);
         formdata.append("radioCatalogueIsPublie",radioCatalogueIsPublie);
         formdata.append("operation","insert");
+        $('.catalogue-loader').show();
         $.ajax({
             type: 'POST',
             url: '{/literal}{jfullurl "entreprise~entreprise:updateCatalogueProduit"}{literal}',
@@ -1042,9 +1179,12 @@ function addCatalogue()
             success: function(data) {
               $('#catalogue-list').html(data);
               $('#catalogue-form').load('getAddCatalogueForm');
+              $('.catalogue-loader').hide();
             },
             error: function() {
-              $('#catalogue-list').html('<div class="alert alert-warning>La requête n\'a pas abouti</div>'); }   // tell jQuery not to set contentType
+              $('#catalogue-list').html('<div class="alert alert-warning>La requête n\'a pas abouti</div>');
+              $('.catalogue-loader').hide();
+            }
         });
     }
 }
@@ -1060,6 +1200,7 @@ function updateCatalogue()
     var marqueProduit = $('#marqueProduit').val();
     var prixProduit = $('#prixProduit').val();
     var radioCatalogueIsPublie = $('input[name="radioCatalogueIsPublie"]:checked').val();
+
     if((refProduit != '') && (nomProduit != '') && (descProduit != '') && (marqueProduit != '') && (prixProduit != ''))
     {
         var formdata = new FormData();
@@ -1073,6 +1214,7 @@ function updateCatalogue()
         formdata.append("prixProduit",prixProduit);
         formdata.append("radioCatalogueIsPublie",radioCatalogueIsPublie);
         formdata.append("operation","update");
+        $('.catalogue-loader').show();
         $.ajax({
             type: 'POST',
             url: '{/literal}{jfullurl "entreprise~entreprise:updateCatalogueProduit"}{literal}',
@@ -1082,11 +1224,50 @@ function updateCatalogue()
             success: function(data) {
               $('#catalogue-list').html(data);
               $('#catalogue-form').load('getAddCatalogueForm');
+              $('.catalogue-loader').hide();
             },
             error: function() {
-              $('#catalogue-list').html('<div class="alert alert-warning>La requête n\'a pas abouti</div>'); }   // tell jQuery not to set contentType
+                $('#catalogue-list').html('<div class="alert alert-warning>La requête n\'a pas abouti</div>');
+                $('.catalogue-loader').hide();
+            }
         });
     }
+}
+
+function deleteCatalogue(id)
+{
+    swal({
+        title: "Suppression",
+        text: "Vous êtes sure de vouloir supprimer ce produit ?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "supprimer",
+        cancelButtonText: "Annuler",
+        closeOnConfirm: true
+        }, function () {
+            var id_produit = id;
+            var formdata = new FormData();
+            formdata.append("id",id_produit);
+            formdata.append("operation","delete");
+            $('.catalogue-loader').show();
+            $.ajax({
+                type: 'POST',
+                url: '{/literal}{jfullurl "entreprise~entreprise:updateCatalogueProduit"}{literal}',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                  $('#catalogue-list').html(data);
+                  $('#catalogue-form').load('getAddCatalogueForm');
+                  $('.catalogue-loader').hide();
+                },
+                error: function() {
+                    $('#catalogue-list').html('<div class="alert alert-warning>La requête n\'a pas abouti</div>');
+                    $('.catalogue-loader').hide();
+                }
+            });
+        });
 }
 
 function catalogueActionGroup()
@@ -1106,6 +1287,7 @@ function catalogueActionGroup()
             }); 
             formdata.append("entrepriseId",entrepriseId);
             formdata.append("operation","deleteGroup");
+            $('.catalogue-loader').show();
             $.ajax({
                 type: 'POST',
                 url: '{/literal}{jfullurl "entreprise~entreprise:updateCatalogueProduit"}{literal}',
@@ -1113,11 +1295,14 @@ function catalogueActionGroup()
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                  $('#catalogue-list').html(data);
-                  $('#catalogue-form').load('getAddCatalogueForm');
+                    $('#catalogue-list').html(data);
+                    $('#catalogue-form').load('getAddCatalogueForm');
+                    $('.catalogue-loader').hide();
                 },
                 error: function() {
-                  $('#catalogue-list').html('<div class="alert alert-warning>La requête n\'a pas abouti</div>'); }   // tell jQuery not to set contentType
+                  $('#catalogue-list').html('<div class="alert alert-warning>La requête n\'a pas abouti</div>');
+                  $('.catalogue-loader').hide();
+                }
             });
         }
     }
@@ -1131,7 +1316,6 @@ function addVideoYoutube()
     var entrepriseId = $('input[name="entrepriseId"]').val();
     if (urlVideo != '' && vignetteVideo != '')
     {
-    
         var formdata = new FormData();
         var img;
         formdata.append("videosfile", vignetteVideo);
@@ -1188,10 +1372,12 @@ function updateVideoYoutube()
         });
     }
 }
+
 function resetVideosForm()
 {
   $('#videos-form').load('getAddVideosForm');
 }
+
 function deleteEmail(el)
 {
     swal({
@@ -1202,19 +1388,19 @@ function deleteEmail(el)
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "supprimer",
             cancelButtonText: "Annuler",
-            closeOnConfirm: false
+            closeOnConfirm: true
         }, function () {
             if ($('#emailList .rMultiItem').length > 1)
             {
                 res = setRemote(el);
-                swal("Supprimé!", "L'email a été supprimée", "success"); 
             }
             else
             {
-                swal("Echecs", "il faut au moins un email", "warning");   
+                swal("Echecs", "il faut au moins un email", "warning");
             }
         });
 }
+
 function deleteTelephone(el)
 {
     swal({
@@ -1225,12 +1411,11 @@ function deleteTelephone(el)
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "supprimer",
             cancelButtonText: "Annuler",
-            closeOnConfirm: false
+            closeOnConfirm: true
         }, function () {
             if ($('#telephoneList .rMultiItem').length > 1)
             {
-                res = setRemote(el);                
-                swal("Supprimé!", "Le numéro a été supprimée", "success");   
+                res = setRemote(el);
             }
             else
             {
@@ -1249,12 +1434,12 @@ function deleteService(el)
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "supprimer",
             cancelButtonText: "Annuler",
-            closeOnConfirm: false
+            closeOnConfirm: true
         }, function () {
-            es = setRemote(el);                
-            swal("Supprimé!", "Le service a été supprimée", "success"); 
+            es = setRemote(el);
         }); 
 }
+
 function deleteProduit(el)
 {
     swal({
@@ -1265,12 +1450,12 @@ function deleteProduit(el)
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "supprimer",
             cancelButtonText: "Annuler",
-            closeOnConfirm: false
+            closeOnConfirm: true
         }, function () {
-            es = setRemote(el);                
-            swal("Supprimé!", "Le produit a été supprimée", "success"); 
+            es = setRemote(el);
         }); 
 }
+
 function deleteMarque(el)
 {
     swal({
@@ -1281,12 +1466,12 @@ function deleteMarque(el)
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "supprimer",
             cancelButtonText: "Annuler",
-            closeOnConfirm: false
+            closeOnConfirm: true
         }, function () {
-            es = setRemote(el);                
-            swal("Supprimé!", "La marque a été supprimée", "success"); 
+            es = setRemote(el);
         }); 
 }
+
 function addGalerieImage()
 {
     var galerie_image_file = $('#galerie-image')[0].files[0];
@@ -1305,7 +1490,7 @@ function addGalerieImage()
             data: formdata,
             processData: false,
             contentType: false,
-            success: function(data) {                  
+            success: function(data) {
                $('#galerie-image-list').html(data);
                $('#galerie-image').val(''); 
                $('.tr-delete').click(function()

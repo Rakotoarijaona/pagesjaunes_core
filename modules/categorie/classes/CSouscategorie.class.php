@@ -104,22 +104,23 @@ class CSouscategorie
     {
         $cnx = jDb::getConnection();
         $res = $cnx->query('SELECT * FROM '.$cnx->prefixTable ("souscategorie").' WHERE souscategorie_namealias ="'.$namealias.'"' );
-        $i = 0;
+        $i = false;
         if (sizeof($res->fetch())>0)
         {
-            $i = 1;
+            $i = true;
         }
         return $i;
     }
-    //test doublons
+
+    //update test doublons
     public static function ifUpdateNameExist($id, $namealias)
     {
         $cnx = jDb::getConnection();
         $res = $cnx->query('SELECT * FROM '.$cnx->prefixTable ("souscategorie").' WHERE souscategorie_id <> '.$id.' AND souscategorie_namealias ="'.$namealias.'"');
-        $i = 0;
+        $i = false;
         if (sizeof($res->fetch())>0)
         {
-            $i = 1;
+            $i = true;
         }
         return $i;
     }
@@ -143,7 +144,7 @@ class CSouscategorie
             $daoFactory->insert($record);
             return $record->souscategorie_id;
         } 
-        return 0;      
+        return 0;
     }
 
     //mis à jour
@@ -202,6 +203,7 @@ class CSouscategorie
         }
         return $i;
     }
+
     //can delete
     public function can_delete2()
     {
@@ -223,7 +225,7 @@ class CSouscategorie
             $mot = trim ($mot);
             if ($mot != '')
             {
-                $id = Motscles::insert($mot);
+                $id = CMotscles::insert($mot);
                 $dt = new jDateTime();
                 $dt->now();
                 $datecreation = $dt->toString(jDateTime::DB_DFORMAT);

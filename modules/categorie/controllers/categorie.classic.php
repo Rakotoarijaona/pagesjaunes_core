@@ -25,11 +25,11 @@ class categorieCtrl extends jController {
         'gestion_mots_cles'  =>array('jacl2.right'=>'keywords.update')
     );
 
-    function index() 
+    public function index() 
     {
         $resp = $this->getResponse('html');
         if (!jAcl2::check("categorie.restrictall")) { //Test droit restrict all
-            $tpl = new jTpl();        
+            $tpl = new jTpl();
             $tpl->assign("SCRIPT", jZone::get('common~script'));
 
             //Liste de tous les categories
@@ -43,8 +43,6 @@ class categorieCtrl extends jController {
             }
             $tpl->assign("oList", $oList);
             $tpl->assign("oListCategorie", $oListCategorie);
-
-            //jMessage
 
             $resp->body->assign('MAIN', $tpl->fetch('categorie~index'));
             $tpl->assign("SCRIPT", jZone::get('common~script'));
@@ -60,7 +58,7 @@ class categorieCtrl extends jController {
         return $resp;
     }
 
-    function edition() 
+    public function edition() 
     {
         $resp = $this->getResponse('html');
         if (!jAcl2::check("categorie.restrictall")) { //Test droit restrict all
@@ -113,7 +111,7 @@ class categorieCtrl extends jController {
         }
         return $resp ;
     }
-    function deleteCategorie()
+    public function deleteCategorie()
     {
         $resp = $this->getResponse('redirect');
         if (!jAcl2::check("categorie.restrictall")) { //Test droit restrict all
@@ -140,7 +138,7 @@ class categorieCtrl extends jController {
         return $resp;
     }
 
-    function deleteSouscategorie()
+    public function deleteSouscategorie()
     {
         $resp = $this->getResponse('redirect');
         if (!jAcl2::check("categorie.restrictall")) { //Test droit restrict all
@@ -178,7 +176,7 @@ class categorieCtrl extends jController {
                     $oCategorie->name = $this->param('nom');
                     $namealias = CCommonTools::generateAlias ($oCategorie->name);
                     $oCategorie->namealias = $namealias;
-                    if ((categorie::ifNameExist($namealias) == 0)&&(souscategorie::ifNameExist($namealias) == 0))
+                    if ((CCategorie::ifNameExist($namealias) == false)&&(CSouscategorie::ifNameExist($namealias) == false))
                     {
                         //icone catégorie
                         $iErrorCode         = 0 ;
@@ -229,14 +227,14 @@ class categorieCtrl extends jController {
                     else
                     {     
                         jMessage::add(jLocale::get('categorie~categorie.name.exist.alert.error'),'danger');
-                    }                
+                    }
                 }
                 else
                 {
                     $osouscategorie = new CSouscategorie();
                     $osouscategorie->name = $this->param('nom');
                     $namealias = CCommonTools::generateAlias ($osouscategorie->name);
-                    if ((categorie::ifNameExist($namealias) == 0)&&(souscategorie::ifNameExist($namealias) == 0))
+                    if ((CCategorie::ifNameExist($namealias) == false)&&(CSouscategorie::ifNameExist($namealias) == false))
                     {
                         $osouscategorie->namealias = $namealias;
                         $osouscategorie->categorieid = $this->param('categorie_parent');
@@ -259,7 +257,7 @@ class categorieCtrl extends jController {
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $resp->body->assign('MAIN', $tpl->fetch('common~accessdenied'));
         }
-        return $resp;        
+        return $resp;
     }
 
     // Sauvegarde de la modification
@@ -277,7 +275,7 @@ class categorieCtrl extends jController {
                         $oCategorie->name = $this->param('name');
                         $namealias = CCommonTools::generateAlias ($oCategorie->name);
                         $oCategorie->namealias = $namealias;
-                        if ((categorie::ifUpdateNameExist($this->intParam('id'), $namealias) == 0)&&(souscategorie::ifNameExist($namealias) == 0))
+                        if ((CCategorie::ifUpdateNameExist($this->intParam('id'), $namealias) == false)&&(CSouscategorie::ifNameExist($namealias) == false))
                         {
                             if (!empty($_FILES["vignette"]['name']))
                             {
@@ -347,7 +345,7 @@ class categorieCtrl extends jController {
                         $oCategorie->name = $this->param('name');
                         $namealias = CCommonTools::generateAlias ($oCategorie->name);
                         $oCategorie->namealias = $namealias;
-                        if (categorie::ifNameExist($namealias) == 0)
+                        if (CCategorie::ifNameExist($namealias) == false)
                         {
                             if (isset($_FILES["vignette"]))
                             {
@@ -416,7 +414,7 @@ class categorieCtrl extends jController {
                     {
                         $oSouscategorie->name = $this->param('name');
                         $namealias = CCommonTools::generateAlias ($oSouscategorie->name);
-                        if (souscategorie::ifNameExist($namealias) == 0)
+                        if (CSouscategorie::ifNameExist($namealias) == false)
                         {
                             $oSouscategorie->namealias = $namealias;
                             $oSouscategorie->categorieid = $this->intParam('parent');
@@ -440,7 +438,7 @@ class categorieCtrl extends jController {
                         $oSouscategorie->id = $this->intParam('id');
                         $oSouscategorie->name = $this->param('name');
                         $namealias = CCommonTools::generateAlias ($oSouscategorie->name);
-                        if ((souscategorie::ifUpdateNameExist($this->intParam('id'), $namealias) == 0)&&(categorie::ifNameExist($namealias) == 0))
+                        if ((CSouscategorie::ifUpdateNameExist($this->intParam('id'), $namealias) == false)&&(CCategorie::ifNameExist($namealias) == false))
                         {
                             $oSouscategorie->namealias = $namealias;
                             $oSouscategorie->categorieid = $this->intParam('parent');
@@ -454,7 +452,7 @@ class categorieCtrl extends jController {
                             jMessage::add(jLocale::get('categorie~categorie.name.exist.alert.error'),'danger');
                         }
                     }
-                }                 
+                }
             }
             
             $resp->action = "categorie~categorie:edition";
@@ -467,11 +465,10 @@ class categorieCtrl extends jController {
         }
         return $resp;  
     }
-    /*
-    gestion des mots clés
-    */
-    function gestion_mots_cles()
-    {     
+
+    //gestion des mots clés
+    public function gestion_mots_cles()
+    {
         if (!jAcl2::check("keywords.restrictall")) { //Test droit restrict all
             $resp = $this->getResponse('html');
             $tpl = new jTpl();
@@ -489,57 +486,59 @@ class categorieCtrl extends jController {
     }
 
     //insert Test Doublons
-    function insertNameExist ()
+    public function insertNameExist ()
     {
         $resp = $this->getResponse('text');
         $name = $this->param('nom');
         $namealias = CCommonTools::generateAlias ($name);
-        $exist = 0;
-        if (categorie::ifNameExist($namealias) == 1)
+        $exist = false;
+        if (CCategorie::ifNameExist($namealias) == true)
         {
-            $exist = 1;
+            $exist = true;
         }
-        if (souscategorie::ifNameExist($namealias) == 1)
+        if (CSouscategorie::ifNameExist($namealias) == true)
         {
-            $exist = 1;
+            $exist = true;
         }
         $resp->content = $exist;
         return $resp;
     }
+
     //categorie update Test Doublons
-    function categorieUpdateNameExist ()
+    public function categorieUpdateNameExist ()
     {
         $resp = $this->getResponse('text');
         $id = $this->param('id');
         $name = $this->param('nom');
         $namealias = CCommonTools::generateAlias ($name);
-        $exist = 0;
-        if (categorie::ifUpdateNameExist($id, $namealias) == 1)
+        $exist = false;
+        if (CCategorie::ifUpdateNameExist($id, $namealias) == true)
         {
-            $exist = 1;
+            $exist = true;
         }
-        if (souscategorie::ifNameExist($namealias) == 1)
+        if (CSouscategorie::ifNameExist($namealias) == true)
         {
-            $exist = 1;
+            $exist = true;
         }
         $resp->content = $exist;
         return $resp;
     }
+
     //sous-categorie update Test Doublons
-    function souscategorieUpdateNameExist ()
+    public function souscategorieUpdateNameExist ()
     {
         $resp = $this->getResponse('text');
         $id = $this->param('id');
         $name = $this->param('nom');
         $namealias = CCommonTools::generateAlias ($name);
-        $exist = 0;
-        if (souscategorie::ifUpdateNameExist($id, $namealias) == 1)
+        $exist = false;
+        if (CSouscategorie::ifUpdateNameExist($id, $namealias) == true)
         {
-            $exist = 1;
+            $exist = true;
         }
-        if (categorie::ifNameExist($namealias) == 1)
+        if (CCategorie::ifNameExist($namealias) == true)
         {
-            $exist = 1;
+            $exist = true;
         }
         $resp->content = $exist;
         return $resp;

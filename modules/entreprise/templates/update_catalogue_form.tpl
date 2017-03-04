@@ -10,7 +10,7 @@
 <div class="form-group">
     <label>Image produit *:</label>
     <div class="fileupload fileupload-new" data-provides="fileupload">
-        <div class="fileupload-new thumbnail" style="width: 100px; height: 100px;">
+        <div class="fileupload-new thumbnail" style="max-width: 100px; max-height: 100px; line-height: 20px;">
             <img alt="" src="{$j_basepath}entreprise/produits/{$oCatalogue->image_produit}" />
         </div>
         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100px; max-height: 100px; line-height: 20px;"></div>
@@ -30,7 +30,7 @@
 </div>
 <div class="form-group">
     <label>Marque produit *</label>
-    <input id="marqueProduit" name="marqueProduit" type="text" class="form-control required" value="{$oCatalogue->marque_produit}">
+    <input id="marqueProduit" name="marqueProduit" type="text" class="form-control" value="{$oCatalogue->marque_produit}">
 </div>
 <div class="form-group">
     <label>Prix produit *</label>
@@ -53,6 +53,13 @@
     </div>
 </div>
 <div class="form-group">
-    <button type="button" onclick="updateCatalogue();" class="catalogue-save-add btn btn-success btn-outline">Enregistrer</button>
+    <button type="button" onclick="updateCatalogue();" class="catalogue-save-add btn btn-success btn-outline">
+        <span class="visible-lg hidden-sm hidden-xs">
+            {@entreprise~entreprise.enregistrer.la.catalogue@}
+        </span>
+        <span class="hidden-lg visible-sm visible-xs">
+            {@common~common.enregistrer@}
+        </span>
+    </button>
     <button type="button" onclick="return setRemote(this);" data-remote-target="#catalogue-form" data-load-remote="{jfullurl 'entreprise~entreprise:getAddCatalogueForm'}" class="catalogue-clear-add-form btn btn-default btn-outline">Annuler</button>
 </div>

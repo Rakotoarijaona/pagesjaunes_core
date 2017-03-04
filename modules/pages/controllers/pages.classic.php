@@ -49,9 +49,10 @@ class pagesCtrl extends jController {
     function ajout() {
         $resp = $this->getResponse('html');
         if (!jAcl2::check("pages.restrictall")) { //Test droit restrict all
-            $tpl = new jTpl();        
+            $tpl = new jTpl();
 
             $tpl->assign("SCRIPT", jZone::get('common~script'));
+            CCommonTools::assignDefinedConstants($tpl);
             $resp->body->assign('MAIN', $tpl->fetch('pages~ajout'));
             $resp->body->assign('selectedMenuItem','pages');
         }
@@ -86,12 +87,12 @@ class pagesCtrl extends jController {
                     jMessage::add(jLocale::get("pages~pages.add.success"), "success");
                 }
                 else
-                {                
+                {
                     jMessage::add(jLocale::get("pages~pages.name.exist"), "danger");
-                }            
+                }
             }
             else
-            {             
+            {
                 jMessage::add(jLocale::get("pages~pages.error"), "danger");
             }
             $resp = $this->getResponse ('redirect');

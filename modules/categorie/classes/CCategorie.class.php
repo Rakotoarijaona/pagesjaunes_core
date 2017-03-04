@@ -125,22 +125,23 @@ class CCategorie
     {
         $cnx = jDb::getConnection();
         $res = $cnx->query('SELECT * FROM '.$cnx->prefixTable ("categorie").' WHERE categorie_namealias ="'.$namealias.'"' );
-        $i = 0;
+        $i = false;
         if (sizeof($res->fetch())>0)
         {
-            $i = 1;
+            $i = true;
         }
         return $i;
     }
+
      //test doublons
     public static function ifUpdateNameExist($id, $namealias)
     {
         $cnx = jDb::getConnection();
         $res = $cnx->query('SELECT * FROM '.$cnx->prefixTable ("categorie").' WHERE categorie_id <> '.$id.' AND categorie_namealias ="'.$namealias.'"');
-        $i = 0;
+        $i = false;
         if (sizeof($res->fetch())>0)
         {
-            $i = 1;
+            $i = true;
         }
         return $i;
     }
@@ -259,6 +260,7 @@ class CCategorie
         }
         return $i;
     }
+
     //can delete
     public static function can_delete($id)
     {
@@ -272,7 +274,7 @@ class CCategorie
         return $i;
     }
 
-    //test enfants    
+    //test enfants
     public function has_child()
     {
         $cnx = jDb::getConnection();

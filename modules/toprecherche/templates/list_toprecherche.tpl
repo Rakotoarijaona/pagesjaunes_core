@@ -11,6 +11,7 @@
     <tbody>
         {if sizeof($toToprecherche)}
         {foreach ($toToprecherche as $oToprecherche)}
+        {if (!empty($oToprecherche->getTitle()))}
         <tr>
             <td>
                 <div class="checkbox" style="margin: 0px">
@@ -32,6 +33,7 @@
                 {/ifacl2}
             </td>
         </tr>
+        {/if}
         {/foreach}
         {else}
         <tr><td colspan="5"><div class="alert alert-info">Aucuns résultats</div></td></tr>
