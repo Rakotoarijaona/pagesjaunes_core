@@ -23,9 +23,17 @@ class adsCtrl extends jController {
     */
     public $pluginParams=array(
         'index'                     =>array('jacl2.right'=>'ads.list'),
+        'liste_annonce'             =>array('jacl2.right'=>'ads.list'),
         'ajout'                     =>array('jacl2.right'=>'ads.create'),
+        'save_add_annonceur'        =>array('jacl2.right'=>'ads.create'),
+        'ajout_annonceur'           =>array('jacl2.right'=>'ads.create'),
         'update'                    =>array('jacl2.right'=>'ads.update'),
+        'editer_annonceur'          =>array('jacl2.right'=>'ads.update'),
+        'save_edit_annonceur'       =>array('jacl2.right'=>'ads.update'),
+        'copier_annonceur'          =>array('jacl2.right'=>'ads.update'),
         'delete'                    =>array('jacl2.right'=>'ads.delete'),
+        'supprimer_annonce'         =>array('jacl2.right'=>'ads.delete'),
+        'save_delete_annonceur'     =>array('jacl2.right'=>'ads.delete'),
         'ajout_type'                =>array('jacl2.right'=>'ads.type.create'),
         'update_type'               =>array('jacl2.right'=>'ads.type.update'),
         'delete_type'               =>array('jacl2.right'=>'ads.type.delete'),
@@ -38,6 +46,15 @@ class adsCtrl extends jController {
         'save_update_type'          =>array('jacl2.right'=>'ads.type.update'),
         'save_delete_type'          =>array('jacl2.right'=>'ads.type.delete'),
         'save_delete_group_type'    =>array('jacl2.right'=>'ads.type.delete')
+        liste_annonce
+save_add_annonceur
+set_expired
+editer_annonceur
+save_edit_annonceur
+copier_annonceur
+supprimer_annonce
+save_delete_annonceur
+statistiques
     );
 
     // page index
