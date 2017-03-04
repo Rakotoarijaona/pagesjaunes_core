@@ -273,9 +273,20 @@ function deleteGroupEntreprise()
             closeOnConfirm: false
             }, function () {
                 var entrepriseGroup = [];
+                var sortsens = $("#sortsens").val();
+                var sortfield = $("#sortfield").val();
                        
                 var formdata = new FormData();
                 i = 0;
+                $('input[name="filtrePublication[]"]:checked').each(function()
+                {
+                    formdata.append("filtrePublication[]",$(this).val());
+                });
+                formdata.append("filtreInfo",$('input[name="filtreInfo"]:checked').val());
+                formdata.append("filtreRecherche", $('#filtreRecherche').val());
+                formdata.append("filtreCategorie", $("#filtreCategorie").val());
+                formdata.append("sortsens", sortsens);
+                formdata.append("sortfield", sortfield);
                 $('input[name="entrepriseCheck[]"]:checked').each(function()
                 {
                     formdata.append("entrepriseGroup[]",$(this).val());
@@ -310,10 +321,34 @@ function submitDelete(id)
             cancelButtonText: "Annuler",
             closeOnConfirm: false
         }, function () {
-            var param = 'id='+id;
-            $('#entreprise-list').html('<div class="spiner-example"><div class="sk-spinner sk-spinner-three-bounce"><div class="sk-bounce1"></div><div class="sk-bounce2"></div><div class="sk-bounce3"></div></div></div>').load('deleteEntreprise',param, function(){
+            var sortsens = $("#sortsens").val();
+            var sortfield = $("#sortfield").val();
+            var formdata = new FormData();
+            i = 0;
+            $('input[name="filtrePublication[]"]:checked').each(function()
+            {
+                formdata.append("filtrePublication[]",$(this).val());
+            });
+            formdata.append("filtreInfo",$('input[name="filtreInfo"]:checked').val());
+            formdata.append("filtreRecherche", $('#filtreRecherche').val());
+            formdata.append("filtreCategorie", $("#filtreCategorie").val());
+            formdata.append("sortsens", sortsens);
+            formdata.append("sortfield", sortfield);
+            formdata.append("id", id);
+            $('#entreprise-list').html('<div class="spiner-example"><div class="sk-spinner sk-spinner-three-bounce"><div class="sk-bounce1"></div><div class="sk-bounce2"></div><div class="sk-bounce3"></div></div></div>');
+            $.ajax({
+                type: 'POST',
+                url: '{/literal}{jfullurl "entreprise~entreprise:deleteEntreprise"}{literal}',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(resp) {
+                    $('#entreprise-list').html(resp);
                     swal("Supprimé!", "L'entreprise a été supprimée", "success");
-                });         
+                },
+                error: function() {
+                }
+            });         
         });
 }
 function filterByCategorie()

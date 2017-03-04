@@ -344,6 +344,10 @@
                                                 <div class="form-group">
                                                     <label>Vignette youtube</label>
                                                     <div class="fileupload fileupload-new vignette-fileupload" data-provides="fileupload">
+                                                        <div class="fileupload-new thumbnail" style="max-width: 100%; max-height: 150px">
+                                                            <img src="" alt="" id="vignette-thumbnail"/>
+                                                        </div>
+                                                        
                                                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 189px; max-height: 137px; line-height: 10px"></div>
                                                         <div>
                                                             <span class="btn btn-default btn-file">
@@ -431,7 +435,7 @@
                                                 <div class="form-group">
                                                     <label>Image</label>
                                                     <div class="fileupload fileupload-new gallery-file" data-provides="fileupload">
-                                                        <div class="fileupload-new thumbnail" style="width: 100%; height: 150px">
+                                                        <div class="fileupload-new thumbnail" style="max-width: 100%; max-height: 150px">
                                                             <img src="" alt="" />
                                                         </div>
                                                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100%; height: 150px; line-height: 10px"></div>
@@ -546,7 +550,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Marque produit (*)</label>
-                                                <input id="marqueProduit" name="marqueProduit" type="text" class="form-control required">
+                                                <input id="marqueProduit" name="marqueProduit" type="text" class="form-control">
                                             </div>
                                             <div class="form-group">
                                                 <label>Prix produit (*)</label>
@@ -594,8 +598,8 @@
                                                             <td><img class="thumbnail" style="max-height: 90px; height: 90px" src="{$j_basepath}entreprise/produits/thumbnail/{$oCatalogue->image_produit}" alt="" /></td>
                                                             <td>{$oCatalogue->prix_produit}&nbsp;Ar</td>
                                                             <td>  
-                                                                <button onclick="getProduitCatalogue({$oCatalogue->id});" type="button" class="btn btn-success btn-xs">Editer</button>
-                                                                <button onclick="deleteProduitCatalogue({$oCatalogue->id});" type="button" class="btn btn-danger btn-xs">Supprimer</button>
+                                                                <button onclick="getProduitCatalogue({$oCatalogue->id});" type="button" class="btn btn-default btn-xs btn-block">Editer</button>
+                                                                <button onclick="deleteProduitCatalogue({$oCatalogue->id});" type="button" class="btn btn-default btn-xs btn-block">Supprimer</button>
                                                             </td>
                                                         </tr>
                                                         {/foreach}
@@ -626,6 +630,24 @@
         </div>
     </div>
 </main>
+<div class="page-loader" style="display: none"><img src="{$j_basepath}frontlibraries/loader.gif" width="50px"></div>
+
+{literal}
+<style>
+    .page-loader {
+        position: fixed;
+        z-index: 2000;
+        top: 50%;
+        left: 50%;
+        margin-left: -2.5rem;
+        margin-top: -2.5rem;
+        height: 5rem;
+        width: 5rem;
+        opacity: 1;
+        user-select: none;
+    }
+</style>
+{/literal}
 
 {literal}
 <script type="text/javascript">
@@ -865,6 +887,7 @@ function getVideosYoutube(id)
         var formdata = new FormData();
         var img;
         formdata.append("id", id);
+        $('.page-loader').show();
         $.ajax({
             type: 'POST',
             url: '{/literal}{jUrl "front_office~entreprise:getVideosYoutube"}{literal}',
@@ -885,6 +908,7 @@ function getVideosYoutube(id)
                     $('.video-form').append(inputHdn);
                     $('.video-form #video-id').val(data.id);
                 }
+                $('.page-loader').hide();
             },
             error: function() {
                
@@ -923,6 +947,7 @@ function updateVideoYoutube()
     var entrepriseId = $('input[name="entreprise"]').val();
     if (urlVideo != '')
     {
+        $('.page-loader').show();
         var formdata = new FormData();
         var img;
         formdata.append("vignette", vignetteVideo);
@@ -975,6 +1000,7 @@ function updateVideoYoutube()
                     }
                 }
                 clearVideoForm();
+                $('.page-loader').hide();
             },
             error: function() {
                
@@ -995,6 +1021,7 @@ function deleteVideoYoutube(id)
     }, function () {
         if (id != '')
         {
+            $('.page-loader').show();
             var formdata = new FormData();
             var img;
             formdata.append("id", id);
@@ -1008,6 +1035,7 @@ function deleteVideoYoutube(id)
                     clearVideoForm();
                     var selector = 'tr#'+id;
                     $(selector).remove();
+                    $('.page-loader').hide();
                 },
                 error: function() {
                    
@@ -1027,6 +1055,7 @@ function addImageGallery()
 {
     if ($('#image_gallery').val() !='')
     {
+        $('.page-loader').show();
         var image_gallery = $('#image_gallery')[0].files[0];
         var entrepriseId = $('input[name="entreprise"]').val();
         var formdata = new FormData();
@@ -1052,6 +1081,7 @@ function addImageGallery()
                                 '</div>';
                     $('.image-list').append(item);
                     clearImageForm();
+                    $('.page-loader').hide();
                 }
             }
         });
@@ -1070,6 +1100,7 @@ function deleteImageGallery(id)
     }, function () {
         if (id != '')
         {
+            $('.page-loader').show();
             var formdata = new FormData();
             formdata.append("id", id);
             $.ajax({
@@ -1082,6 +1113,7 @@ function deleteImageGallery(id)
                     clearImageForm();
                     var selector = '.item.'+id;
                     $(selector).remove();
+                    $('.page-loader').hide();
                 },
                 error: function() {
                    
@@ -1123,6 +1155,7 @@ function getProduitCatalogue(id)
 {
     if (id != '')
     {
+        $('.page-loader').show();
         var formdata = new FormData();
         formdata.append("id", id);
         $.ajax({
@@ -1153,6 +1186,7 @@ function getProduitCatalogue(id)
                     $('#catalogue-form').append(inputHdn);
                     $('#catalogue-id').val(data.id);
                 }
+                $('.page-loader').hide();
             },
             error: function() {
                
@@ -1185,6 +1219,7 @@ function updateProduitCatalogue()
     }
     if ((reference_produit != '') && (nom_produit != '') && (description_produit != '') && (prix_produit != ''))
     {
+        $('.page-loader').show();
         var formdata = new FormData();
 
         formdata.append("id", id);
@@ -1213,8 +1248,8 @@ function updateProduitCatalogue()
                                     '<td><img class="thumbnail" style="max-height: 90px; height: 90px" src="{/literal}{$j_basepath}{literal}entreprise/produits/thumbnail/'+data.image_produit+'" alt="" /></td>'+
                                     '<td>'+data.prix_produit+' Ar</td>'+
                                     '<td>'+
-                                        '<button onclick="getProduitCatalogue('+data.id+');" type="button" class="btn btn-success btn-xs">Editer</button>'+
-                                        '<button onclick="deleteProduitCatalogue('+data.id+');" type="button" class="btn btn-danger btn-xs">Supprimer</button>'+
+                                        '<button onclick="getProduitCatalogue('+data.id+');" type="button" class="btn btn-default btn-xs btn-block">Editer</button>'+
+                                        '<button onclick="deleteProduitCatalogue('+data.id+');" type="button" class="btn btn-default btn-xs btn-block">Supprimer</button>'+
                                     '</td>'+
                                  '</tr>';
                         $('#catalogue-list tbody').append(tr);
@@ -1228,14 +1263,14 @@ function updateProduitCatalogue()
                                             '<td><img class="thumbnail" style="max-height: 90px; height: 90px" src="{/literal}{$j_basepath}{literal}entreprise/produits/thumbnail/'+data.image_produit+'" alt="" /></td>'+
                                             '<td>'+data.prix_produit+' Ar</td>'+
                                             '<td>'+
-                                                '<button onclick="getProduitCatalogue('+data.id+');" type="button" class="btn btn-success btn-xs">Editer</button>'+
-                                                '<button onclick="deleteProduitCatalogue('+data.id+');" type="button" class="btn btn-danger btn-xs">Supprimer</button>'+
+                                                '<button onclick="getProduitCatalogue('+data.id+');" type="button" class="btn btn-default btn-xs btn-block">Editer</button>'+
+                                                '<button onclick="deleteProduitCatalogue('+data.id+');" type="button" class="btn btn-default btn-xs btn-block">Supprimer</button>'+
                                             '</td>';
                         $(selector).html(td);
                     }
 
                     clearCatalogueForm();
-
+                    $('.page-loader').hide();
                 }
             }
         });
@@ -1255,6 +1290,7 @@ function deleteProduitCatalogue(id)
     }, function () {
         if (id != '')
         {
+            $('.page-loader').show();
             var formdata = new FormData();
             formdata.append("id", id);
             $.ajax({
@@ -1267,6 +1303,7 @@ function deleteProduitCatalogue(id)
                     clearCatalogueForm();
                     var selector    = '.catalogue.'+id;
                     $(selector).remove();
+                    $('.page-loader').hide();
                 },
                 error: function() {
                    

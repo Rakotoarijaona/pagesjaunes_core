@@ -968,14 +968,108 @@ class entrepriseCtrl extends jControllerRSR {
     public function deleteEntreprise()
     {
         $resp = $this->getResponse('htmlfragment');
-        if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all
+        if (!jAcl2::check("entreprise.restrictall")) { //Test droit restrict all    
+
+            // response
+            $resp = $this->getResponse('htmlfragment');
+
             $entrepriseId = $this->param('id');
 
             CEntreprise::deleteEntreprise($entrepriseId);
 
-            $toListEntreprise = CEntreprise::getList();
-            $resp->tpl->assign("toListEntreprise", $toListEntreprise);
+            // Filtres
+            $filtreStatus   = array();
+            $filtreCategorie = '';
+            $filtreInfo     = '';
+            $filtreNonPublie = '';
+            $filtrePublie = '';
+            $filtreEnAttente = '';
+            $filtreRecherche = '';
+
+            if ($this->param('filtreInfo', '') != '')
+            {
+                $filtreInfo = $this->param('filtreInfo');
+            }
+            if ($this->param('filtrePublication', '') != '')
+            {
+                $filtre = $this->param('filtrePublication');
+                if (sizeof($filtre) > 0)
+                {
+                    foreach ($filtre as $f)
+                    {
+                    
+                        $filtreStatus[] = 'is_publie = '.$f;
+                        if ($f == 0)
+                        {
+                            $filtreNonPublie = 'checked';
+                        }
+                        elseif ($f == 1)
+                        {
+                            $filtrePublie = 'checked';
+                        }
+                        elseif ($f == 2)
+                        {
+                            $filtreEnAttente = 'checked';
+                        }
+                    }
+                }
+            }
+            if ($this->param('filtreCategorie', '') != '')
+            {
+                $filtreCategorie = $this->param('filtreCategorie');
+            }
+            if ($this->param('filtreRecherche', '') != '')
+            {
+                $filtreRecherche = $this->param('filtreRecherche');
+            }
+
+            $oListCategorie = array();
+            $oList = CCategorie::getList();
+            $i = 0;
+
+            foreach ($oList as $categorie) {
+                $oListCategorie[$i]['categorie'] = $categorie;
+                $oListCategorie[$i]['souscategorie'] = $categorie->getChild();
+                $i+=1;
+            }
+
+            //pagination parameters
+            $paginationParams = array();
+            $hasPagination = true;
+            $page = $this->intParam("page", 1, true);
+            $sortSens = $this->stringParam("sortsens", "DESC", true);
+            $sortField = $this->stringParam("sortfield", "raisonsociale", true);
+            $listStatus = $this->intParam("ls", LIST_ACTIVE, true);
+
+            //pagination parameters
+            $paginationParams = array();
+
+            //and filters
+            $andFilters = array();
+            if ($listStatus == LIST_ACTIVE) {
+                $andFilters[] = "abonnement_removalstatus = " . NO;
+                $paginationParams["ls"] = NO;
+            } else {
+                $andFilters[] = "abonnement_removalstatus = " . YES;
+                $paginationParams["ls"] = YES;
+            }
+
+            // Liste
+            $nbRecs = 0;
+            $toListEntreprise = CEntreprise::getListFiltered($filtreStatus, $filtreInfo, $filtreCategorie, $filtreRecherche, $hasPagination, $nbRecs, $page, NB_DATA_PER_PAGE, $sortField, $sortSens);
+
+            // pagination
+            $pagination = CCommonTools::getPagination("entreprise~entreprise:index", $nbRecs, $page, NB_DATA_PER_PAGE, NB_LINK_TO_DISPLAY, array(), false, "paginateEntreprise");
+
             $resp->tplname = 'entreprise~entreprise_list';
+            CCommonTools::assignDefinedConstants($resp->tpl);
+            $resp->tpl->assign("toListEntreprise", $toListEntreprise);
+            $resp->tpl->assign("page", $page);
+            $resp->tpl->assign("nbRecs", $nbRecs);
+            $resp->tpl->assign("oListCategorie", $oListCategorie);
+            $resp->tpl->assign("pagination", $pagination);
+            $resp->tpl->assign("sortsens", $sortSens);
+            $resp->tpl->assign("sortfield", $sortField);
         }
         else {
             $resp = $this->getResponse('html');
@@ -995,9 +1089,99 @@ class entrepriseCtrl extends jControllerRSR {
                 CEntreprise::deleteEntreprise($entrepriseId);
             }
             
-            $toListEntreprise = CEntreprise::getList();
-            $resp->tpl->assign("toListEntreprise", $toListEntreprise);
+            // Filtres
+            $filtreStatus   = array();
+            $filtreCategorie = '';
+            $filtreInfo     = '';
+            $filtreNonPublie = '';
+            $filtrePublie = '';
+            $filtreEnAttente = '';
+            $filtreRecherche = '';
+
+            if ($this->param('filtreInfo', '') != '')
+            {
+                $filtreInfo = $this->param('filtreInfo');
+            }
+            if ($this->param('filtrePublication', '') != '')
+            {
+                $filtre = $this->param('filtrePublication');
+                if (sizeof($filtre) > 0)
+                {
+                    foreach ($filtre as $f)
+                    {
+                    
+                        $filtreStatus[] = 'is_publie = '.$f;
+                        if ($f == 0)
+                        {
+                            $filtreNonPublie = 'checked';
+                        }
+                        elseif ($f == 1)
+                        {
+                            $filtrePublie = 'checked';
+                        }
+                        elseif ($f == 2)
+                        {
+                            $filtreEnAttente = 'checked';
+                        }
+                    }
+                }
+            }
+            if ($this->param('filtreCategorie', '') != '')
+            {
+                $filtreCategorie = $this->param('filtreCategorie');
+            }
+            if ($this->param('filtreRecherche', '') != '')
+            {
+                $filtreRecherche = $this->param('filtreRecherche');
+            }
+
+            $oListCategorie = array();
+            $oList = CCategorie::getList();
+            $i = 0;
+
+            foreach ($oList as $categorie) {
+                $oListCategorie[$i]['categorie'] = $categorie;
+                $oListCategorie[$i]['souscategorie'] = $categorie->getChild();
+                $i+=1;
+            }
+
+            //pagination parameters
+            $paginationParams = array();
+            $hasPagination = true;
+            $page = $this->intParam("page", 1, true);
+            $sortSens = $this->stringParam("sortsens", "DESC", true);
+            $sortField = $this->stringParam("sortfield", "raisonsociale", true);
+            $listStatus = $this->intParam("ls", LIST_ACTIVE, true);
+
+            //pagination parameters
+            $paginationParams = array();
+
+            //and filters
+            $andFilters = array();
+            if ($listStatus == LIST_ACTIVE) {
+                $andFilters[] = "abonnement_removalstatus = " . NO;
+                $paginationParams["ls"] = NO;
+            } else {
+                $andFilters[] = "abonnement_removalstatus = " . YES;
+                $paginationParams["ls"] = YES;
+            }
+
+            // Liste
+            $nbRecs = 0;
+            $toListEntreprise = CEntreprise::getListFiltered($filtreStatus, $filtreInfo, $filtreCategorie, $filtreRecherche, $hasPagination, $nbRecs, $page, NB_DATA_PER_PAGE, $sortField, $sortSens);
+
+            // pagination
+            $pagination = CCommonTools::getPagination("entreprise~entreprise:index", $nbRecs, $page, NB_DATA_PER_PAGE, NB_LINK_TO_DISPLAY, array(), false, "paginateEntreprise");
+
             $resp->tplname = 'entreprise~entreprise_list';
+            CCommonTools::assignDefinedConstants($resp->tpl);
+            $resp->tpl->assign("toListEntreprise", $toListEntreprise);
+            $resp->tpl->assign("page", $page);
+            $resp->tpl->assign("nbRecs", $nbRecs);
+            $resp->tpl->assign("oListCategorie", $oListCategorie);
+            $resp->tpl->assign("pagination", $pagination);
+            $resp->tpl->assign("sortsens", $sortSens);
+            $resp->tpl->assign("sortfield", $sortField);
         }
         else {
             $resp = $this->getResponse('html');

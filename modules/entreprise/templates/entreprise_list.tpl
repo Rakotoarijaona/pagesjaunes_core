@@ -74,10 +74,9 @@
                 {/ifacl2}
             </select>
             <span class="input-group-btn">
-                <button type="button" class="btn btn-white input-sm" onclick="deleteGroup();"> Appliquer</button>
+                <button type="button" class="btn btn-white input-sm" onclick="deleteGroupEntreprise();"> Appliquer</button>
             </span>
         </div>
-        <form name="formGroupDelete" id="formGroupDelete" action="{jurl 'pages~pages:delete_group'}" method="POST"></form>
     </div>
     <div class="col-md-8">
         {if $nbRecs > $NB_DATA_PER_PAGE}
