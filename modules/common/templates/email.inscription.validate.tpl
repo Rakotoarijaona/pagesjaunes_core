@@ -16,7 +16,7 @@
                                 <td align="left" valign="center"
                                 height="30" bgcolor="#ffffff" style="padding:10px 10px 20px 10px;">
                                     <span style="font-family:arial;color:#000000;">
-                                        <strong>Sujet </strong>: inscription validée sur pagesjaunes.mg
+                                        <strong>Sujet </strong>: inscription validée sur Pagesjaunes.mg
                                     </span>
                                 </td>
                             </tr>
@@ -26,7 +26,7 @@
                                 <td align="left" valign="top"
                                 bgcolor="#ffffff" style="font-family:arial;color:#000000;padding:0px 10px 10px 10px;">
                                     Bonjour,<br/>
-                                    <p>Votre inscription est validée. Vous êtes déjà en ligne.Nous vous donnons rendez-vous sur le site <a href="">www.pagesjaunes.mg.</a></p>
+                                    <p>Votre inscription est validée. Vous êtes déjà en ligne.Nous vous donnons rendez-vous sur le site <a href="http://www.pagesjaunes.mg">www.pagesjaunes.mg.</a></p>
                                     <p>Pagesjaunes.mg vous remercie de votre confiance.</p>
                                 </td>
                             </tr>

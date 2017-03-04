@@ -11,16 +11,6 @@
             <tbody>
                 <tr>
                     <td align="center" valign="top">
-                        <table width="600" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
-                            <tr>
-                                <td align="left" valign="center"
-                                height="30" bgcolor="#ffffff" style="padding:10px 10px 20px 10px;">
-                                    <span style="font-family:arial;color:#000000;">
-                                        <strong>Sujet </strong>: Accusé de réception de votre requête sur Pagesjaunes.mg
-                                    </span>
-                                </td>
-                            </tr>
-                        </table>
                         <table width="600" border="0" cellpadding="0" cellspacing="0" bgcolor="#DAE9C8">
                             <tr>
                                 <td align="left" valign="top"
@@ -34,7 +24,7 @@
                                 <td align="left" valign="top"
                                 bgcolor="#ffffff" style="font-family:arial;color:#000000;padding:0px 10px 10px 10px;">
                                     <blockquote style="color:#555555;font-size:13px;border-left:3px solid #cdcdcd;padding-left:15px;display:block;">
-                                        <h4 style="border-bottom:1px dotted #dedede;padding-bottom:8px;margin-bottom:0px;">Votre message : </h4>
+                                        <h4 style="border-bottom:1px dotted #dedede;padding-bottom:8px;margin-bottom:10px;">Votre message : </h4>
                                         {$message}
                                     </blockquote>
                                 </td>

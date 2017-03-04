@@ -288,7 +288,7 @@ class ads_zoneCtrl extends jController {
             
             // Liste des categories
             $oListCategorie = array();
-            $oList = Categorie::getList();
+            $oList = CCategorie::getList();
             $i = 0;
             foreach ($oList as $categorie) {
                 $oListCategorie[$i]['categorie'] = $categorie;
@@ -347,7 +347,7 @@ class ads_zoneCtrl extends jController {
 
         // Liste des categories
         $oListCategorie = array();
-        $oList = Categorie::getList();
+        $oList = CCategorie::getList();
         $i = 0;
         foreach ($oList as $categorie) {
             $oListCategorie[$i]['categorie'] = $categorie;

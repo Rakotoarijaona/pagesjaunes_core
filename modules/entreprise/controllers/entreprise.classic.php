@@ -543,7 +543,7 @@ class entrepriseCtrl extends jControllerRSR {
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $resp->body->assign('MAIN', $tpl->fetch('common~accessdenied'));
         }
-        return $resp;            
+        return $resp;
     }
 
     public function updateEmails()
@@ -555,13 +555,20 @@ class entrepriseCtrl extends jControllerRSR {
             $oEntreprise = CEntreprise::getById($entrepriseId);
             $id = $this->intParam('emailId');
             if ($operation == 'insert')
-            {            
-                $oEntreprise->insertEmail($this->param('emailText'));
+            {
+                $email = $this->stringParam('emailText','');
+                if (!empty($email))
+                {
+                    $oEntreprise->insertEmail($this->param('emailText'));
+                }
             }
             elseif ($operation == 'update')
             {
-                $emailText = $this->param('emailText');
-                $oEntreprise->updateEmail($id, $emailText);
+                $emailText = $this->stringParam('emailText','');
+                if (!empty($emailText))
+                {
+                    $oEntreprise->updateEmail($id, $emailText);
+                }
             }
             elseif ($operation == 'delete') 
             {
@@ -610,13 +617,20 @@ class entrepriseCtrl extends jControllerRSR {
             $oEntreprise = CEntreprise::getById($entrepriseId);
             $id = $this->intParam('telephoneId');
             if ($operation == 'insert')
-            {            
-                $oEntreprise->insertTelephone($this->param('numero'));
+            {
+                $numero = $this->param('numero', '');
+                if (!empty($numero))
+                {
+                    $oEntreprise->insertTelephone($this->param('numero'));
+                }
             }
             elseif ($operation == 'update')
             {
                 $numero = $this->param('numero');
-                $oEntreprise->updateTelephone($id, $numero);
+                if (!empty($numero))
+                {
+                    $oEntreprise->updateTelephone($id, $numero);
+                }
             }
             elseif ($operation == 'delete') 
             {
@@ -843,7 +857,7 @@ class entrepriseCtrl extends jControllerRSR {
             $motscles = $this->param('motscles');
 
             $radioActivVideo = $this->param('radioActivVideo');
-            $radioGalerieImage = $this->param('radioActivVideo');
+            $radioGalerieImage = $this->param('radioGalerieImage');
             $radioActivCatalogue = $this->param('radioActivCatalogue');
 
             $oEntreprise = CEntreprise::getById($entrepriseId);
@@ -931,6 +945,7 @@ class entrepriseCtrl extends jControllerRSR {
             $oEntreprise->nos_references_active = $radioNosRef;
             $oEntreprise->nos_references = $nosRef;
             $oEntreprise->catalogue_active = $radioActivCatalogue;
+
             $oEntreprise->update();
 
             // update weight
@@ -1011,18 +1026,20 @@ class entrepriseCtrl extends jControllerRSR {
                         $image_produit = $oEntreprise->uploadCatalogue('img_produit');
                     }
                 }
-
-                if(!empty($this->param('refProduit')) && !empty($this->param('nomProduit')) && 
-                    !empty($this->param('descProduit')) && ($image_produit != '') &&
-                    !empty($this->param('marqueProduit')) && !empty($this->param('prixProduit')))
+                $refProduit     = $this->param('refProduit', '');
+                $nomProduit     = $this->param('nomProduit', '');
+                $descProduit    = $this->param('descProduit', '');
+                $marqueProduit  = $this->param('marqueProduit', '');
+                $prixProduit    = $this->param('prixProduit', '');
+                if(!empty($refProduit) && !empty($nomProduit) && !empty($descProduit) && ($image_produit != '') && !empty($marqueProduit) && !empty($prixProduit))
                 {
-                    $oCatalogue->reference_produit = $this->param('refProduit');
+                    $oCatalogue->reference_produit = $refProduit;
                     $oCatalogue->entreprise_id = $entrepriseId;
-                    $oCatalogue->nom_produit = $this->param('nomProduit');
+                    $oCatalogue->nom_produit = $nomProduit;
                     $oCatalogue->image_produit = $image_produit;
-                    $oCatalogue->description_produit = $this->param('descProduit');
-                    $oCatalogue->marque_produit = $this->param('marqueProduit');
-                    $oCatalogue->prix_produit = $this->param('prixProduit');
+                    $oCatalogue->description_produit = $descProduit;
+                    $oCatalogue->marque_produit = $marqueProduit;
+                    $oCatalogue->prix_produit = $prixProduit;
                     $oCatalogue->is_publie = $this->param('radioCatalogueIsPublie');
                     //$oCatalogue->is_publie
                     $oCatalogue->insert();
@@ -1112,7 +1129,7 @@ class entrepriseCtrl extends jControllerRSR {
     }
 
     //insert Test Doublons
-    function ifRaisonsocialeExist ()
+    public function ifRaisonsocialeExist ()
     {
         $resp = $this->getResponse('text');
         $raisonsociale = $this->param('raisonsociale');
@@ -1124,8 +1141,9 @@ class entrepriseCtrl extends jControllerRSR {
         $resp->content = $valid;
         return $resp;
     }
+
     //update Test Doublons
-    function ifUpdateRaisonsocialeExist ()
+    public function ifUpdateRaisonsocialeExist ()
     {
         $resp = $this->getResponse('text');
         $id = $this->param('id');
@@ -1138,8 +1156,9 @@ class entrepriseCtrl extends jControllerRSR {
         $resp->content = $valid;
         return $resp;
     }
+
     //insert Test Doublons
-    function ifLoginExist ()
+    public function ifLoginExist ()
     {
         $resp = $this->getResponse('text');
         $login = $this->param('login');
@@ -1151,8 +1170,9 @@ class entrepriseCtrl extends jControllerRSR {
         $resp->content = $valid;
         return $resp;
     }
+
     //update Test Doublons
-    function ifUpdateLoginExist ()
+    public function ifUpdateLoginExist ()
     {
         $resp = $this->getResponse('text');
         $id = $this->param('id');
@@ -1181,5 +1201,44 @@ class entrepriseCtrl extends jControllerRSR {
         $resp->data = $datas;
 
         return $resp;
+    }
+
+    // send notification email
+    public function sentNotificationEmail()
+    {
+        if (!jAcl2::check("entreprise.restrictall")) {
+
+            $email = $this->param('email');
+
+            $mailNotification = new jMailer();
+            $mailNotification->isHTML(true);
+            $mailNotification->Subject = jLocale::get("common~email.inscription.validate");
+            $mailNotification->setFrom(EMAIL_CONTACT_ADMIN, "Pagesjaunes.mg");
+
+            // template
+            $tplNotification = new jTpl();
+            $mailNotification->Body = $tplNotification->fetch('common~email.inscription.validate');
+
+            // addresses
+            $mailNotification->AddAddress(EMAIL_ADMIN_ADMIN);
+            $mailNotification->AddAddress($email);
+
+            $mailNotification->Send();
+
+            jMessage::add(jLocale::get("common~email.notification.sent.success"), "success");
+
+            $resp = $this->getResponse('redirect');
+            $resp->action = "entreprise~entreprise:index";
+
+            return $resp;
+
+        } else {
+
+            $resp = $this->getResponse('html');
+            $tpl = new jTpl();
+            $tpl->assign("SCRIPT", jZone::get('common~script'));
+            $resp->body->assign('MAIN', $tpl->fetch('common~accessdenied'));
+
+        }
     }
 }

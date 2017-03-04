@@ -26,7 +26,7 @@
 	            <div class="form-group r-form">
                     <label class="col-sm-3 text-left control-label">Identifiant *:</label> 
                     <div class="col-sm-5">
-                        <input type="text" class="form-control" name="new_usr_login" id="new_usr_login" value="{$oUser->usr_login}">
+                        <input type="text" class="form-control" disabled value="{$oUser->usr_login}">
                     </div>
                 </div>
                 <div class="form-group r-form">
@@ -127,7 +127,7 @@ $(document).ready(function(){
             new_usr_login: {
                 required: true,
                 minlength: 3,
-                remote : {                    
+                remote : {
                     url: "{/literal}{jurl 'user~user:updateLoginExist'}{literal}",
                     type: "post",
                     data: {
@@ -143,7 +143,7 @@ $(document).ready(function(){
             usr_email: {
                 required: true,
                 email: true,
-                remote : {                    
+                remote : {
                     url: "{/literal}{jurl 'user~user:updateEmailExist'}{literal}",
                     type: "post",
                     data: {

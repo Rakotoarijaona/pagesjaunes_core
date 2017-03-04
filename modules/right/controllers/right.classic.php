@@ -35,7 +35,7 @@ class rightCtrl extends jController {
             // Control manager
             $toListProfile = CJacl2Group::getList();
             $tpl->assign('toListProfile', $toListProfile);
-            $toListUser = User::getList();
+            $toListUser = CUser::getList();
             $tpl->assign('toListUser', $toListUser);
             $tpl->assign("SCRIPT", jZone::get('common~script'));
             $resp->body->assign('MAIN', $tpl->fetch('right~index'));
@@ -186,14 +186,14 @@ class rightCtrl extends jController {
     {
         if (jAcl2::check("user.delete") && !jAcl2::check("user.restrictall")) {
             $resp = $this->getResponse ('redirect') ;
-            $oUser = new User ();
+            $oUser = new CUser ();
             //upload des fichiers
             /*$uploaddir = '/var/www/uploads/';
             $uploadTDRfile = $uploaddir . basename($_FILES['userfile']['name']);*/
             $resp->params = array () ;
            
             foreach ($this->param('groupUser') as $usr_login) {
-                User::delete($usr_login);
+                CUser::delete($usr_login);
             }
             jMessage::add(jLocale::get("user~user.delete.success"), "success");
             $resp->action = "right~right:index";
@@ -234,7 +234,7 @@ class rightCtrl extends jController {
     {
         $resp = $this->getResponse ('redirect') ;
         if (jAcl2::check("user.create") && !jAcl2::check("user.restrictall")) {
-            $oUser = new User ();
+            $oUser = new CUser ();
             //upload des fichiers
             /*$uploaddir = '/var/www/uploads/';
             $uploadTDRfile = $uploaddir . basename($_FILES['userfile']['name']);*/
@@ -268,10 +268,10 @@ class rightCtrl extends jController {
             if ($usr_login != '' || $usr_login != null)
             {
                 $resp = $this->getResponse ('htmlfragment') ;
-                $oUser = User::getUserByLogin($usr_login);
+                $oUser = CUser::getUserByLogin($usr_login);
                 $resp->tplname = 'user~modal_update' ;
                 $resp->tpl->assign ('oUser',$oUser);
-                $oUserProfile = User::get_User_Group($usr_login);
+                $oUserProfile = CUser::get_User_Group($usr_login);
                 $resp->tpl->assign('oUserProfile', $oUserProfile);
                 $toListProfile = CJacl2Group::getList();
                 $resp->tpl->assign('toListProfile', $toListProfile);
@@ -302,7 +302,7 @@ class rightCtrl extends jController {
     {
         $resp = $this->getResponse('redirect') ;
         if (jAcl2::check("user.update") && !jAcl2::check("user.restrictall")) {
-            $oUser = User::getUserByLogin($this->param('usr_login'));
+            $oUser = CUser::getUserByLogin($this->param('usr_login'));
             if ($oUser != null) {
                 $oUser->usr_name = $this->param('usr_name');
                 $oUser->usr_lastname = $this->param('usr_lastname');

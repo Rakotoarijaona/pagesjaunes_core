@@ -16,7 +16,7 @@
                                 <td align="left" valign="center"
                                 height="30" bgcolor="#ffffff" style="padding:10px 10px 20px 10px;">
                                     <span style="font-family:arial;color:#000000;">
-                                        <strong>Sujet </strong>: Nouvelle demande de mise à jour sur pagesjaunes.mg [your-raisonsociale]
+                                        <strong>Sujet </strong>: Nouvelle demande de mise à jour sur pagesjaunes.mg {$raisonsociale}
                                     </span>
                                 </td>
                             </tr>
@@ -26,15 +26,7 @@
                                 <td align="left" valign="top"
                                 bgcolor="#ffffff" style="font-family:arial;color:#000000;padding:0px 10px 10px 10px;">
                                     Bonjour,<br/>
-                                    <p>Une nouvelle demande de mise à jour sur pagesjaunes.mg "[your-raisonsociale]" a été enregistrée <br/>
-                                        <ul>
-                                            <li>Informations générales</li>
-                                            <li>Informations complémentaires</li>
-                                            <li>Informations payantes</li>
-                                        </ul>
-                                        <br/>
-                                        <a href="">Cliquez ici pour plus de détails</a>
-                                    </p>
+                                    <p>Une nouvelle demande de mise à jour sur pagesjaunes.mg "{$raisonsociale}" a été enregistrée</p>
                                 </td>
                             </tr>
                         </table>

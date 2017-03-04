@@ -232,16 +232,18 @@ class CUser
     public function create()
     {
         if (empty($this->defaultUser_id)) {
-            $connectedUser = (jAuth::isConnected()) ? jAuth::getUserSession() : jDao::createRecord('user~jelixuser');
+
+            $connectedUser  = (jAuth::isConnected()) ? jAuth::getUserSession() : jDao::createRecord('user~jelixuser');
             $daoDefaultUser = jDao::get('user~jelixuser');
             $recDefaultUser = jDao::createRecord('user~jelixuser');
+
             if (!empty($this->usr_password)) {
                 $userObject = jAuth::createUserObject($this->usr_login, $this->usr_password);
                 $this->usr_password = $userObject->password;
             }
+
             $this->usr_adminId = $connectedUser->id;
             $this->fetchIntoRecord($recDefaultUser);
-            CCommonTools::decodeDaoRecUtf8($recDefaultUser);
             $daoDefaultUser->insert($recDefaultUser);
             $this->usr_id = $recDefaultUser->id;
 
@@ -330,11 +332,13 @@ class CUser
         jAuth::updateUser($jAuthUserRecords);
     }
 
+    // Changer mot de passe
     public function changePassword($usr_login)
     {
-            jAuth::changePassword($usr_login, $this->usr_password);
+        jAuth::changePassword($usr_login, $this->usr_password);
     }
 
+    // generate token
     public function createToken()
     {
         $jAuthUserRecords = jAuth::getUser($this->usr_login);
@@ -345,6 +349,7 @@ class CUser
         }
     }
 
+    // Remove token
     public static function destroyToken($usr_login)
     {
         $jAuthUserRecords = jAuth::getUser($usr_login);
@@ -361,7 +366,7 @@ class CUser
         $groupLabel = CUser::get_Group_label($user_id);
         if ($groupLabel != 'superadmin')
         {
-            jAcl2DbUserGroup::removeUserFromGroup($user_id,$groupLabel);
+            jAcl2DbUserGroup::removeUser($user_id);
             jAuth::removeUser($user_id);
         }
     }
@@ -373,8 +378,10 @@ class CUser
         jAcl2DbUserGroup::removeUserFromGroup($login,$oldgroupid);
         jAcl2DbUserGroup::addUserToGroup($login, $newgroupid);
     }
+
     // get locales
-    public static function getLanguages($language_localeId = LANG_DEFAULT_ID) {
+    public static function getLanguages($language_localeId = LANG_DEFAULT_ID) 
+    {
         $languagesJson = array();
         $daoLanguage = jDao::get('common~language');
         $languages = $daoLanguage->findAll(array('language_localeId' => $language_localeId));
@@ -388,7 +395,8 @@ class CUser
     }
 
     // get countries
-    public static function getCountries($country_localeId = LANG_DEFAULT_ID) {
+    public static function getCountries($country_localeId = LANG_DEFAULT_ID)
+    {
         $countriesJson = array();
         $countries = CCountry::getList(null, $country_localeId);
         foreach ($countries as $country) {
@@ -401,7 +409,8 @@ class CUser
     }
 
     // get civilities
-    public static function getCivilities($civility_localeId = LANG_DEFAULT_ID) {
+    public static function getCivilities($civility_localeId = LANG_DEFAULT_ID)
+    {
         $civilitiesJson = array();
         $daoCivility = jDao::get('common~civility');
 

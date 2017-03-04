@@ -16,7 +16,7 @@
                                 <td align="left" valign="center"
                                 height="30" bgcolor="#ffffff" style="padding:10px 10px 20px 10px;">
                                     <span style="font-family:arial;color:#000000;">
-                                        <strong>Sujet </strong>: Requête client <strong>{$name}</strong>
+                                        <strong>Sujet </strong>: {$subject}
                                     </span>
                                 </td>
                             </tr>

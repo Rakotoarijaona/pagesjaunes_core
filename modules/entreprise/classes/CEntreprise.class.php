@@ -414,9 +414,9 @@ class CEntreprise
                 $andNbAvecInfoCompFilters[] = "videos_active = 0";
                 $andNbAvecInfoCompFilters[] = "galerie_image_active = 0";
                 $andNbAvecInfoCompFilters[] = "catalogue_active = 0";
-                $entrepriseWithServiceIds = CEntreprise::getEntrepriseWithServiceIds();
-                $entrepriseWithMarqueIds = CEntreprise::getEntrepriseWithMarqueIds();
-                $entrepriseWithProduitIds = CEntreprise::getEntrepriseWithProduitIds();
+                $entrepriseWithServiceIds   = CEntreprise::getEntrepriseWithServiceIds();
+                $entrepriseWithMarqueIds    = CEntreprise::getEntrepriseWithMarqueIds();
+                $entrepriseWithProduitIds   = CEntreprise::getEntrepriseWithProduitIds();
                 $entrepriseWithInfosCompIds = array_merge($entrepriseWithServiceIds, $entrepriseWithMarqueIds, $entrepriseWithProduitIds);
                 $entrepriseWithInfosCompIds = array_unique($entrepriseWithInfosCompIds);
                 $andNbAvecInfoCompFilters[] = "id IN(" . implode(",", $entrepriseWithInfosCompIds) . ")";
@@ -435,9 +435,9 @@ class CEntreprise
                 $andNbAvecInfoCompFilters[] = "videos_active = 0";
                 $andNbAvecInfoCompFilters[] = "galerie_image_active = 0";
                 $andNbAvecInfoCompFilters[] = "catalogue_active = 0";
-                $entrepriseWithServiceIds = CEntreprise::getEntrepriseWithServiceIds();
-                $entrepriseWithMarqueIds = CEntreprise::getEntrepriseWithMarqueIds();
-                $entrepriseWithProduitIds = CEntreprise::getEntrepriseWithProduitIds();
+                $entrepriseWithServiceIds   = CEntreprise::getEntrepriseWithServiceIds();
+                $entrepriseWithMarqueIds    = CEntreprise::getEntrepriseWithMarqueIds();
+                $entrepriseWithProduitIds   = CEntreprise::getEntrepriseWithProduitIds();
                 $entrepriseWithInfosCompIds = array_merge($entrepriseWithServiceIds, $entrepriseWithMarqueIds, $entrepriseWithProduitIds);
                 $entrepriseWithInfosCompIds = array_unique($entrepriseWithInfosCompIds);
                 $andNbAvecInfoCompFilters[] = "id NOT IN(" . implode(",", $entrepriseWithInfosCompIds) . ")";
@@ -954,6 +954,7 @@ class CEntreprise
             $serviceFactory->update($record);
         }
     }
+
     public function deleteService($serviceId)
     {
         $serviceFactory = jDao::get('entreprise~service');
@@ -1016,6 +1017,7 @@ class CEntreprise
         }
         return $produits;
     }
+
     public function insertProduit($name)
     {
         if ($name!='')
@@ -1045,6 +1047,7 @@ class CEntreprise
             }
         }
     }
+
     public function updateProduit($produitId, $name)
     {
         if ($name!='')
@@ -1059,6 +1062,7 @@ class CEntreprise
             $produitFactory->update($record);
         }
     }
+
     public function deleteProduit($produitId)
     {
         $produitFactory = jDao::get('entreprise~produit');
@@ -1078,6 +1082,7 @@ class CEntreprise
         }
         return $marques;
     }
+
     public function getMarqueList() //get by entreprise id
     {
         $cnx = jDb::getConnection();
@@ -1116,6 +1121,7 @@ class CEntreprise
         }
         return $marques;
     }
+
     public function insertMarque($name)
     {
         if ($name!='')
@@ -1145,6 +1151,7 @@ class CEntreprise
             }
         }
     }
+
     public function updateMarque($marqueId, $name)
     {
         if ($name!='')
@@ -1159,6 +1166,7 @@ class CEntreprise
             $marqueFactory->update($record);
         }
     }
+
     public function deleteMarque($marqueId)
     {
         $marqueFactory = jDao::get('entreprise~marque');
@@ -1202,6 +1210,7 @@ class CEntreprise
         $record->date_creation = $dt->toString(jDateTime::DB_DTFORMAT);
         $factory->insert($record);
     }
+
     public function updateSouscategories()
     {
         $oldSousCategorie = $this->getSouscategories();
@@ -1268,8 +1277,8 @@ class CEntreprise
     }
 
     //Upload de vidéos présentation
-
-    public static function uploadVideos($file) {
+    public static function uploadVideos($file)
+    {
         $fileName = $_FILES[$file]["name"]; // The file name
         $fileTmpLoc = $_FILES[$file]["tmp_name"]; // File in the PHP tmp folder
         $fileType = $_FILES[$file]["type"]; // The type of file it is
@@ -1292,6 +1301,7 @@ class CEntreprise
             $resp->addContent('<div class="alert alert-warning">Sorry, only .mp4 video are allowed</div>');
             return $resp;
         }
+
         if(move_uploaded_file($fileTmpLoc, "entreprise/videos/$newName")){
             $resp->addContent($newName);
             return $resp;
@@ -1301,9 +1311,7 @@ class CEntreprise
         }
     }
 
-    //
     //Section vidéos youtube
-    //
 
     public static function getVideosYoutube($id)
     {
@@ -1317,6 +1325,7 @@ class CEntreprise
         }
         return $videos; 
     }
+
     public function getVideosYoutubeList()
     {
         $cnx = jDb::getConnection();
@@ -1422,9 +1431,8 @@ class CEntreprise
         $maFactory->delete($videoId);
     }
 
-    //
+
     // Section image gallery
-    //
     public static function getImagesGalerie($id)
     {
         $cnx = jDb::getConnection();
@@ -1437,6 +1445,7 @@ class CEntreprise
         }
         return $images; 
     }
+
     public function getImagesGalerieList()
     {
         $cnx = jDb::getConnection();
@@ -1449,6 +1458,7 @@ class CEntreprise
         }
         return $images; 
     }
+
     public function insertImagesGalerie($image)
     {
         $maFactory = jDao::get('entreprise~images');
@@ -1462,6 +1472,7 @@ class CEntreprise
         $maFactory->insert($record);
         return $record->id;
     }
+
     public function updateImagesGalerie($id, $image)
     {
         $maFactory = jDao::get('entreprise~images');
@@ -1472,6 +1483,7 @@ class CEntreprise
         $record->date_update = $dt->toString(jDateTime::DB_DTFORMAT);
         $maFactory->update($record);
     }
+
     public function deleteImagesGalerie($id)
     {
         $maFactory = jDao::get('entreprise~images');
@@ -1743,7 +1755,8 @@ class CEntreprise
 
     public function getCategorieIcon()
     {
-        $oSousCategorie = $this->getSouscategories()[0];
+        $sousCategories = $this->getSouscategories();
+        $oSousCategorie = $sousCategories[0];
         $oCategorie = CCategorie::getById($oSousCategorie->souscategorie_categorieid);
         return $oCategorie->vignette;
     }
@@ -2349,6 +2362,11 @@ class CEntreprise
             $ids[] = $row->entreprise_id;
         }
         return $ids;
+    }
+
+    public function uploadLogo()
+    {
+        
     }
 }
 ?>

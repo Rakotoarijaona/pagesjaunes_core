@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2><strong>Ajouter une nouvelle Entreprise</strong></h2>        
+        <h2><strong>Ajouter une nouvelle Entreprise</strong></h2>
         <ol class="breadcrumb">
             <li>
                 <a href="{jurl 'dashboard~dashboard:index'}">Accueil</a>

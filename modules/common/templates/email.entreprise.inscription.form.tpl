@@ -11,16 +11,6 @@
             <tbody>
                 <tr>
                     <td align="center" valign="top">
-                        <table width="600" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
-                            <tr>
-                                <td align="left" valign="center"
-                                height="30" bgcolor="#ffffff" style="padding:10px 10px 20px 10px;">
-                                    <span style="font-family:arial;color:#000000;">
-                                        <strong>Sujet </strong>: Nouvelle demande d'inscription sur pagesjaunes.mg {$raisonsociale}
-                                    </span>
-                                </td>
-                            </tr>
-                        </table>
                         <table width="600" border="0" cellpadding="0" cellspacing="0" bgcolor="#DAE9C8">
                             <tr>
                                 <td align="left" valign="top"

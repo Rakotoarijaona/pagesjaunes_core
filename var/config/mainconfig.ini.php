@@ -173,12 +173,12 @@ default=messages.log
 ;emailHeaders = "Content-Type: text/plain; charset=UTF-8\nFrom: webmaster@yoursite.com\nX-Mailer: Jelix\nX-Priority: 1 (Highest)\n"
 
 [mailer]
-webmasterEmail="rakotoarijohn@gmail.com"
-webmasterName= YWA
+webmasterEmail="rakotoarijohn@yahoo.fr"
+webmasterName=Pagesjaunes
 
 ; How to send mail : "mail" (mail()), "sendmail" (call sendmail), "smtp" (send directly to a smtp)
 ;                   or "file" (store the mail into a file, in filesDir directory)
-mailerType=mail
+mailerType="smtp"
 ; Sets the hostname to use in Message-Id and Received headers
 ; and as default HELO string. If empty, the value returned
 ; by SERVER_NAME is used or 'localhost.localdomain'.
@@ -196,17 +196,15 @@ smtpHost=smtp.gmail.com
 ; default SMTP server port
 smtpPort=465
 ; secured connection or not. possible values: "", "ssl", "tls"
-smtpSecure=ssl
+smtpSecure="ssl"
 ; SMTP HELO of the message (Default is hostname)
 smtpHelo=
 ; SMTP authentication
 smtpAuth=on
 smtpUsername=ystawa@gmail.com
-smtpPassword=Ro_ysta_l;
+smtpPassword=Ro_ysta_l
 ; SMTP server timeout in seconds
 smtpTimeout=10
-
-
 
 [acl2]
 ; example of driver: "db"

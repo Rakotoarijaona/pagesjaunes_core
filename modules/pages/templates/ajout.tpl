@@ -53,6 +53,19 @@
                             <label class="control-label">Meta déscription</label> 
                             <textarea id="metadescription" name="metadescription" class="metadescription form-control"></textarea>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label">Avec publicité </label>
+                            <div class="input-group" id="cible">
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="has_pub_yes" value="{$YES}" name="has_pub">
+                                    <label for="has_pub_yes"> oui </label>
+                                </div>
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="has_pub_no" value="{$NO}" name="has_pub" checked>
+                                    <label for="has_pub_no"> non </label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-lg-12 hr-line-dashed"></div>
                         <div class="row">
                             <div class="col-lg-12 text-right">

@@ -26,7 +26,7 @@
                             <p>{$oEntreprise->activite|upper}</p>
                             {elseif ($oEntreprise->logo != '')}
                             <div class="clearfix">
-                                <figure class="logo"><img src="{$j_basepath}entreprise/images/{$oEntreprise->logo}" alt="{$oEntreprise->logo}" title="{$oEntreprise->logo}"></figure>
+                                <figure class="logo"><img style="max-width: 240px; max-height: 240px" src="{$j_basepath}entreprise/images/{$oEntreprise->logo}" alt="{$oEntreprise->logo}" title="{$oEntreprise->logo}"></figure>
                                 <h1>{$oEntreprise->raisonsociale|upper}
                                     <span>{$oEntreprise->souscategoriesListToStringFiche()}</span>
                                 </h1>
@@ -49,78 +49,89 @@
                             <hr>
                             {/if}
                             {if sizeof ($oEntreprise->getServiceList())>0}
-                            <div class="service-wrapper">
-                                <h3>Services</h3>
-                                <ul>
-                                {for ($i=0; $i<sizeof($oEntreprise->getServiceList());$i++)}
-                                    {if ($i!=0 && $i%3 == 0)}
-                                    </ul>
+                                {assign $servicesList = $oEntreprise->getServiceList()}
+                                <div class="service-wrapper">
+                                    <h3>Services</h3>
                                     <ul>
-                                    {/if}
-                                    <li class="col-sm-4">
-                                        {$oEntreprise->getServiceList()[$i]}
-                                    </li>
-                                {/for}
-                            </div>
+                                    {foreach $servicesList as $indexService => $service}
+                                        {if ($indexService != 0 && $indexService%3 == 0)}
+                                            </ul>
+                                            <ul>
+                                        {/if}
+                                        <li class="col-sm-4">
+                                            {$service}
+                                        </li>
+                                    {/foreach}
+                                </div>
                             {/if}
                             {if sizeof ($oEntreprise->getProduitList())>0}
-                            <div class="service-wrapper">
-                                <h3>Produits</h3>
-                                <ul>
-                                {for ($i=0; $i<sizeof($oEntreprise->getProduitList());$i++)}
-                                    {if ($i!=0 && $i%3 == 0)}
-                                    </ul>
+                                {assign $productsList = $oEntreprise->getProduitList()}
+                                <div class="service-wrapper">
+                                    <h3>Produits</h3>
                                     <ul>
-                                    {/if}
-                                    <li class="col-sm-4">
-                                        {$oEntreprise->getProduitList()[$i]}
-                                    </li>
-                                {/for}
-                            </div>
+                                    {foreach $productsList as $indexProduct => $product}
+                                        {if ($indexProduct != 0 && $indexProduct%3 == 0)}
+                                        </ul>
+                                        <ul>
+                                        {/if}
+                                        <li class="col-sm-4">
+                                            {$product}
+                                        </li>
+                                    {/foreach}
+                                </div>
                             {/if}
                             {if sizeof ($oEntreprise->getMarqueList())>0}
-                            <div class="service-wrapper">
-                                <h3>Marques</h3>
-                                <ul>
-                                {for ($i=0; $i<sizeof($oEntreprise->getMarqueList());$i++)}
-                                    {if ($i!=0 && $i%3 == 0)}
-                                    </ul>
+                                {assign $entreprisesList = $oEntreprise->getMarqueList()}
+                                <div class="service-wrapper">
+                                    <h3>Marques</h3>
                                     <ul>
-                                    {/if}
-                                    <li class="col-sm-4">
-                                        {$oEntreprise->getMarqueList()[$i]}
-                                    </li>
-                                {/for}
-                            </div>
+                                    {foreach $entreprisesList as $indexEntreprise => $entreprise}
+                                        {if ($indexEntreprise != 0 && $indexEntreprise%3 == 0)}
+                                        </ul>
+                                        <ul>
+                                        {/if}
+                                        <li class="col-sm-4">
+                                            {$entreprise}
+                                        </li>
+                                    {/foreach}
+                                </div>
                             {/if}
                         </div>
                     </div>
                     <div class="col-md-4 float-right">
                         <div class="contact-infos">
+                            {if ($oEntreprise->adresse != '')}
                             <p class="info-item">
                                 <i class="fa fa-home"></i>
                                 <span>{$oEntreprise->adresse}</span>
                             </p>
+                            {/if}
+                            {if sizeof ($oEntreprise->getTelephones()) > 0}
                             <p class="info-item">
                                 <i class="fa fa-phone"></i>
                                 <span>
                                     {foreach $oEntreprise->getTelephones() as $telephone}
-                                    {$telephone}<br> 
+                                        {$telephone}<br> 
                                     {/foreach} 
                                 </span>
                             </p>
+                            {/if}
+                            {if sizeof ($oEntreprise->getEmails()) > 0}
                             <p class="info-item">
                                 <i class="fa fa-envelope"></i>
                                 <span>
                                     {foreach $oEntreprise->getEmails() as $email}
-                                    <a href="mailto:{$email}">{$email}</a><br> 
+                                        <a href="mailto:{$email}">{$email}</a><br> 
                                     {/foreach} 
                                 </span>
                             </p>
+                            {/if}
+                            {if ($oEntreprise->url_website != '')}
                             <p class="info-item">
                                 <i class="fa fa-globe"></i>
                                 <span><a href="http://{$oEntreprise->url_website}" target="_blank" title="{$oEntreprise->url_website}">Visiter notre site web</a></span>
                             </p>
+                            {/if}
                         </div>
                         {if ($oEntreprise->latitude != '' && $oEntreprise->longitude != '')}
                         <!-- google map -->

@@ -17,7 +17,6 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeIn">
-                      
     {jmessage}
     <div class="row">
         <div class="col-lg-6">
@@ -63,7 +62,7 @@
                             {/foreach}
                         </ol>
                         {/if}
-                    </div>                    
+                    </div>
                     {/ifacl2}
                 </div>
             </div>
@@ -198,7 +197,7 @@ $(document).ready(function(){
     }
     toggle_icone_picker();
 
-    $('#categorie_parent').change(function(){        
+    $('#categorie_parent').change(function(){
         toggle_icone_picker();
     });
 
@@ -241,13 +240,13 @@ $(document).ready(function(){
         var nameExist;
         if (formvalid != false)
         {
-            $.post("{/literal}{jurl 'categorie~categorie:insertNameExist'}{literal}",
+            $.post("{/literal}{jfullurl 'categorie~categorie:insertNameExist'}{literal}",
             {
                 nom: $('#nom').val()
             },
             function(data, status){
                 nameExist = data;
-                if(nameExist == 0)
+                if(nameExist == false)
                 {
                     $('#form').submit();
                 }
@@ -259,7 +258,7 @@ $(document).ready(function(){
                     error.appendTo($('#nom').parent());
 
                 }
-            });            
+            });
         }
     });
 

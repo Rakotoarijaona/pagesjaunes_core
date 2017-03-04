@@ -13,7 +13,7 @@
     <div class="form-wrapper">
         <div role="form">
             <div class="screen-reader-response" style="display:none;"></div>
-            <form action="{jurl 'front_office~default:save_insription'}" method="post" id="formInscription" name="formInscription" class="form" enctype="multipart/form-data">
+            <form action="{jurl 'front_office~default:save_inscription'}" method="post" id="formInscription" name="formInscription" class="form" enctype="multipart/form-data">
                 <div class="container">
                     <div class="row">
                         <p>Veuillez remplir les champs ci-dessous, les champs marqués par (*) sont obligatoires</p>

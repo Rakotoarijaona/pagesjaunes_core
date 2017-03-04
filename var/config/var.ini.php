@@ -30,4 +30,4 @@ define("DELAY_TYPE_YEAR", 4);
 define("EMAIL_ADMIN_ADMIN", "admin@pagesjaunes.mg");*/
 
 define("EMAIL_CONTACT_ADMIN", "rakotoarijohn@gmail.com");
-define("EMAIL_ADMIN_ADMIN", "rakotoarijohn@yahoo.fr");
+define("EMAIL_ADMIN_ADMIN", "ystawa@gmail.com");

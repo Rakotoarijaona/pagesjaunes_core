@@ -19,8 +19,10 @@ class rightadsZone extends jZone
 
     protected function _prepareTpl()
     {
-        // Recherche par sous catégorie 
-        if (($this->param('listType','') == 'souscategorie') && ($this->param('souscategorie','') != ''))
+        // Recherche par sous catégorie
+        $listType = $this->param('listType','');
+        $souscategorie = $this->param('souscategorie','');
+        if (($listType == 'souscategorie') && !empty($souscategorie))
         {
             $souscategorieId = $this->param('souscategorie');
 
@@ -49,8 +51,9 @@ class rightadsZone extends jZone
 
             $this->_tpl->assign('bottom_standard', $bottom_standard);
 
-        // Recherche simple      
-        } elseif (($this->param('listType','') == 'search') && (!empty($this->param('toResult','')))) {
+        // Recherche simple
+        $toResult = $this->param('toResult','');
+        } elseif (($listType == 'search') && (!empty($toResult))) {
             
             $toResult = $this->param('toResult','');
             $bottom_target      = array();

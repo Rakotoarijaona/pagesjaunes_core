@@ -17,8 +17,8 @@
         <property name="slideshow_contentposition" fieldname="slideshow_contentposition" datatype="varchar" required="true" maxlength="10"/>
         <property name="slideshow_urlpage" fieldname="slideshow_urlpage" datatype="varchar" required="true" maxlength="100"/>
         <property name="slideshow_creationdate" fieldname="slideshow_creationdate" datatype="datetime" required="true"/>
-        <property name="slideshow_updatedate" fieldname="slideshow_updatedate" datatype="datetime" required="true"/>
-        <property name="slideshow_publicationdate" fieldname="slideshow_publicationdate" datatype="datetime" required="true"/>
+        <property name="slideshow_updatedate" fieldname="slideshow_updatedate" datatype="datetime"/>
+        <property name="slideshow_publicationdate" fieldname="slideshow_publicationdate" datatype="datetime"/>
         <!--<property name="" fieldname="" datatype="string/int/float/date"
         required="yes" maxlength="" minlength="" regexp="" sequence=""
         updatepattern="" insertpattern="" selectpattern=""/>-->
